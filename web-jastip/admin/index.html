@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Jastip Stella</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><span class="blue-t">Jastip</span> Stella</h2>
+                <span class="badge">Admin Panel</span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="index.html" class="menu-item active">Dashboard</a>
+                <a href="catalog.html" class="menu-item">Catalog View</a>
+                <a href="payment.html" class="menu-item">Payment</a>
+                <a href="#" class="menu-item">Settings</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn-logout">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <h1>Overview Management</h1>
+                    <p class="subtitle">Kelola produk katalog dan request titipan pelanggan.</p>
+                </div>
+                <div class="admin-profile">
+                    <div class="avatar">A</div>
+                    <span>Admin Stella</span>
+                </div>
+            </header>
+
+            <!-- SECTION: Catalog Products -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h3>Catalog Products</h3>
+                    <button class="btn btn-primary">+ Add New Product</button>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Produk</th>
+                                    <th>Harga (Set Harga)</th>
+                                    <th>Status (Complete/Incomplete)</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Row 1 -->
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <div class="img-placeholder">IMG</div>
+                                            <div class="product-info">
+                                                <strong>Sepatu Nike Air Jordan 1</strong>
+                                                <span class="desc">Warna Classic Red-White, US 9.</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="input-price" value="2850000">
+                                    </td>
+                                    <td>
+                                        <select class="select-status status-complete">
+                                            <option value="complete" selected>Complete (Sudah Dibelikan)</option>
+                                            <option value="incomplete">Incomplete (Belum Dibelikan)</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger">Remove</button>
+                                    </td>
+                                </tr>
+                                <!-- Row 2 -->
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <div class="img-placeholder">IMG</div>
+                                            <div class="product-info">
+                                                <strong>Parfum Chanel No. 5</strong>
+                                                <span class="desc">Eau de Parfum 100ml.</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="input-price" value="3100000">
+                                    </td>
+                                    <td>
+                                        <select class="select-status status-incomplete">
+                                            <option value="complete">Complete (Sudah Dibelikan)</option>
+                                            <option value="incomplete" selected>Incomplete (Belum Dibelikan)</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger">Remove</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: User Requests -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h3>User Requests</h3>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Info Pemesan</th>
+                                    <th>Detail Barang Incaran</th>
+                                    <th>Persetujuan (Approve/Deny)</th>
+                                    <th>Status Barang</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Row 1 -->
+                                <tr>
+                                    <td>
+                                        <div class="user-info">
+                                            <strong>customer1@email.com</strong>
+                                            <span class="desc">WA: 081234567890</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="item-info">
+                                            <a href="#" class="item-link">Tas ransel Fjallraven Kanken</a>
+                                            <span class="desc">Kategori: Fashion. Warna hijau zaitun.</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="approval-actions">
+                                            <button class="btn btn-approve active">Approved</button>
+                                            <button class="btn btn-deny">Deny</button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select class="select-status status-incomplete">
+                                            <option value="complete">Complete (Berhasil Didapat)</option>
+                                            <option value="incomplete" selected>Incomplete (Masa Pencarian)</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <!-- Row 2 -->
+                                <tr>
+                                    <td>
+                                        <div class="user-info">
+                                            <strong>jane.doe@gmail.com</strong>
+                                            <span class="desc">WA: 089988776655</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="item-info">
+                                            <a href="#" class="item-link">Snack Tteokbokki Gmarket</a>
+                                            <span class="desc">Kategori: Makanan. Level 5 Pedas (5 bks).</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="approval-actions">
+                                            <button class="btn btn-approve">Approve</button>
+                                            <button class="btn btn-deny active">Denied</button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select class="select-status status-disabled" disabled>
+                                            <option value="incomplete" selected>Incomplete (Ditolak)</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

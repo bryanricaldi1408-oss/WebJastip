@@ -1,0 +1,435 @@
+/* Import Font */
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../src/fonts/Satoshi-Variable.ttf');
+}
+@font-face {
+    font-family: 'InstrumentSerif';
+    src: url('../src/fonts/InstrumentSerif-Regular.ttf');
+}
+
+:root {
+    --my-blue: #88A8D7;
+    --my-blue-hover: #7697C5;
+    --bg-gray: #F8F8F8;
+    --text-dark: #333333;
+    --text-muted: #666666;
+    --border-color: #E2E8F0;
+    --success: #70A58A;
+    --success-hover: #5D8F74;
+    --danger: #E63946;
+    --danger-hover: #D62828;
+    --warning: #F59E0B;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Satoshi', sans-serif;
+    background-color: var(--bg-gray);
+    color: var(--text-dark);
+}
+
+.blue-t {
+    color: var(--my-blue);
+}
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background-color: white;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+}
+
+.sidebar-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-header h2 {
+    font-family: 'Satoshi';
+    font-size: 24px;
+}
+
+.badge {
+    background-color: #E2E8F0;
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    align-self: flex-start;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    flex: 1;
+}
+
+.menu-item {
+    padding: 16px 24px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.menu-item:hover, .menu-item.active {
+    background-color: #F1F5F9;
+    color: var(--my-blue);
+    border-left-color: var(--my-blue);
+}
+
+.sidebar-footer {
+    padding: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-logout {
+    width: 100%;
+    padding: 12px;
+    background-color: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-logout:hover {
+    background-color: var(--danger);
+    color: white;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-left: 260px;
+    padding: 32px 48px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.topbar h1 {
+    font-size: 32px;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: bold;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background-color: var(--my-blue);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+/* Sections & Cards */
+.admin-section {
+    margin-bottom: 48px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h3 {
+    font-size: 24px;
+}
+
+.card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+/* Table Styles */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.admin-table th, .admin-table td {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table th {
+    background-color: #F8FAFC;
+    color: var(--text-muted);
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+/* Table Cells Inner Styling */
+.product-cell, .user-info, .item-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.img-placeholder {
+    width: 48px;
+    height: 48px;
+    background-color: var(--bg-gray);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #999;
+    border: 1px solid var(--border-color);
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-info .desc, .user-info .desc, .item-info .desc {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.item-link {
+    color: var(--my-blue);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.item-link:hover {
+    text-decoration: underline;
+}
+
+/* Form Elements */
+.input-price {
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 16px;
+    width: 150px;
+}
+
+.input-price:focus {
+    outline: none;
+    border-color: var(--my-blue);
+    box-shadow: 0 0 0 3px rgba(136, 168, 215, 0.2);
+}
+
+.select-status {
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid;
+    outline: none;
+}
+
+.status-complete {
+    background-color: #ECFDF5;
+    color: var(--success);
+    border-color: #A7F3D0;
+}
+
+.status-incomplete {
+    background-color: #FFFBEB;
+    color: var(--warning);
+    border-color: #FDE68A;
+}
+
+.status-disabled {
+    background-color: #F1F5F9;
+    color: var(--text-muted);
+    border-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--my-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--my-blue-hover);
+}
+
+.btn-danger {
+    background-color: #FEF2F2;
+    color: var(--danger);
+    border: 1px solid #FECACA;
+}
+
+.btn-danger:hover {
+    background-color: var(--danger);
+    color: white;
+}
+
+/* Approval Actions Group */
+.approval-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-approve, .btn-deny {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+}
+
+.btn-approve:hover {
+    border-color: var(--success);
+    color: var(--success);
+}
+
+.btn-deny:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.btn-approve.active {
+    background-color: var(--success);
+    color: white;
+    border-color: var(--success);
+}
+
+.btn-deny.active {
+    background-color: var(--danger);
+    color: white;
+    border-color: var(--danger);
+}
+
+/* Grid Layout for Catalog View */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.product-card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.product-img-wrapper-grid {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border-color);
+}
+
+.product-img-placeholder-grid {
+    width: 100%;
+    height: 100%;
+    background-color: #FAFAFA;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.wishlist-btn-grid {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #CCC;
+}
+
+.product-info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.product-name-grid {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.product-desc-grid {
+    font-family: 'InstrumentSerif', serif;
+    font-size: 18px;
+    color: var(--text-muted);
+}
+
+.product-price-grid {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-dark);
+}

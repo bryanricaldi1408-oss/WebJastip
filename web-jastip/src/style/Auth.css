@@ -1,0 +1,129 @@
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--bg-gray);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.auth-card {
+    background-color: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.auth-title {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333333;
+}
+
+.auth-subtitle {
+    font-family: 'InstrumentSerif', serif;
+    font-size: 22px;
+    color: #666666;
+    margin-bottom: 32px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+}
+
+.auth-form label {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.auth-input {
+    font-family: 'InstrumentSerif', serif;
+    font-size: 20px;
+    padding: 12px 16px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.auth-input:focus {
+    border-color: var(--my-blue);
+    box-shadow: 0 0 0 3px rgba(136, 168, 215, 0.2);
+}
+
+.auth-btn {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: var(--my-blue);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 12px;
+}
+
+.auth-btn:hover {
+    background-color: #7697C5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(136, 168, 215, 0.3);
+}
+
+.auth-btn:active {
+    transform: translateY(0);
+}
+
+.auth-footer {
+    margin-top: 24px;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 15px;
+    color: #666666;
+}
+
+.auth-link-text {
+    color: var(--my-blue);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.auth-link-text:hover {
+    text-decoration: underline;
+}
+
+.auth-logo {
+    font-family: 'Satoshi', sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 28px;
+}
+
+.auth-error {
+    color: #dc2626; /* Warna merah lebih gelap untuk kontras */
+    background-color: #fef2f2; /* Latar belakang merah sangat muda */
+    border: 1px solid #fecaca; /* Garis pinggir merah muda */
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 18px;
+    font-family: 'InstrumentSerif', serif; 
+    margin-top: 8px;
+    margin-bottom: 0;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+}

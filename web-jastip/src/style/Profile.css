@@ -1,0 +1,184 @@
+/* Container Utama */
+.profile-container {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 0 24px;
+    font-family: 'Satoshi', sans-serif;
+    color: #333333;
+}
+
+/* Bagian Header Profil */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.profile-page-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(136, 168, 215, 0.2);
+}
+
+.profile-title {
+    font-family: 'InstrumentSerif', serif;
+    font-size: 42px;
+    margin: 0 0 8px 0;
+    color: #1a1a1a;
+}
+
+.profile-subtitle {
+    font-size: 16px;
+    color: #666666;
+    margin: 0;
+}
+
+/* Bagian Konten 2 Kolom */
+.profile-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Membagi layar menjadi 2 kolom sama besar */
+    gap: 48px;
+}
+
+/* Responsif untuk HP (bertumpuk) */
+@media (max-width: 768px) {
+    .profile-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+.profile-section {
+    background-color: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
+}
+
+.section-heading {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: var(--my-blue, #88a8d7);
+    border-bottom: 2px solid var(--my-blue, #88a8d7);
+    display: inline-block;
+    padding-bottom: 8px;
+}
+
+/* Formulir (Satu Tema dengan Auth.css) */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #444444;
+}
+
+.profile-input, .profile-textarea {
+    padding: 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'Satoshi', sans-serif;
+    transition: all 0.2s ease;
+    background-color: #fcfcfc;
+}
+
+.profile-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.profile-input:focus, .profile-textarea:focus {
+    outline: none;
+    border-color: var(--my-blue, #88a8d7);
+    box-shadow: 0 0 0 3px rgba(136, 168, 215, 0.2);
+    background-color: #ffffff;
+}
+
+/* Input yang tidak bisa diganti (disabled) */
+.profile-input:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Tombol-Tombol */
+.profile-btn-primary {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: var(--my-blue, #88a8d7);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 12px;
+}
+
+.profile-btn-primary:hover {
+    background-color: #7697C5; /* Warna hover sedikit lebih gelap */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(136, 168, 215, 0.3);
+}
+
+.profile-btn-secondary {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    background-color: white;
+    color: var(--my-blue, #88a8d7);
+    border: 2px solid var(--my-blue, #88a8d7);
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 12px;
+}
+
+.profile-btn-secondary:hover {
+    background-color: rgba(136, 168, 215, 0.05);
+}
+
+.logout-area {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px dashed #eaeaea;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.profile-btn-danger {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-btn-danger:hover {
+    background-color: #fee2e2;
+}
