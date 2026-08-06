@@ -1,4 +1,4 @@
-import { createSignal, onMount, onCleanup, For } from "solid-js";
+import { createSignal, onMount, onCleanup, For, Show } from "solid-js";
 import { A } from "@solidjs/router";
 import "../style/Home.css"
 import { Request } from "../components/Request";
@@ -183,9 +183,17 @@ export const Home = () => {
                 <div class="request-card">
                     <h2 class="t-req"><span class="blue">Request</span> Aja.</h2>
                     <p class="sub-req">Kalau gak nemu yang kamu mau! :D</p>
-                    {(!users.currUser)
-                    ?<p> Log In terlebih dahulu untuk memasukan request</p>
-                    :(
+                    {(!users.currUser) ? (
+                        <div class="login-prompt-card">
+                            <div class="login-prompt-icon">🔒</div>
+                            <h3>Ingin Titip Barang?</h3>
+                            <p>Silakan <strong>Log In</strong> atau <strong>Sign Up</strong> terlebih dahulu untuk mengajukan request barang impianmu.</p>
+                            <div class="login-prompt-actions">
+                                <A href="/login" class="btn-prompt-login">Log In</A>
+                                <A href="/signup" class="btn-prompt-signup">Sign Up</A>
+                            </div>
+                        </div>
+                    ) : (
                     <form class="request-form" onSubmit={handleRequest}>
                         <div class="form-group">
                             <label>Nama Produk</label>
@@ -252,27 +260,33 @@ export const Home = () => {
                     </h2>
                     <A href="/products" class="see-all">See All</A>
                 </div>
-                
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <span class="blue">Recent</span> Requests
-                    </h2>
-                </div>
+                <Show when={requests().length === 0}>
+                    <div class="no-requests-msg">
+                        <p>Belum ada request titipan saat ini.</p>
+                    </div>
+                </Show>
+                <Show when={requests().length > 0}>
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="blue">Recent</span> Requests
+                        </h2>
+                    </div>
 
-                <div class="request-container">
-                    <For each={requests()}>
-                        {(item)=> (
-                            <Request 
-                                image={item.product_image_url}
-                                category={item.category}
-                                name={item.name}
-                                desc={item.details}
-                                user={item.user_name}
-                                link={item.item_link}
-                            />
-                        )}
-                    </For>
-                </div>
+                    <div class="request-container">
+                        <For each={requests()}>
+                            {(item)=> (
+                                <Request 
+                                    image={item.product_image_url}
+                                    category={item.category}
+                                    name={item.name}
+                                    desc={item.details}
+                                    user={item.user_name}
+                                    link={item.item_link}
+                                />
+                            )}
+                        </For>
+                    </div>
+                </Show>
             </div>
         </>
     );

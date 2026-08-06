@@ -1,6 +1,6 @@
 import "../style/Profile.css";
 import "../style/Auth.css";
-import profileIcon from "../assets/profileIcon.png";
+import profileIcon from "../assets/ProfileIcon.png";
 import { users, setUsers, showNotification } from "../store/WebStore"
 import { useNavigate } from "@solidjs/router";
 import { onMount, createSignal, Show } from "solid-js";

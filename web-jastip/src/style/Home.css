@@ -267,6 +267,106 @@
     margin-top: 16px;
 }
 
+/* Card Prompt Login untuk User Belum Login */
+.login-prompt-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #f4f7fc 100%);
+    border: 1.5px dashed var(--my-blue);
+    border-radius: 14px;
+    margin: auto 0;
+    box-shadow: 0 4px 14px rgba(136, 168, 215, 0.12);
+}
+
+.login-prompt-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+    background: #eef3fb;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-prompt-card h3 {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+}
+
+.login-prompt-card p {
+    font-family: 'InstrumentSerif', serif;
+    font-size: 18px;
+    color: #666666;
+    margin: 0 0 20px 0;
+    line-height: 1.4;
+}
+
+.login-prompt-actions {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-prompt-login {
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    background-color: var(--my-blue);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(136, 168, 215, 0.3);
+}
+
+.btn-prompt-login:hover {
+    background-color: #7697C5;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(136, 168, 215, 0.4);
+}
+
+.btn-prompt-signup {
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    background-color: transparent;
+    color: var(--my-blue);
+    border: 1.5px solid var(--my-blue);
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-prompt-signup:hover {
+    background-color: rgba(136, 168, 215, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Pesan Kosong Request */
+.no-requests-msg {
+    text-align: center;
+    padding: 36px 20px;
+    background-color: #f9fbfd;
+    border-radius: 12px;
+    border: 1px dashed #d0dbe9;
+    color: #778899;
+    font-family: 'InstrumentSerif', serif;
+    font-size: 20px;
+    margin: 20px 0;
+}
+
 /* Responsif Mobile / Tablet / iPad */
 @media (max-width: 1024px) {
     .hero-container {
