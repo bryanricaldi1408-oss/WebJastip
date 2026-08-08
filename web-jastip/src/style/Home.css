@@ -178,6 +178,72 @@
     overflow: hidden;
 }
 
+/* Card Placeholder ketika gambar promo kosong */
+.no-image-card {
+    width: 100%;
+    height: 100%;
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, #ffffff 0%, #f4f7fc 100%);
+    margin: auto 0;
+}
+
+.no-image-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    background: #eef3fb;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(136, 168, 215, 0.2);
+}
+
+.no-image-title {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333333;
+    margin: 0 0 8px 0;
+}
+
+.no-image-subtitle {
+    font-family: 'InstrumentSerif', serif;
+    font-size: 21px;
+    color: #666666;
+    margin: 0 0 20px 0;
+    max-width: 380px;
+    line-height: 1.4;
+}
+
+.no-image-subtitle code {
+    background-color: #e2e8f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 15px;
+    color: #4a5568;
+}
+
+.no-image-badge {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--my-blue);
+    background-color: rgba(136, 168, 215, 0.12);
+    border: 1px dashed var(--my-blue);
+    padding: 6px 18px;
+    border-radius: 50px;
+}
+
 /* Tombol Navigasi Panah Kiri & Kanan */
 .nav-btn {
     position: absolute;
@@ -380,6 +446,27 @@
         height: 320px;
     }
     
+    .no-image-card {
+        min-height: 280px;
+        padding: 24px 16px;
+    }
+
+    .no-image-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 36px;
+        margin-bottom: 12px;
+    }
+
+    .no-image-title {
+        font-size: 1.6rem;
+    }
+
+    .no-image-subtitle {
+        font-size: 17px;
+        margin-bottom: 14px;
+    }
+    
     .request-card {
         padding: 20px;
     }
@@ -392,10 +479,23 @@
     .section-title {
         font-size: 32px;
     }
+
+    .section-header {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
     
-    .products-grid {
+    .request-container {
         grid-template-columns: repeat(2, 1fr); /* 2 kolom di tablet */
         gap: 16px;
+    }
+
+    .t-req {
+        font-size: 2rem;
+    }
+
+    .sub-req {
+        font-size: 20px;
     }
 }
 
@@ -410,16 +510,98 @@
         height: 220px;
     }
 
+    .no-image-card {
+        min-height: 200px;
+        padding: 16px 12px;
+    }
+
+    .no-image-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 26px;
+        margin-bottom: 8px;
+    }
+
+    .no-image-title {
+        font-size: 1.3rem;
+    }
+
+    .no-image-subtitle {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .no-image-badge {
+        font-size: 11px;
+        padding: 4px 12px;
+    }
+
     .products-section {
         padding: 0 12px;
     }
     
     .section-title {
-        font-size: 28px;
+        font-size: 24px;
+    }
+
+    .see-all {
+        font-size: 16px;
     }
     
-    .products-grid {
+    .request-container {
         grid-template-columns: 1fr; /* 1 kolom di HP kecil */
         gap: 16px;
+    }
+
+    .t-req {
+        font-size: 1.6rem;
+    }
+
+    .sub-req {
+        font-size: 18px;
+        margin: 4px 0 16px 0;
+    }
+
+    .form-group label {
+        font-size: 18px;
+    }
+
+    .req-input {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+
+    .btn-send-req {
+        width: 100%;
+        text-align: center;
+        align-self: stretch;
+    }
+
+    .login-prompt-card {
+        padding: 24px 16px;
+    }
+
+    .login-prompt-card h3 {
+        font-size: 18px;
+    }
+
+    .login-prompt-card p {
+        font-size: 16px;
+    }
+
+    .login-prompt-actions {
+        flex-direction: column;
+    }
+
+    .btn-prompt-login,
+    .btn-prompt-signup {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .no-requests-msg {
+        padding: 24px 16px;
+        font-size: 18px;
     }
 }

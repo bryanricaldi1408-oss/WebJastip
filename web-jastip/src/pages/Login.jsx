@@ -1,7 +1,7 @@
 import { A, useNavigate} from "@solidjs/router";
 import "../style/Auth.css";
 import { createSignal } from "solid-js";
-import { setUsers, showNotification} from "../store/WebStore"
+import { setUsers, showNotification, users} from "../store/WebStore"
 
 export const Login = () => {
     const [email, setEmail] = createSignal("")
@@ -31,7 +31,11 @@ export const Login = () => {
             if(response.ok){
                 showNotification('Login Berhasil', 'success');
                 setUsers("currUser", data.user);
-                navigate('/', {replace: true})
+                if(users.currUser?.role === 'admin'){
+                    navigate('/admin', { replace: true});
+                }else{
+                    navigate('/', { replace: true});
+                }
             }else{
                 showNotification('Password atau email salah', 'error')
             }

@@ -59,10 +59,27 @@ img {
     height: 80px;
 }
 .cart-icon{
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    background-color: var(--my-white);
     object-fit: contain;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.cart-icon:hover {
+    background-color: #E2E8F0;
+    transform: translateY(-2px) scale(1.08) rotate(-6deg);
+    box-shadow: 0 6px 16px rgba(136, 168, 215, 0.35);
+}
+
+.cart-icon:active {
+    transform: translateY(0) scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .search-container{
@@ -109,11 +126,31 @@ img {
     box-sizing: border-box;
     white-space: nowrap;
     flex-shrink: 0;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 2px 8px rgba(136, 168, 215, 0.3);
 }
+
+.contact-container:hover {
+    background-color: #7697C5;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 18px rgba(136, 168, 215, 0.5);
+}
+
+.contact-container:hover .wa-icon {
+    transform: scale(1.18) rotate(-10deg);
+}
+
+.contact-container:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 6px rgba(136, 168, 215, 0.3);
+}
+
 .wa-icon{
     width: 26px;
     height: 26px;
     object-fit: contain;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .profile-icon{
@@ -123,6 +160,17 @@ img {
     object-fit: cover;
     cursor: pointer;
     flex-shrink: 0;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.profile-icon:hover {
+    transform: translateY(-2px) scale(1.08);
+    box-shadow: 0 6px 16px rgba(136, 168, 215, 0.4);
+}
+
+.profile-icon:active {
+    transform: translateY(0) scale(0.95);
 }
 .right-container{
     display: flex;
@@ -182,6 +230,9 @@ img {
     }
     .title{
         padding-right: 30px;
+    }
+    .auth-link{
+        font-size: 10px;
     }
     .contact-container {
         width: 48px;
@@ -262,7 +313,8 @@ img {
         overflow-x: auto;
         white-space: nowrap;
         justify-content: flex-start;
-        gap: 15px;
+        gap: 8px;
+        flex-wrap: nowrap;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
     }
@@ -271,38 +323,108 @@ img {
         display: none;
     }
     
+    .auth-link{
+        font-size: 7px;
+    } 
     .left-categories, .right-categories {
-        display: flex;
-        flex-shrink: 0;
-        gap: 10px;
+        display: contents; /* Semua category-item jadi anak langsung dari category-container */
     }
-    
+
+    .category-item {
+        font-size: 16px;
+        padding: 6px 14px;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    /* Auth buttons wrapper untuk user belum login */
+    .auth-buttons {
+        grid-column: 2 / span 2;
+        grid-row: 1;
+        display: flex;
+        gap: 8px;
+        align-self: center;
+        justify-self: end;
+    }
+
+    .auth-link {
+        font-size: 14px;
+        padding: 7px 12px;
+        box-shadow: none;
+    }
 }
 
-.hero-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr; /* Kotak kiri 2 bagian, kotak kanan 1 bagian */
-    gap: 24px;                      /* Jarak antar kedua kotak */
-    width: 100%;
-    max-width: 80%;
-    margin: 0 auto;
-    padding: 20px 40px;
-    box-sizing: border-box;
+/* Auth buttons wrapper desktop */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-shrink: 0;
 }
-.banner-card {
-    background-color: white;
-    border-radius: 16px;
-    padding: 24px;
-    position: relative;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    
-}
-.request-card {
-    background-color: white;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    height: 623px;
+
+/* Responsif untuk HP sangat kecil */
+@media (max-width: 480px) {
+    .upper-h {
+        padding: 10px 12px;
+        gap: 8px;
+        height: auto;
+    }
+
+    .auth-link{
+        font-size: 10px;
+    }
+    .title {
+        font-size: 1.4rem;
+    }
+
+    .search-container {
+        height: 36px;
+        padding: 0 14px;
+    }
+
+    .search-input {
+        font-size: 15px;
+    }
+
+    .contact-container {
+        height: 34px;
+        font-size: 14px;
+    }
+
+    .wa-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .category-container {
+        padding: 8px 12px;
+        gap: 6px;
+    }
+
+    .category-item {
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+
+    .cart-icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    .profile-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .auth-buttons {
+        gap: 4px;
+    }
+
+    .auth-link {
+        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 6px;
+    }
 }
 
 /* Styling untuk tombol Sign Up dan Log In */

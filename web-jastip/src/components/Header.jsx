@@ -20,17 +20,19 @@ export const Header =  () => {
                 <SearchBar />
                 {/* 3. Contacts Us */}
                 <div class="right-container">
-                    <div class="contact-container">
+                    <a href="https://wa.me/628122040228" target="_blank" rel="noopener noreferrer" class="contact-container">
                         <span class="contact-text">Kontak di Sini</span>
                         <img class="wa-icon" src={waIcon}/>
-                    </div>
+                    </a>
                     {/* 4. Cart */}
                     <img class="cart-icon" src={cartIcon}/>
                     {/* 5. Profile */}
                     {/* Hanya muncul kalau belum login */}
                     <Show when={users.currUser === null}>
-                        <A href="/signup" class="auth-link">Sign Up</A>
-                        <A href="/login" class="auth-link">Log In</A>
+                        <div class="auth-buttons">
+                            <A href="/signup" class="auth-link">Sign Up</A>
+                            <A href="/login" class="auth-link">Log In</A>
+                        </div>
                     </Show>
 
                     {/* Hanya muncul kalau SUDAH login */}

@@ -17,6 +17,7 @@ CREATE TABLE users (
     phone_number VARCHAR(20),
     password VARCHAR(255) NOT NULL, 
     addresses VARCHAR(255),
+    role VARCHAR(20) DEFAULT 'user',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -69,4 +70,4 @@ CREATE TABLE banners (
 
 --account dummy for testing
 INSERT INTO users(name, email, phone_number,password)
-VALUES ('admin', 'admin@gmail.com', '08', 'admin1234')
+VALUES ('admin', 'admin@gmail.com', '08', 'admin1234', 'admin')

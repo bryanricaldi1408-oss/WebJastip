@@ -65,21 +65,24 @@
 /* Responsif: Di HP (layar kecil), notifikasi muncul di atas tengah */
 @media screen and (max-width: 600px) {
     .notification-container {
-        top: 16px;
-        right: 50%;
-        transform: translateX(50%);
-        align-items: center; /* Kotak jadi ke tengah */
+        top: auto;
+        right: auto;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        align-items: center;
     }
 
     .toast-box {
         width: 90vw;
-        animation: slideInDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        min-width: auto;
+        animation: slideInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
-    /* Animasi masuk dari atas khusus layar HP */
-    @keyframes slideInDown {
+    /* Animasi masuk dari bawah khusus layar HP */
+    @keyframes slideInUp {
         0% {
-            transform: translateY(-100%);
+            transform: translateY(100%);
             opacity: 0;
         }
         100% {

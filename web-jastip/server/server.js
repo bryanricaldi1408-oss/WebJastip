@@ -49,7 +49,7 @@ app.post('/api/login', async (req,res) => {
         const {email, password} = req.body
 
         const query = `
-            SELECT id, name, email, password, phone_number
+            SELECT id, name, email, password, phone_number, role
             FROM users
             WHERE email = $1 AND password = $2
         `;
@@ -180,15 +180,15 @@ app.get('/api/products', async (_ , res) => {
         res.status(500).json({ message: 'Gagal mengirim semua produk' });
     }
 });
-// GET ALL REQUESTS
-// GET ALL REQUESTS (Mengambil semua request titipan)
-app.get('/api/requests', async (_, res) => {
+// GET ALL REQUESTS yang udh di approved
+app.get('/api/requests/approved', async (_, res) => {
     try {
         const query = `
             SELECT 
                 r.id,
                 r.user_id,
-                COALESCE(u.name, 'Anonim') AS user_name,        
+                COALESCE(u.name, 'Anonim') AS user_name,
+                u.phone_number,
                 r.name,
                 r.item_link,
                 r.details,
@@ -198,7 +198,41 @@ app.get('/api/requests', async (_, res) => {
                 r.approval_status,            -- 'pending', 'approved', atau 'denied'
                 r.created_at
             FROM requests r
-            LEFT JOIN users u ON r.user_id = u.id  -- Menggunakan LEFT JOIN agar request tanpa user tetap muncul
+            JOIN users u ON r.user_id = u.id
+            WHERE r.approval_status = 'approved'
+            ORDER BY r.created_at DESC;
+        `;
+
+        const result = await dbPool.query(query);
+
+        res.status(200).json({
+            requests: result.rows
+        });
+
+    } catch (error) {
+        console.error('Error fetching requests:', error);
+        res.status(500).json({ message: 'Gagal mengambil data request' });
+    }
+});
+// GET ALL REQUESTS (Mengambil semua request titipan)
+app.get('/api/requests', async (_, res) => {
+    try {
+        const query = `
+            SELECT 
+                r.id,
+                r.user_id,
+                COALESCE(u.name, 'Anonim') AS user_name,
+                u.phone_number,
+                r.name,
+                r.item_link,
+                r.details,
+                r.category,
+                r.product_image_url,
+                r.status,                     -- 'incomplete' atau 'complete'
+                r.approval_status,            -- 'pending', 'approved', atau 'denied'
+                r.created_at
+            FROM requests r
+            JOIN users u ON r.user_id = u.id
             ORDER BY r.created_at DESC;
         `;
 
@@ -217,3 +251,31 @@ const PORT = 5000;
 app.listen(PORT, () =>{
     console.log(`Server Listening at PORT:${PORT}...`)
 })
+
+
+app.put('/api/approval', async (req, res) => {
+    const { value, reqId } = req.body;
+    try {
+        const query = `
+            UPDATE requests
+            SET approval_status = $1
+            WHERE id = $2 RETURNING *
+        `;
+
+        const values = [value, reqId];
+        const result = await dbPool.query(query, values);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Request tidak ditemukan' });
+        }
+
+        res.status(200).json({
+            message: 'Status approval berhasil diperbarui',
+            request: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error('Error updating approval status:', error);
+        res.status(500).json({ message: 'Gagal memperbarui status approval' });
+    }
+});

@@ -124,7 +124,7 @@ export const Home = () => {
 
     const fetchRequests = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/requests');
+            const response = await fetch('http://localhost:5000/api/requests/approved');
             const data = await response.json();
 
             if(response.ok){
@@ -168,7 +168,12 @@ export const Home = () => {
                                 alt={`Banner ${currentIndex() + 1}`}
                             />
                         ) : (
-                            <div class="no-image">Tidak ada gambar di folder /image</div>
+                            <div class="no-image-card">
+                                <div class="no-image-icon">🖼️</div>
+                                <h2 class="no-image-title"><span class="blue">Promo & Info</span> Banner</h2>
+                                <p class="no-image-subtitle">Belum ada gambar promo di folder <code>/src/images</code></p>
+                                <div class="no-image-badge">✨ Tempat Banner Carousel Promo</div>
+                            </div>
                         )}
                         {/* Tombol Navigasi Panah Kiri & Kanan */}
                         <button class="nav-btn prev-btn" onClick={prevSlide}>❮</button>

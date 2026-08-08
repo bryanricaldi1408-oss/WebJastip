@@ -45,10 +45,94 @@
     gap: 48px;
 }
 
-/* Responsif untuk HP (bertumpuk) */
+/* Responsif untuk Tablet & HP */
 @media (max-width: 768px) {
+    .profile-container {
+        margin: 32px auto;
+        padding: 0 16px;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+        margin-bottom: 32px;
+        padding-bottom: 20px;
+    }
+
+    .profile-page-icon {
+        width: 64px;
+        height: 64px;
+    }
+
+    .profile-title {
+        font-size: 28px;
+    }
+
     .profile-content {
         grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .profile-section {
+        padding: 24px 20px;
+    }
+
+    .logout-area {
+        justify-content: center;
+        margin-top: 32px;
+    }
+
+    .profile-btn-primary,
+    .profile-btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
+
+    .profile-btn-danger {
+        width: 100%;
+        text-align: center;
+        padding: 12px 20px;
+    }
+}
+
+/* Responsif untuk HP Kecil */
+@media (max-width: 480px) {
+    .profile-container {
+        margin: 20px auto;
+        padding: 0 12px;
+    }
+
+    .profile-header {
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .profile-page-icon {
+        width: 56px;
+        height: 56px;
+    }
+
+    .profile-title {
+        font-size: 24px;
+    }
+
+    .profile-subtitle {
+        font-size: 14px;
+    }
+
+    .profile-section {
+        padding: 20px 16px;
+        border-radius: 12px;
+    }
+
+    .section-heading {
+        font-size: 17px;
+    }
+
+    .profile-input, .profile-textarea {
+        font-size: 14px;
+        padding: 10px 12px;
     }
 }
 

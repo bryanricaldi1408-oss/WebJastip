@@ -1,11 +1,11 @@
 /* Import Font */
 @font-face {
     font-family: 'Satoshi';
-    src: url('../src/fonts/Satoshi-Variable.ttf');
+    src: url('../../src/fonts/Satoshi-Variable.ttf');
 }
 @font-face {
     font-family: 'InstrumentSerif';
-    src: url('../src/fonts/InstrumentSerif-Regular.ttf');
+    src: url('../../src/fonts/InstrumentSerif-Regular.ttf');
 }
 
 :root {
@@ -213,10 +213,17 @@ body {
 }
 
 /* Table Cells Inner Styling */
-.product-cell, .user-info, .item-info {
+.product-cell {
     display: flex;
     align-items: center;
     gap: 16px;
+}
+
+.user-info, .item-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
 }
 
 .img-placeholder {
@@ -232,6 +239,19 @@ body {
     border: 1px solid var(--border-color);
 }
 
+.request-img-thumb {
+    width: 68px;
+    height: 68px;
+    background-color: #F1F5F9;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
 .product-info {
     display: flex;
     flex-direction: column;
@@ -240,7 +260,6 @@ body {
 .product-info .desc, .user-info .desc, .item-info .desc {
     color: var(--text-muted);
     font-size: 14px;
-    margin-top: 4px;
 }
 
 .item-link {
@@ -363,73 +382,4 @@ body {
     background-color: var(--danger);
     color: white;
     border-color: var(--danger);
-}
-
-/* Grid Layout for Catalog View */
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-}
-
-.product-card-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.product-img-wrapper-grid {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 16px;
-    overflow: hidden;
-    background-color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-    border: 1px solid var(--border-color);
-}
-
-.product-img-placeholder-grid {
-    width: 100%;
-    height: 100%;
-    background-color: #FAFAFA;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-}
-
-.wishlist-btn-grid {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-    color: #CCC;
-}
-
-.product-info-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.product-name-grid {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--text-dark);
-}
-
-.product-desc-grid {
-    font-family: 'InstrumentSerif', serif;
-    font-size: 18px;
-    color: var(--text-muted);
-}
-
-.product-price-grid {
-    font-size: 16px;
-    font-weight: bold;
-    color: var(--text-dark);
 }

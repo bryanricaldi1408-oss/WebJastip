@@ -112,3 +112,22 @@
     color: #7697C5;
     text-decoration: underline;
 }
+
+/* Responsif untuk Mobile */
+@media (max-width: 768px) {
+    .request-item-card {
+        max-width: 100%;
+    }
+
+    .request-title {
+        font-size: 16px;
+    }
+
+    .request-desc {
+        font-size: 14px;
+    }
+
+    .request-user-box {
+        font-size: 12px;
+    }
+}
