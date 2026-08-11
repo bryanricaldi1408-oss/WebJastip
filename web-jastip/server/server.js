@@ -139,30 +139,6 @@ app.put('/api/update-password', async (req, res)=>{
     }
 });
 
-// Submit Request Titipan
-app.post('/api/request', async (req, res) => {
-    try{
-        const {name, link, detail, category, imageUrl, user_id} = req.body;
-
-        const query =  `
-            INSERT INTO requests(user_id, name, item_link, details, category, product_image_url)
-            VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
-        `;
-        const values = [user_id, name, link, detail, category, imageUrl];
-
-        const result = await dbPool.query(query, values);
-        
-        // Mengirimkan response sukses
-        res.status(201).json({
-            message: 'Request barang berhasil dikirim!',
-            request: result.rows[0]
-        });
-    }catch(error){
-        console.error("Error submitting request:", error);
-        res.status(500).json({ message: 'Gagal mengirim request titipan' });
-    }
-});
-
 //GET ALL PRODUCTS
 app.get('/api/products', async (_ , res) => {
     try{
@@ -247,11 +223,17 @@ app.get('/api/requests', async (_, res) => {
         res.status(500).json({ message: 'Gagal mengambil data request' });
     }
 });
-const PORT = 5000;
-app.listen(PORT, () =>{
-    console.log(`Server Listening at PORT:${PORT}...`)
-})
 
+
+
+//WebSocket.io untuk refresh otomatis
+const http = require('http');
+const { Server } = require('socket.io');
+
+const server = http.createServer(app);
+const io = new Server(server,{
+    cors: { origin: "*"}
+});
 
 app.put('/api/approval', async (req, res) => {
     const { value, reqId } = req.body;
@@ -265,13 +247,13 @@ app.put('/api/approval', async (req, res) => {
         const values = [value, reqId];
         const result = await dbPool.query(query, values);
 
-        if (result.rows.length === 0) {
-            return res.status(404).json({ message: 'Request tidak ditemukan' });
-        }
+        const updatedItem = result.rows[0];
+
+        io.emit('request_status_changed', updatedItem);
 
         res.status(200).json({
             message: 'Status approval berhasil diperbarui',
-            request: result.rows[0]
+            request: updatedItem
         });
 
     } catch (error) {
@@ -279,3 +261,39 @@ app.put('/api/approval', async (req, res) => {
         res.status(500).json({ message: 'Gagal memperbarui status approval' });
     }
 });
+
+// Submit Request Titipan
+app.post('/api/request', async (req, res) => {
+    try {
+        const { name, link, detail, category, imageUrl, user_id } = req.body;
+
+        const query = `
+            INSERT INTO requests(user_id, name, item_link, details, category, product_image_url)
+            VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
+        `;
+        const values = [user_id, name, link, detail, category, imageUrl];
+        const result = await dbPool.query(query, values);
+
+        const fullQuery = `
+            SELECT r.*, u.name AS user_name, u.phone_number
+            FROM requests r
+            JOIN users u ON r.user_id = u.id
+            WHERE r.id = $1
+        `;
+        const newReq = await dbPool.query(fullQuery, [result.rows[0].id]);
+        io.emit('new_request', newReq.rows[0]);
+
+        res.status(201).json({
+            message: 'Request barang berhasil dikirim!',
+            request: result.rows[0]
+        });
+    } catch (error) {
+        console.error("Error submitting request:", error);
+        res.status(500).json({ message: 'Gagal mengirim request titipan' });
+    }
+});
+
+const PORT = 5000;
+server.listen(PORT, () =>{
+    console.log(`Server Listening at PORT:${PORT}...`)
+})

@@ -1,9 +1,10 @@
-import { createSignal, For, onMount } from "solid-js";
+import { createSignal, For, onCleanup, onMount } from "solid-js";
 import "../style/HomeAdmin.css";
 import { A } from "@solidjs/router"
 import { RequestTable } from "../components/RequestTable";
+import { io } from "socket.io-client";
 
-
+const socket = io('http://localhost:5000')
 
 export const HomeAdmin = () => {
   const [ requests, setRequests ]= createSignal([]);
@@ -13,8 +14,15 @@ export const HomeAdmin = () => {
     const response = await fetch('http://localhost:5000/api/requests');
     const data = await response.json();
     setRequests(data.requests); // Menyimpan array data dari backend
+
+    socket.on('new_request', (newReq) => {
+      setRequests((prev) => [newReq, ...prev]);
+    });
   });
 
+  onCleanup(() =>{
+    socket.off('new_request');
+  });
   return (
     <>
       <div class="admin-layout">

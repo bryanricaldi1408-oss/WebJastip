@@ -198,6 +198,22 @@ export const Profile = () => {
                     </div>
                 </div>
             </div>
+                <div class="req-table">
+                    <div class="table-responsive">
+                    <table class="admin-table">
+                    <thead>
+                        <tr>
+                        <th>Info Pemesan</th>
+                        <th>Gambar Produk</th>
+                        <th>Detail Barang Incaran</th>
+                        <th>Persetujuan (Approve/Deny)</th>
+                        <th>Status Barang</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 };

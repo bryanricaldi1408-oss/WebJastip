@@ -3,8 +3,10 @@ import { showNotification } from "../../src/store/WebStore";
 
 export const RequestTable = (props) => {
     const [approvalStatus, setApprovalStatus] = createSignal(props.approval_status || 'pending');
-    
+    const [isProcessing, setIsProcessing] = createSignal(false);
     async function handleApproval(statusValue) {
+        if(isProcessing()) return;
+        setIsProcessing(true);
         try {
             const response = await fetch('http://localhost:5000/api/approval', {
                 method: 'PUT',
@@ -31,6 +33,8 @@ export const RequestTable = (props) => {
         } catch (error) {
             console.error('Error updating approval:', error);
             showNotification('Terjadi kesalahan pada server', 'error');
+        }finally{
+            setIsProcessing(false);
         }
     }
 
@@ -66,6 +70,7 @@ export const RequestTable = (props) => {
                     <button 
                         class={`btn btn-approve ${approvalStatus() === 'approved' ? 'active' : ''}`}
                         onClick={() => handleApproval('approved')}
+                        disabled={isProcessing()}
                     >
                         {approvalStatus() === 'approved' ? 'Approved' : 'Approve'}
                     </button>
