@@ -4,6 +4,7 @@ import { showNotification } from "../../src/store/WebStore";
 export const RequestTable = (props) => {
     const [approvalStatus, setApprovalStatus] = createSignal(props.approval_status || 'pending');
     const [isProcessing, setIsProcessing] = createSignal(false);
+    const [productStatus, setProductStatus]= createSignal(props.status || 'incomplete');
     async function handleApproval(statusValue) {
         if(isProcessing()) return;
         setIsProcessing(true);
@@ -34,6 +35,37 @@ export const RequestTable = (props) => {
             console.error('Error updating approval:', error);
             showNotification('Terjadi kesalahan pada server', 'error');
         }finally{
+            setIsProcessing(false);
+        }
+    }
+
+    async function handleStatusChange(newStatus) {
+        if(isProcessing()) return;
+        setIsProcessing(true);
+        try {
+            const response = await fetch('http://localhost:5000/api/request-status', {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    status: newStatus,
+                    reqId: props.id
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setProductStatus(newStatus);
+                showNotification(data.message || 'Status barang berhasil diperbarui', 'success');
+            } else {
+                showNotification(data.message || 'Gagal memperbarui status barang', 'error');
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+            showNotification('Terjadi kesalahan pada server', 'error');
+        } finally {
             setIsProcessing(false);
         }
     }
@@ -83,9 +115,14 @@ export const RequestTable = (props) => {
                 </div>
             </td>
             <td>
-                <select class="select-status status-incomplete">
-                    <option value="complete" selected={props.status === 'complete'}>Complete (Berhasil Didapat)</option>
-                    <option value="incomplete" selected={props.status !== 'complete'}>Incomplete (Masa Pencarian)</option>
+                <select 
+                    class={`select-status ${productStatus() === 'complete' ? 'status-complete' : 'status-incomplete'}`}
+                    value={productStatus()}
+                    onChange={(e) => handleStatusChange(e.target.value)}
+                    disabled={isProcessing()}
+                >
+                    <option value="incomplete">Incomplete (Masa Pencarian)</option>
+                    <option value="complete">Complete (Berhasil Didapat)</option>
                 </select>
             </td>
         </tr>

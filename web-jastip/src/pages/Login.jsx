@@ -31,7 +31,7 @@ export const Login = () => {
             if(response.ok){
                 showNotification('Login Berhasil', 'success');
                 setUsers("currUser", data.user);
-                if(users.currUser?.role === 'admin'){
+                if(users().currUser?.role === 'admin'){
                     navigate('/admin', { replace: true});
                 }else{
                     navigate('/', { replace: true});

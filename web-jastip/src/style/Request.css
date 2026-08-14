@@ -1,6 +1,6 @@
 .request-item-card {
     width: 100%;
-    max-width: 240px;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     gap: 8px;

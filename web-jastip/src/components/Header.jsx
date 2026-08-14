@@ -28,7 +28,7 @@ export const Header =  () => {
                     <img class="cart-icon" src={cartIcon}/>
                     {/* 5. Profile */}
                     {/* Hanya muncul kalau belum login */}
-                    <Show when={users.currUser === null}>
+                    <Show when={users().currUser === null}>
                         <div class="auth-buttons">
                             <A href="/signup" class="auth-link">Sign Up</A>
                             <A href="/login" class="auth-link">Log In</A>
@@ -36,7 +36,7 @@ export const Header =  () => {
                     </Show>
 
                     {/* Hanya muncul kalau SUDAH login */}
-                    <Show when={users.currUser !== null}>
+                    <Show when={users().currUser !== null}>
                         <A href="/profile" class="profile-link">
                             <img src={profileIcon} class="profile-icon"/>
                         </A>

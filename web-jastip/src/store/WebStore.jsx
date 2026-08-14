@@ -1,10 +1,9 @@
-import { createStore } from "solid-js/store";
-import { createSignal} from "solid-js"
+import { createSignal } from "solid-js";
 
 const storedUser = localStorage.getItem("currUser");
 const initialUser = storedUser ? JSON.parse(storedUser) : null;
 
-const [users, setUsersStore] = createStore({
+const [users, setUsersSignal] = createSignal({
     currUser : initialUser,    
 });
 
@@ -16,7 +15,7 @@ export { notification };
 export { product, setProduct};
 
 export const setUsers = (key, value) => {
-    setUsersStore(key, value);
+    setUsersSignal(prev => ({ ...prev, [key]: value }));
     if (key === 'currUser') {
         if (value) {
             localStorage.setItem("currUser", JSON.stringify(value));

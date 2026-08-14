@@ -328,7 +328,7 @@
 
 .request-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 24px;
     margin-top: 16px;
 }
@@ -549,8 +549,8 @@
     }
     
     .request-container {
-        grid-template-columns: 1fr; /* 1 kolom di HP kecil */
-        gap: 16px;
+        grid-template-columns: repeat(2, 1fr); /* 2 kolom di HP kecil */
+        gap: 12px;
     }
 
     .t-req {

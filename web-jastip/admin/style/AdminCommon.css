@@ -11,7 +11,7 @@
 :root {
     --my-blue: #88A8D7;
     --my-blue-hover: #7697C5;
-    --bg-gray: #F8F8F8;
+    --bg-gray: #f8f8f8;
     --text-dark: #333333;
     --text-muted: #666666;
     --border-color: #E2E8F0;
@@ -52,7 +52,19 @@ body {
     flex-direction: column;
     position: fixed;
     height: 100vh;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar.open ~ .main-content {
+    margin-left: 260px;
+}
+
 
 .sidebar-header {
     padding: 24px;
@@ -103,6 +115,9 @@ body {
 .sidebar-footer {
     padding: 24px;
     border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .btn-logout {
@@ -122,11 +137,30 @@ body {
     color: white;
 }
 
+.btn-main-website {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--my-blue);
+    border: 1px solid var(--my-blue);
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center;
+}
+
+.btn-main-website:hover {
+    background-color: var(--my-blue-hover);
+    border-color: var(--my-blue-hover);
+}
+
 /* Main Content */
 .main-content {
     flex: 1;
-    margin-left: 260px;
+    margin-left: 0;
     padding: 32px 48px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .topbar {
@@ -134,6 +168,44 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 40px;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Hamburger Button */
+.hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 8px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.hamburger-btn:hover {
+    background-color: #F1F5F9;
+    border-color: var(--my-blue);
+}
+
+.hamburger-line {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: var(--text-dark);
+    border-radius: 2px;
+    transition: all 0.3s ease;
 }
 
 .topbar h1 {
@@ -382,4 +454,213 @@ body {
     background-color: var(--danger);
     color: white;
     border-color: var(--danger);
+}
+
+/* ===========================
+   Modal Styles
+   =========================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 32px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.close-btn:hover {
+    color: var(--danger);
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.form-input {
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--my-blue);
+    box-shadow: 0 0 0 3px rgba(136, 168, 215, 0.2);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Image Upload Styles */
+.image-upload-wrapper {
+    width: 100%;
+}
+
+.file-input-hidden {
+    display: none;
+}
+
+.image-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 150px;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #F8FAFC;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-upload-label:hover {
+    border-color: var(--my-blue);
+    background-color: #F1F5F9;
+}
+
+.image-upload-label.has-image {
+    border-style: solid;
+    background-color: transparent;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+}
+
+.upload-placeholder svg {
+    color: var(--my-blue);
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.change-image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 12px;
+    font-weight: bold;
+    transform: translateY(100%);
+    transition: transform 0.2s ease;
+}
+
+.image-upload-label.has-image:hover .change-image-overlay {
+    transform: translateY(0);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: #F8FAFC;
+}
+
+/* ===========================
+   Responsive — Sidebar Toggle
+   =========================== */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 24px 20px;
+    }
+
+    .topbar h1 {
+        font-size: 22px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
 }

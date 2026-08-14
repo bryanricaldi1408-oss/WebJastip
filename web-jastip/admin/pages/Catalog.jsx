@@ -1,6 +1,9 @@
 import "../style/Catalog.css";
+import { useNavigate } from "@solidjs/router";
+import { setUsers } from "../../src/store/WebStore";
 
 export const Catalog = () => {
+    const navigate = useNavigate();
 
     return (
         <>
@@ -17,7 +20,11 @@ export const Catalog = () => {
                         <a href="#" class="menu-item">Settings</a>
                     </nav>
                     <div class="sidebar-footer">
-                        <button class="btn-logout">Logout</button>
+                        <button class="btn-logout" onClick={() => {
+                            setUsers("currUser", null);
+                            navigate("/login");
+                        }}>Logout</button>
+                        <button class="btn-main-website" onClick={() => navigate("/")}>Main Website</button>
                     </div>
                 </aside>
 

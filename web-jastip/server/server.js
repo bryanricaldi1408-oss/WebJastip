@@ -191,28 +191,58 @@ app.get('/api/requests/approved', async (_, res) => {
     }
 });
 // GET ALL REQUESTS (Mengambil semua request titipan)
-app.get('/api/requests', async (_, res) => {
+app.get('/api/requests', async (req, res) => {
     try {
-        const query = `
-            SELECT 
-                r.id,
-                r.user_id,
-                COALESCE(u.name, 'Anonim') AS user_name,
-                u.phone_number,
-                r.name,
-                r.item_link,
-                r.details,
-                r.category,
-                r.product_image_url,
-                r.status,                     -- 'incomplete' atau 'complete'
-                r.approval_status,            -- 'pending', 'approved', atau 'denied'
-                r.created_at
-            FROM requests r
-            JOIN users u ON r.user_id = u.id
-            ORDER BY r.created_at DESC;
-        `;
+        const email = req.query.email;
 
-        const result = await dbPool.query(query);
+        let query;
+        let params = [];
+
+        if (email) {
+            // Filter request berdasarkan email user
+            query = `
+                SELECT 
+                    r.id,
+                    r.user_id,
+                    COALESCE(u.name, 'Anonim') AS user_name,
+                    u.phone_number,
+                    r.name,
+                    r.item_link,
+                    r.details,
+                    r.category,
+                    r.product_image_url,
+                    r.status,
+                    r.approval_status,
+                    r.created_at
+                FROM requests r
+                JOIN users u ON r.user_id = u.id
+                WHERE u.email = $1
+                ORDER BY r.created_at DESC;
+            `;
+            params = [email];
+        } else {
+            // Tanpa filter — untuk admin (backward compatible)
+            query = `
+                SELECT 
+                    r.id,
+                    r.user_id,
+                    COALESCE(u.name, 'Anonim') AS user_name,
+                    u.phone_number,
+                    r.name,
+                    r.item_link,
+                    r.details,
+                    r.category,
+                    r.product_image_url,
+                    r.status,
+                    r.approval_status,
+                    r.created_at
+                FROM requests r
+                JOIN users u ON r.user_id = u.id
+                ORDER BY r.created_at DESC;
+            `;
+        }
+
+        const result = await dbPool.query(query, params);
 
         res.status(200).json({
             requests: result.rows
@@ -262,6 +292,44 @@ app.put('/api/approval', async (req, res) => {
     }
 });
 
+// GET SINGLE REQUEST BY ID
+app.get('/api/requests/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        const query = `
+            SELECT 
+                r.id,
+                r.user_id,
+                COALESCE(u.name, 'Anonim') AS user_name,
+                u.phone_number,
+                r.name,
+                r.item_link,
+                r.details,
+                r.category,
+                r.product_image_url,
+                r.status,
+                r.approval_status,
+                r.created_at
+            FROM requests r
+            JOIN users u ON r.user_id = u.id
+            WHERE r.id = $1
+        `;
+        
+        const result = await dbPool.query(query, [id]);
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Barang tidak ditemukan' });
+        }
+        
+        res.status(200).json(result.rows[0]);
+        
+    } catch (error) {
+        console.error('Error fetching single request:', error);
+        res.status(500).json({ message: 'Gagal mengambil detail barang' });
+    }
+});
+
 // Submit Request Titipan
 app.post('/api/request', async (req, res) => {
     try {
@@ -290,6 +358,32 @@ app.post('/api/request', async (req, res) => {
     } catch (error) {
         console.error("Error submitting request:", error);
         res.status(500).json({ message: 'Gagal mengirim request titipan' });
+    }
+});
+
+// Update Status Barang (Complete/Incomplete)
+app.put('/api/request-status', async (req, res) => {
+    const { status, reqId } = req.body;
+    try {
+        const query = `
+            UPDATE requests
+            SET status = $1
+            WHERE id = $2 RETURNING *
+        `;
+        const values = [status, reqId];
+        const result = await dbPool.query(query, values);
+
+        const updatedItem = result.rows[0];
+
+        io.emit('request_status_changed', updatedItem);
+
+        res.status(200).json({
+            message: 'Status barang berhasil diperbarui',
+            request: updatedItem
+        });
+    } catch (error) {
+        console.error('Error updating request status:', error);
+        res.status(500).json({ message: 'Gagal memperbarui status barang' });
     }
 });
 

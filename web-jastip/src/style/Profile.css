@@ -87,12 +87,17 @@
     .profile-btn-secondary {
         width: 100%;
         text-align: center;
+        padding: 10px;
+        font-size: 14px;
     }
 
-    .profile-btn-danger {
-        width: 100%;
+    .profile-btn-danger,
+    .profile-btn-admin {
+        width: auto;
+        flex: 1;
         text-align: center;
-        padding: 12px 20px;
+        padding: 8px 12px;
+        font-size: 13px;
     }
 }
 
@@ -133,6 +138,18 @@
     .profile-input, .profile-textarea {
         font-size: 14px;
         padding: 10px 12px;
+    }
+
+    .profile-btn-primary,
+    .profile-btn-secondary {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .profile-btn-danger,
+    .profile-btn-admin {
+        padding: 6px 10px;
+        font-size: 12px;
     }
 }
 
@@ -248,6 +265,7 @@
     border-top: 1px dashed #eaeaea;
     display: flex;
     justify-content: flex-end;
+    gap: 12px;
 }
 
 .profile-btn-danger {
@@ -265,4 +283,21 @@
 
 .profile-btn-danger:hover {
     background-color: #fee2e2;
+}
+
+.profile-btn-admin {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-btn-admin:hover {
+    background-color: #dcfce7;
 }
