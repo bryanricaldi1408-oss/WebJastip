@@ -5,7 +5,7 @@ import waIcon from "../assets/WAIcon.png";
 import profileIcon from "../assets/ProfileIcon.png";
 import { A } from "@solidjs/router";
 import { Show } from "solid-js";
-import { users, setUsers } from "../store/WebStore";
+import { users, setUsers, cartCount } from "../store/WebStore";
 
 export const Header = () => {
   return (
@@ -30,7 +30,14 @@ export const Header = () => {
               <img class="wa-icon" src={waIcon} />
             </a>
             {/* 4. Cart */}
-            <img class="cart-icon" src={cartIcon} />
+            <A href="/cart">
+              <div class="cart-container">
+                <img class="cart-icon" src={cartIcon} />
+                <Show when={cartCount() > 0}>
+                  <span class="cart-bubble">{cartCount()}</span>
+                </Show>
+              </div>
+            </A>
             {/* 5. Profile */}
             {/* Hanya muncul kalau belum login */}
             <Show when={users().currUser === null}>

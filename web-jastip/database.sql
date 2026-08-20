@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS requests CASCADE;
 DROP TABLE IF EXISTS products CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS banners CASCADE;
-
+        
 -- 1. TABEL: users 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -68,7 +68,26 @@ CREATE TABLE banners (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-
+-- 6. TABEL: cart
+CREATE TABLE cart (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    
+    -- product_id diisi jika user menambahkan produk dari Katalog Home
+    product_id INT REFERENCES products(id) ON DELETE CASCADE,
+    
+    -- request_id diisi jika user menambahkan produk dari Titipan Custom
+    request_id INT REFERENCES requests(id) ON DELETE CASCADE,
+    
+    quantity INT DEFAULT 1,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Memastikan cart item harus memiliki salah satu: product_id ATAU request_id (tidak boleh dua-duanya kosong)
+    CONSTRAINT check_item_type CHECK (
+        (product_id IS NOT NULL AND request_id IS NULL) OR 
+        (product_id IS NULL AND request_id IS NOT NULL)
+    )
+);
 --account dummy for testing
-INSERT INTO users(name, email, phone_number,password)
-VALUES ('admin', 'admin@gmail.com', '08', 'admin1234', 'admin')
+INSERT INTO users(name, email, phone_number,password, role)
+VALUES ('admin', 'admin@gmail.com', '08', 'admin1234', 'admin');

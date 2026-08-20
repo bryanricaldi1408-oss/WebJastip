@@ -9,6 +9,7 @@ import { Catalog } from "../admin/pages/Catalog";
 import { Notification } from "./components/Notification";
 import { Payment } from "../admin/pages/Payment";
 import { Detail } from "./pages/Detail";
+import { Cart } from "./pages/Cart";
 
 const Layout = (props) => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/profile" component={Profile} />
           <Route path="/product/:id" component={Detail} />
           <Route path="/request/:id" component={Detail} />
+          <Route path="/cart" component={Cart} />
         </Route>
       </Router>
     </>

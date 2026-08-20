@@ -256,10 +256,11 @@ img {
 
   .upper-h {
     display: grid;
-    grid-template-columns: 1fr auto auto;
-    gap: 12px;
+    grid-template-columns: 1fr auto auto auto auto;
+    gap: 8px;
     padding: 12px 16px;
     box-sizing: border-box;
+    height: auto;
   }
 
   .title {
@@ -270,17 +271,25 @@ img {
     align-self: center;
   }
 
+  .search-container {
+    grid-column: 1 / span 5;
+    grid-row: 2;
+    width: 100%;
+    max-width: 100%;
+    height: 42px;
+  }
+
+  /* Urutan di row 1: Title | WA | Cart | Profile */
   .cart-icon {
-    grid-column: 2;
+    grid-column: 3;
     grid-row: 1;
     width: 32px;
     height: 32px;
     align-self: center;
-    margin-left: auto;
   }
 
   .profile-link {
-    grid-column: 3;
+    grid-column: 4;
     grid-row: 1;
     align-self: center;
     display: flex;
@@ -292,25 +301,28 @@ img {
     height: 32px;
   }
 
-  .search-container {
-    grid-column: 1 / span 3;
-    grid-row: 2;
-    width: 100%;
-    max-width: 100%;
-    height: 42px;
-  }
-
   .search-input {
     font-size: 18px;
   }
 
   .contact-container {
-    grid-column: 1 / span 3;
-    grid-row: 3;
-    width: 100%;
+    grid-column: auto;
+    grid-row: 1;
+    width: 40px;
+    height: 40px;
+    padding: 0;
     justify-content: center;
-    height: 42px;
-    font-size: 18px;
+    border-radius: 50%;
+    align-self: center;
+  }
+
+  .contact-text {
+    display: none;
+  }
+
+  .wa-icon {
+    width: 22px;
+    height: 22px;
   }
 
   .category-container {
@@ -345,10 +357,10 @@ img {
 
   /* Auth buttons wrapper untuk user belum login */
   .auth-buttons {
-    grid-column: 2 / span 2;
+    grid-column: 2 / span 3;
     grid-row: 1;
     display: flex;
-    gap: 8px;
+    gap: 6px;
     align-self: center;
     justify-self: end;
   }
@@ -458,4 +470,34 @@ img {
 .auth-link:active {
   transform: translateY(0) scale(0.98);
   box-shadow: 0 2px 4px rgba(136, 168, 215, 0.4);
+}
+
+/* Container cart wajib diset relative agar bubble tau posisinya di mana */
+.cart-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Style untuk bubble merahnya */
+.cart-bubble {
+  position: absolute;
+  top: -6px; /* Mengatur seberapa tinggi bubble nya */
+  right: -6px; /* Mengatur posisinya di ujung kanan icon */
+  background-color: #ff3b30; /* Warna merah */
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  
+  /* Membuatnya menjadi bulat sempurna */
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  
+  /* Menengahkan angka di dalam bubble */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

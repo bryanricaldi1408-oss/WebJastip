@@ -1,16 +1,15 @@
 import { useLocation, useParams } from "@solidjs/router";
 import { createSignal, onMount, Show } from "solid-js";
 import "../style/Detail.css";
-
+import { cartCount, setCartCount, showNotification } from "../store/WebStore";
+import { users } from "../store/WebStore";
 export const Detail = () => {
   const params = useParams();
   const location = useLocation();
   const [product, setProduct] = createSignal(null);
   const [request, setRequest] = createSignal(null);
   const [isLoading, setIsLoading] = createSignal(true);
-
-  // Simulasi data jumlah wishlist (bisa diganti logic asli nanti)
-  const [wishlistCount] = createSignal(Math.floor(Math.random() * 50) + 15);
+  const [isAdded, setIsAdded] = createSignal(false);
 
   const isProductType = location.pathname.includes("/product");
 
@@ -57,13 +56,58 @@ export const Detail = () => {
     return `Rp ${Number(price).toLocaleString("id-ID")}`;
   };
 
+  const handleCart = async () => {
+    if (!users().currUser) {
+      showNotification("Tolong login/signup terlebih dahulu", "error")
+      return;
+    }
+
+    // Naikkan angka bubble merah secara instan
+    setCartCount(cartCount() + 1);
+    
+    // Tentukan payload apakah ini produk katalog atau request titipan
+    const payload = {
+      quantity: 1, // Kita menambahkan 1 barang setiap kali klik
+      user_id: users().currUser.id,
+    };
+    
+    if (isProductType) {
+      payload.product_id = parseInt(params.id);
+    } else {
+      payload.request_id = parseInt(params.id);
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/add-cart', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if(response.ok){
+        showNotification("Item berhasil dimasukan ke dalam cart", "success")
+        setIsAdded(true); // Tandai tombol sudah diklik
+      }
+      else{
+        alert("Gagal menambahkan ke keranjang, coba lagi.");
+        // Kembalikan angka bubble merah kalau error
+        setCartCount(cartCount() - 1);
+      }
+
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+      setCartCount(cartCount() - 1);
+    }
+  };
   return (
     <div class="aest-detail-page">
       {/* LOADING STATE */}
       <Show when={isLoading()}>
         <div class="aest-loading-wrapper">
           <div class="aest-spinner"></div>
-          <p>Mempersiapkan tampilan menawan...</p>
+          <p>Loading...</p>
         </div>
       </Show>
 
@@ -114,9 +158,13 @@ export const Detail = () => {
               </div>
 
               <div class="aest-actions">
-                <button class="aest-btn aest-btn-primary">
+                <button
+                  class={`aest-btn aest-btn-primary ${isAdded() ? "aest-btn-added" : ""}`}
+                  onClick={handleCart}
+                  disabled={isAdded()}
+                >
                   <span class="aest-btn-icon">🛍️</span>
-                  Beli Produk Ini
+                  {isAdded() ? "Sudah di Keranjang" : "Beli Produk Ini"}
                 </button>
               </div>
 
@@ -185,9 +233,13 @@ export const Detail = () => {
                     Cek Link Asli
                   </a>
                 </Show>
-                <button class="aest-btn aest-btn-primary aest-btn-glow">
+                <button
+                  class={`aest-btn aest-btn-primary aest-btn-glow ${isAdded() ? "aest-btn-added" : ""}`}
+                  onClick={handleCart}
+                  disabled={isAdded()}
+                >
                   <span class="aest-btn-icon">🛒</span>
-                  Ikut Titip (Add to Cart)
+                  {isAdded() ? "Sudah di Keranjang" : "Ikut Titip (Add to Cart)"}
                 </button>
               </div>
 

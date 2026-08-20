@@ -2,6 +2,7 @@ import { createSignal } from "solid-js";
 
 const storedUser = localStorage.getItem("currUser");
 const initialUser = storedUser ? JSON.parse(storedUser) : null;
+const [cartCount, setCartCount]= createSignal(0);
 
 const [users, setUsersSignal] = createSignal({
   currUser: initialUser,
@@ -13,6 +14,7 @@ const [product, setProduct] = createSignal([]);
 export { users };
 export { notification };
 export { product, setProduct };
+export { cartCount, setCartCount};
 
 export const setUsers = (key, value) => {
   setUsersSignal((prev) => ({ ...prev, [key]: value }));
@@ -28,7 +30,7 @@ export const setUsers = (key, value) => {
 export const showNotification = (
   message,
   type = "success",
-  duration = 3000,
+  duration = 2000,
 ) => {
   const id = Date.now();
   setNotification((prev) => [...prev, { id, message, type }]);

@@ -440,6 +440,25 @@ app.put("/api/request-status", async (req, res) => {
   }
 });
 
+// ADD TO CART
+app.post("/api/add-cart", async (req, res) => {
+  try {
+    const { user_id, product_id, request_id, quantity } = req.body;
+    
+    const query = `
+      INSERT INTO cart (user_id, product_id, request_id, quantity) 
+      VALUES ($1, $2, $3, $4) RETURNING *
+    `;
+    const values = [user_id, product_id || null, request_id || null, quantity];
+    const result = await dbPool.query(query, values);
+    
+    res.status(201).json({ message: "Berhasil ditambahkan ke cart", cartItem: result.rows[0] });
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    res.status(500).json({ message: "Gagal menambahkan ke cart" });
+  }
+});
+
 const PORT = 5000;
 server.listen(PORT, () => {
   console.log(`Server Listening at PORT:${PORT}...`);
