@@ -6,6 +6,7 @@ import { users } from "../store/WebStore";
 import { showNotification } from "../store/WebStore";
 import { io } from "socket.io-client";
 import { uploadImage } from "../utils/uploadImage";
+import { Product } from "../components/Product";
 
 const imageModules = import.meta.glob("../images/*.{png, jpeg,jpg}", {
   eager: true,
@@ -25,9 +26,11 @@ export const Home = () => {
   const [category, setCategory] = createSignal("");
   const [requests, setRequests] = createSignal([]);
   const [isSubmitting, setIsSubmitting] = createSignal(false);
+  const [products, setProducts] = createSignal([]);
 
   onMount(() => {
     fetchRequests();
+    fetchProducts();
     socket.on("request_status_changed", (updatedItem) => {
       if (updatedItem.approval_status === "approved") {
         // Cek apakah item sudah ada di array
@@ -154,6 +157,19 @@ export const Home = () => {
       }
     } catch (error) {
       console.error("Gagal mengambil data request:", error);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/products");
+      const data = await response.json();
+
+      if (response.ok) {
+        setProducts(data.products || []);
+      }
+    } catch (error) {
+      console.error("Gagal mengambil data produk: ", error);
     }
   };
 
@@ -328,10 +344,33 @@ export const Home = () => {
             See All
           </A>
         </div>
+
+        <Show when={products().length === 0}>
+          <div class="no-requests-msg">
+            <p>Belum ada produk saat ini.</p>
+          </div>
+        </Show>
+
+        <Show when={products().length !== 0}>
+          <div class="product-container">
+            <For each={products()}>
+              {(item) => (
+                <A href={`/product/${item.id}`} style="text-decoration: none;">
+                  <Product 
+                    name = {item.name}
+                    description = {item.description}
+                    price = {item.price}
+                    image_url = {item.image_url}
+                  />
+                </A>
+              )}
+            </For>
+          </div>
+        </Show>
         <div class="section-header">
-            <h2 class="section-title">
-              <span class="blue">Recent</span> Requests
-            </h2>
+          <h2 class="section-title">
+            <span class="blue">Recent</span> Requests
+          </h2>
         </div>
         <Show when={requests().length === 0}>
           <div class="no-requests-msg">
@@ -342,7 +381,7 @@ export const Home = () => {
           <div class="request-container">
             <For each={requests()}>
               {(item) => (
-                <A href={`/detail/${item.id}`}>
+                <A href={`/request/${item.id}`} style="text-decoration: none;">
                   <Request
                     image={item.product_image_url}
                     category={item.category}

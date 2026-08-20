@@ -1,452 +1,461 @@
 @font-face {
-    font-family: 'Satoshi';
-    src: url('../fonts/Satoshi-Variable.ttf');
+  font-family: "Satoshi";
+  src: url("../fonts/Satoshi-Variable.ttf");
 }
 
 @font-face {
-    font-family: 'InstrumentSerif';
-    src: url('../fonts/InstrumentSerif-Regular.ttf');
+  font-family: "InstrumentSerif";
+  src: url("../fonts/InstrumentSerif-Regular.ttf");
 }
-:root{
-    --my-blue :#88A8D7;
-    --my-white : #F3F3F3;
-    --bg-gray : #F8F8F8;
-}
-
-*, *::before, *::after {
-    box-sizing: border-box;
+:root {
+  --my-blue: #88a8d7;
+  --my-white: #f3f3f3;
+  --bg-gray: #f8f8f8;
 }
 
-body{
-    margin: 0px;
-    background-color: var(--bg-gray);
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0px;
+  background-color: var(--bg-gray);
 }
 
 header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    width: 100%;
-    background-color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 img {
-    max-width: 100%;
-    height: auto;
+  max-width: 100%;
+  height: auto;
 }
-.title{
-    font-family: 'Satoshi';
-    font-weight: bold;
-    font-size: 2.5rem;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.blue-t{
-    color: var(--my-blue);
+.title {
+  font-family: "Satoshi";
+  font-weight: bold;
+  font-size: 2.5rem;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
-.upper-h{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    background-color: white;
-    box-sizing: border-box;
-    padding: 10px 40px;
-    /* margin-top: 20px; */
-    height: 80px;
+.blue-t {
+  color: var(--my-blue);
 }
-.cart-icon{
-    width: 42px;
-    height: 42px;
-    padding: 8px;
-    box-sizing: border-box;
-    border-radius: 50%;
-    background-color: var(--my-white);
-    object-fit: contain;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+
+.upper-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: white;
+  box-sizing: border-box;
+  padding: 10px 40px;
+  /* margin-top: 20px; */
+  height: 80px;
+}
+.cart-icon {
+  width: 42px;
+  height: 42px;
+  padding: 8px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background-color: var(--my-white);
+  object-fit: contain;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .cart-icon:hover {
-    background-color: #E2E8F0;
-    transform: translateY(-2px) scale(1.08) rotate(-6deg);
-    box-shadow: 0 6px 16px rgba(136, 168, 215, 0.35);
+  background-color: #e2e8f0;
+  transform: translateY(-2px) scale(1.08) rotate(-6deg);
+  box-shadow: 0 6px 16px rgba(136, 168, 215, 0.35);
 }
 
 .cart-icon:active {
-    transform: translateY(0) scale(0.95);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(0) scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.search-container{
-    display: flex;
-    align-items: center;
-    background-color: var(--my-white);
-    border-radius: 50px;
-    padding: 0 20px;
-    gap: 12px;
-    width: 100%;
-    max-width: 1000px;
-    height: 48px;
-    box-sizing: border-box;
+.search-container {
+  display: flex;
+  align-items: center;
+  background-color: var(--my-white);
+  border-radius: 50px;
+  padding: 0 20px;
+  gap: 12px;
+  width: 100%;
+  max-width: 1000px;
+  height: 48px;
+  box-sizing: border-box;
 }
 
 .search-icon {
-    width: 22px;               /* Atur ukuran icon agar proposional */
-    height: 22px;
-    object-fit: contain;
-    opacity: 0.5;              /* Membuat warna icon agak memudar/abu-abu agar sesuai desain */
+  width: 22px; /* Atur ukuran icon agar proposional */
+  height: 22px;
+  object-fit: contain;
+  opacity: 0.5; /* Membuat warna icon agak memudar/abu-abu agar sesuai desain */
 }
 .search-input {
-    font-family: 'InstrumentSerif';
-    border: none;              
-    background: transparent;   /* WAJIB: Membuat latar input menyatu dengan warna container */
-    outline: none;             /* WAJIB: Menghilangkan garis biru yang muncul saat diklik */
-    width: 100%;               
-    font-size: 24px;           
-    color: #333333;            
+  font-family: "InstrumentSerif";
+  border: none;
+  background: transparent; /* WAJIB: Membuat latar input menyatu dengan warna container */
+  outline: none; /* WAJIB: Menghilangkan garis biru yang muncul saat diklik */
+  width: 100%;
+  font-size: 24px;
+  color: #333333;
 }
 
-.contact-container{
-    display: flex;
-    font-family: 'InstrumentSerif'; 
-    font-size: 24px;           
-    color: white;  
-    background-color: var(--my-blue);
-    align-items: center;
-    border-radius: 50px;
-    column-gap: 10px;
-    padding: 0 20px;
-    cursor: pointer;
-    height: 48px;
-    box-sizing: border-box;
-    white-space: nowrap;
-    flex-shrink: 0;
-    text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 2px 8px rgba(136, 168, 215, 0.3);
+.contact-container {
+  display: flex;
+  font-family: "InstrumentSerif";
+  font-size: 24px;
+  color: white;
+  background-color: var(--my-blue);
+  align-items: center;
+  border-radius: 50px;
+  column-gap: 10px;
+  padding: 0 20px;
+  cursor: pointer;
+  height: 48px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 8px rgba(136, 168, 215, 0.3);
 }
 
 .contact-container:hover {
-    background-color: #7697C5;
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 6px 18px rgba(136, 168, 215, 0.5);
+  background-color: #7697c5;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 18px rgba(136, 168, 215, 0.5);
 }
 
 .contact-container:hover .wa-icon {
-    transform: scale(1.18) rotate(-10deg);
+  transform: scale(1.18) rotate(-10deg);
 }
 
 .contact-container:active {
-    transform: translateY(0) scale(0.98);
-    box-shadow: 0 2px 6px rgba(136, 168, 215, 0.3);
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 6px rgba(136, 168, 215, 0.3);
 }
 
-.wa-icon{
-    width: 26px;
-    height: 26px;
-    object-fit: contain;
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+.wa-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.profile-icon{
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .profile-icon:hover {
-    transform: translateY(-2px) scale(1.08);
-    box-shadow: 0 6px 16px rgba(136, 168, 215, 0.4);
+  transform: translateY(-2px) scale(1.08);
+  box-shadow: 0 6px 16px rgba(136, 168, 215, 0.4);
 }
 
 .profile-icon:active {
-    transform: translateY(0) scale(0.95);
+  transform: translateY(0) scale(0.95);
 }
-.right-container{
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-shrink: 0;
+.right-container {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .category-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 10px 40px;
-    box-sizing: border-box;
-    background-color: white;
-    border-bottom: 1px solid #EAEAEA;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 40px;
+  box-sizing: border-box;
+  background-color: white;
+  border-bottom: 1px solid #eaeaea;
 }
 
-.left-categories, .right-categories {
-    display: flex;
-    gap: 15px;
-    align-items: center;
+.left-categories,
+.right-categories {
+  display: flex;
+  gap: 15px;
+  align-items: center;
 }
 
 .category-item {
-    font-family: 'InstrumentSerif';
-    font-size: 20px;
-    color: #333333;
-    background-color: var(--my-white);
-    padding: 6px 18px;
-    border-radius: 50px;
-    text-decoration: none;
-    transition: background-color 0.2s ease, color 0.2s ease;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
+  font-family: "InstrumentSerif";
+  font-size: 20px;
+  color: #333333;
+  background-color: var(--my-white);
+  padding: 6px 18px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
 }
 
 .category-item:hover {
-    background-color: #E2E2E2;
+  background-color: #e2e2e2;
 }
 
 .category-item.active {
-    background-color: var(--my-blue);
-    color: white;
+  background-color: var(--my-blue);
+  color: white;
 }
 
 .category-item.active:hover {
-    background-color: #7697C5;
+  background-color: #7697c5;
 }
 
 /* Media Query untuk Tablet / iPad (769px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
-    .contact-text {
-        display: none;
-    }
-    .title{
-        padding-right: 30px;
-    }
-    .auth-link{
-        font-size: 10px;
-    }
-    .contact-container {
-        width: 48px;
-        height: 48px;
-        padding: 0;
-        justify-content: center;
-        border-radius: 50%;
-    }
+  .contact-text {
+    display: none;
+  }
+  .title {
+    padding-right: 30px;
+  }
+  .auth-link {
+    font-size: 10px;
+  }
+  .contact-container {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+  }
 }
 
 /* Media Query untuk Handphone / Layar Kecil */
 @media (max-width: 768px) {
-    .right-container {
-        display: contents; /* Menghilangkan pembungkus agar anak-anaknya sejajar di Grid .upper-h */
-    }
+  .right-container {
+    display: contents; /* Menghilangkan pembungkus agar anak-anaknya sejajar di Grid .upper-h */
+  }
 
-    .upper-h {
-        display: grid;
-        grid-template-columns: 1fr auto auto;
-        gap: 12px;
-        padding: 12px 16px;
-        box-sizing: border-box;
-    }
-    
-    .title {
-        grid-column: 1;
-        grid-row: 1;
-        font-size: 1.8rem;
-        margin: 0;
-        align-self: center;
-    }
-    
-    .cart-icon {
-        grid-column: 2;
-        grid-row: 1;
-        width: 32px;
-        height: 32px;
-        align-self: center;
-        margin-left: auto;
-    }
-    
-    .profile-link {
-        grid-column: 3;
-        grid-row: 1;
-        align-self: center;
-        display: flex;
-        align-items: center;
-    }
-    
-    .profile-icon {
-        width: 32px;
-        height: 32px;
-    }
-    
-    .search-container {
-        grid-column: 1 / span 3;
-        grid-row: 2;
-        width: 100%;
-        max-width: 100%;
-        height: 42px;
-    }
-    
-    .search-input {
-        font-size: 18px;
-    }
-    
-    .contact-container {
-        grid-column: 1 / span 3;
-        grid-row: 3;
-        width: 100%;
-        justify-content: center;
-        height: 42px;
-        font-size: 18px;
-    }
-    
-    .category-container {
-        padding: 10px 16px;
-        overflow-x: auto;
-        white-space: nowrap;
-        justify-content: flex-start;
-        gap: 8px;
-        flex-wrap: nowrap;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-    }
-    
-    .category-container::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .auth-link{
-        font-size: 7px;
-    } 
-    .left-categories, .right-categories {
-        display: contents; /* Semua category-item jadi anak langsung dari category-container */
-    }
+  .upper-h {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 12px;
+    padding: 12px 16px;
+    box-sizing: border-box;
+  }
 
-    .category-item {
-        font-size: 16px;
-        padding: 6px 14px;
-        flex-shrink: 0;
-        white-space: nowrap;
-    }
+  .title {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 1.8rem;
+    margin: 0;
+    align-self: center;
+  }
 
-    /* Auth buttons wrapper untuk user belum login */
-    .auth-buttons {
-        grid-column: 2 / span 2;
-        grid-row: 1;
-        display: flex;
-        gap: 8px;
-        align-self: center;
-        justify-self: end;
-    }
+  .cart-icon {
+    grid-column: 2;
+    grid-row: 1;
+    width: 32px;
+    height: 32px;
+    align-self: center;
+    margin-left: auto;
+  }
 
-    .auth-link {
-        font-size: 14px;
-        padding: 7px 12px;
-        box-shadow: none;
-    }
+  .profile-link {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: center;
+    display: flex;
+    align-items: center;
+  }
+
+  .profile-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .search-container {
+    grid-column: 1 / span 3;
+    grid-row: 2;
+    width: 100%;
+    max-width: 100%;
+    height: 42px;
+  }
+
+  .search-input {
+    font-size: 18px;
+  }
+
+  .contact-container {
+    grid-column: 1 / span 3;
+    grid-row: 3;
+    width: 100%;
+    justify-content: center;
+    height: 42px;
+    font-size: 18px;
+  }
+
+  .category-container {
+    padding: 10px 16px;
+    overflow-x: auto;
+    white-space: nowrap;
+    justify-content: flex-start;
+    gap: 8px;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .category-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .auth-link {
+    font-size: 7px;
+  }
+  .left-categories,
+  .right-categories {
+    display: contents; /* Semua category-item jadi anak langsung dari category-container */
+  }
+
+  .category-item {
+    font-size: 16px;
+    padding: 6px 14px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Auth buttons wrapper untuk user belum login */
+  .auth-buttons {
+    grid-column: 2 / span 2;
+    grid-row: 1;
+    display: flex;
+    gap: 8px;
+    align-self: center;
+    justify-self: end;
+  }
+
+  .auth-link {
+    font-size: 14px;
+    padding: 7px 12px;
+    box-shadow: none;
+  }
 }
 
 /* Auth buttons wrapper desktop */
 .auth-buttons {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-shrink: 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 /* Responsif untuk HP sangat kecil */
 @media (max-width: 480px) {
-    .upper-h {
-        padding: 10px 12px;
-        gap: 8px;
-        height: auto;
-    }
+  .upper-h {
+    padding: 10px 12px;
+    gap: 8px;
+    height: auto;
+  }
 
-    .auth-link{
-        font-size: 10px;
-    }
-    .title {
-        font-size: 1.4rem;
-    }
+  .auth-link {
+    font-size: 10px;
+  }
+  .title {
+    font-size: 1.4rem;
+  }
 
-    .search-container {
-        height: 36px;
-        padding: 0 14px;
-    }
+  .search-container {
+    height: 36px;
+    padding: 0 14px;
+  }
 
-    .search-input {
-        font-size: 15px;
-    }
+  .search-input {
+    font-size: 15px;
+  }
 
-    .contact-container {
-        height: 34px;
-        font-size: 14px;
-    }
+  .contact-container {
+    height: 34px;
+    font-size: 14px;
+  }
 
-    .wa-icon {
-        width: 20px;
-        height: 20px;
-    }
+  .wa-icon {
+    width: 20px;
+    height: 20px;
+  }
 
-    .category-container {
-        padding: 8px 12px;
-        gap: 6px;
-    }
+  .category-container {
+    padding: 8px 12px;
+    gap: 6px;
+  }
 
-    .category-item {
-        font-size: 14px;
-        padding: 5px 12px;
-    }
+  .category-item {
+    font-size: 14px;
+    padding: 5px 12px;
+  }
 
-    .cart-icon {
-        width: 26px;
-        height: 26px;
-    }
+  .cart-icon {
+    width: 26px;
+    height: 26px;
+  }
 
-    .profile-icon {
-        width: 28px;
-        height: 28px;
-    }
+  .profile-icon {
+    width: 28px;
+    height: 28px;
+  }
 
-    .auth-buttons {
-        gap: 4px;
-    }
+  .auth-buttons {
+    gap: 4px;
+  }
 
-    .auth-link {
-        font-size: 12px;
-        padding: 5px 10px;
-        border-radius: 6px;
-    }
+  .auth-link {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 6px;
+  }
 }
 
 /* Styling untuk tombol Sign Up dan Log In */
 .auth-link {
-    background-color: var(--my-blue);
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-family: 'Satoshi';
-    font-size: 20px;
-    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-    display: inline-block;
-    box-shadow: 0 2px 6px rgba(136, 168, 215, 0.4);
-    font-family: 'InstrumentSerif';
+  background-color: var(--my-blue);
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: "Satoshi";
+  font-size: 20px;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease,
+    box-shadow 0.2s ease;
+  display: inline-block;
+  box-shadow: 0 2px 6px rgba(136, 168, 215, 0.4);
+  font-family: "InstrumentSerif";
 }
 
 .auth-link:hover {
-    background-color: #7697C5;
+  background-color: #7697c5;
 }
 
 .auth-link:active {
-    transform: translateY(0) scale(0.98);
-    box-shadow: 0 2px 4px rgba(136, 168, 215, 0.4);
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 4px rgba(136, 168, 215, 0.4);
 }

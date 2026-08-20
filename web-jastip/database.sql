@@ -40,6 +40,7 @@ CREATE TABLE requests (
     item_link TEXT,
     details TEXT,
     category VARCHAR(100),
+    price NUMERIC(12, 2),
     product_image_url TEXT,
     status VARCHAR(50) DEFAULT 'incomplete', -- incomplete, complete
     approval_status VARCHAR(50) DEFAULT 'pending', -- pending, approved, denied

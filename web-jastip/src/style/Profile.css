@@ -1,303 +1,308 @@
 /* Container Utama */
 .profile-container {
-    max-width: 1000px;
-    margin: 60px auto;
-    padding: 0 24px;
-    font-family: 'Satoshi', sans-serif;
-    color: #333333;
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 0 24px;
+  font-family: "Satoshi", sans-serif;
+  color: #333333;
 }
 
 /* Bagian Header Profil */
 .profile-header {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    margin-bottom: 48px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #eaeaea;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 48px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #eaeaea;
 }
 
 .profile-page-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 4px 12px rgba(136, 168, 215, 0.2);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(136, 168, 215, 0.2);
 }
 
 .profile-title {
-    font-family: 'InstrumentSerif', serif;
-    font-size: 42px;
-    margin: 0 0 8px 0;
-    color: #1a1a1a;
+  font-family: "InstrumentSerif", serif;
+  font-size: 42px;
+  margin: 0 0 8px 0;
+  color: #1a1a1a;
 }
 
 .profile-subtitle {
-    font-size: 16px;
-    color: #666666;
-    margin: 0;
+  font-size: 16px;
+  color: #666666;
+  margin: 0;
 }
 
 /* Bagian Konten 2 Kolom */
 .profile-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Membagi layar menjadi 2 kolom sama besar */
-    gap: 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Membagi layar menjadi 2 kolom sama besar */
+  gap: 48px;
 }
 
 /* Responsif untuk Tablet & HP */
 @media (max-width: 768px) {
-    .profile-container {
-        margin: 32px auto;
-        padding: 0 16px;
-    }
+  .profile-container {
+    margin: 32px auto;
+    padding: 0 16px;
+  }
 
-    .profile-header {
-        flex-direction: column;
-        text-align: center;
-        gap: 16px;
-        margin-bottom: 32px;
-        padding-bottom: 20px;
-    }
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+  }
 
-    .profile-page-icon {
-        width: 64px;
-        height: 64px;
-    }
+  .profile-page-icon {
+    width: 64px;
+    height: 64px;
+  }
 
-    .profile-title {
-        font-size: 28px;
-    }
+  .profile-title {
+    font-size: 28px;
+  }
 
-    .profile-content {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
+  .profile-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 
-    .profile-section {
-        padding: 24px 20px;
-    }
+  .profile-section {
+    padding: 24px 20px;
+  }
 
-    .logout-area {
-        justify-content: center;
-        margin-top: 32px;
-    }
+  .logout-area {
+    justify-content: center;
+    margin-top: 32px;
+  }
 
-    .profile-btn-primary,
-    .profile-btn-secondary {
-        width: 100%;
-        text-align: center;
-        padding: 10px;
-        font-size: 14px;
-    }
+  .profile-btn-primary,
+  .profile-btn-secondary {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+  }
 
-    .profile-btn-danger,
-    .profile-btn-admin {
-        width: auto;
-        flex: 1;
-        text-align: center;
-        padding: 8px 12px;
-        font-size: 13px;
-    }
+  .profile-btn-danger,
+  .profile-btn-admin {
+    width: auto;
+    flex: 1;
+    text-align: center;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
 }
 
 /* Responsif untuk HP Kecil */
 @media (max-width: 480px) {
-    .profile-container {
-        margin: 20px auto;
-        padding: 0 12px;
-    }
+  .profile-container {
+    margin: 20px auto;
+    padding: 0 12px;
+  }
 
-    .profile-header {
-        gap: 12px;
-        margin-bottom: 24px;
-    }
+  .profile-header {
+    gap: 12px;
+    margin-bottom: 24px;
+  }
 
-    .profile-page-icon {
-        width: 56px;
-        height: 56px;
-    }
+  .profile-page-icon {
+    width: 56px;
+    height: 56px;
+  }
 
-    .profile-title {
-        font-size: 24px;
-    }
+  .profile-title {
+    font-size: 24px;
+  }
 
-    .profile-subtitle {
-        font-size: 14px;
-    }
+  .profile-subtitle {
+    font-size: 14px;
+  }
 
-    .profile-section {
-        padding: 20px 16px;
-        border-radius: 12px;
-    }
+  .profile-section {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
 
-    .section-heading {
-        font-size: 17px;
-    }
+  .section-heading {
+    font-size: 17px;
+  }
 
-    .profile-input, .profile-textarea {
-        font-size: 14px;
-        padding: 10px 12px;
-    }
+  .profile-input,
+  .profile-textarea {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
 
-    .profile-btn-primary,
-    .profile-btn-secondary {
-        padding: 8px;
-        font-size: 13px;
-    }
+  .profile-btn-primary,
+  .profile-btn-secondary {
+    padding: 8px;
+    font-size: 13px;
+  }
 
-    .profile-btn-danger,
-    .profile-btn-admin {
-        padding: 6px 10px;
-        font-size: 12px;
-    }
+  .profile-btn-danger,
+  .profile-btn-admin {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
 }
 
 .profile-section {
-    background-color: #ffffff;
-    border: 1px solid #eaeaea;
-    border-radius: 16px;
-    padding: 32px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
 }
 
 .section-heading {
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 0;
-    margin-bottom: 24px;
-    color: var(--my-blue, #88a8d7);
-    border-bottom: 2px solid var(--my-blue, #88a8d7);
-    display: inline-block;
-    padding-bottom: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: var(--my-blue, #88a8d7);
+  border-bottom: 2px solid var(--my-blue, #88a8d7);
+  display: inline-block;
+  padding-bottom: 8px;
 }
 
 /* Formulir (Satu Tema dengan Auth.css) */
 .profile-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .form-group label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #444444;
+  font-size: 14px;
+  font-weight: 600;
+  color: #444444;
 }
 
-.profile-input, .profile-textarea {
-    padding: 12px 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 15px;
-    font-family: 'Satoshi', sans-serif;
-    transition: all 0.2s ease;
-    background-color: #fcfcfc;
+.profile-input,
+.profile-textarea {
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: "Satoshi", sans-serif;
+  transition: all 0.2s ease;
+  background-color: #fcfcfc;
 }
 
 .profile-textarea {
-    resize: vertical;
-    min-height: 100px;
+  resize: vertical;
+  min-height: 100px;
 }
 
-.profile-input:focus, .profile-textarea:focus {
-    outline: none;
-    border-color: var(--my-blue, #88a8d7);
-    box-shadow: 0 0 0 3px rgba(136, 168, 215, 0.2);
-    background-color: #ffffff;
+.profile-input:focus,
+.profile-textarea:focus {
+  outline: none;
+  border-color: var(--my-blue, #88a8d7);
+  box-shadow: 0 0 0 3px rgba(136, 168, 215, 0.2);
+  background-color: #ffffff;
 }
 
 /* Input yang tidak bisa diganti (disabled) */
 .profile-input:disabled {
-    background-color: #f3f4f6;
-    color: #9ca3af;
-    cursor: not-allowed;
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
 }
 
 /* Tombol-Tombol */
 .profile-btn-primary {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: var(--my-blue, #88a8d7);
-    color: white;
-    border: none;
-    padding: 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    margin-top: 12px;
+  font-family: "Satoshi", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: var(--my-blue, #88a8d7);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+  margin-top: 12px;
 }
 
 .profile-btn-primary:hover {
-    background-color: #7697C5; /* Warna hover sedikit lebih gelap */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(136, 168, 215, 0.3);
+  background-color: #7697c5; /* Warna hover sedikit lebih gelap */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(136, 168, 215, 0.3);
 }
 
 .profile-btn-secondary {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    background-color: white;
-    color: var(--my-blue, #88a8d7);
-    border: 2px solid var(--my-blue, #88a8d7);
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-top: 12px;
+  font-family: "Satoshi", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  background-color: white;
+  color: var(--my-blue, #88a8d7);
+  border: 2px solid var(--my-blue, #88a8d7);
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 12px;
 }
 
 .profile-btn-secondary:hover {
-    background-color: rgba(136, 168, 215, 0.05);
+  background-color: rgba(136, 168, 215, 0.05);
 }
 
 .logout-area {
-    margin-top: 48px;
-    padding-top: 24px;
-    border-top: 1px dashed #eaeaea;
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px dashed #eaeaea;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
 .profile-btn-danger {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    background-color: #fef2f2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  font-family: "Satoshi", sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .profile-btn-danger:hover {
-    background-color: #fee2e2;
+  background-color: #fee2e2;
 }
 
 .profile-btn-admin {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    background-color: #f0fdf4;
-    color: #16a34a;
-    border: 1px solid #bbf7d0;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  font-family: "Satoshi", sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .profile-btn-admin:hover {
-    background-color: #dcfce7;
+  background-color: #dcfce7;
 }

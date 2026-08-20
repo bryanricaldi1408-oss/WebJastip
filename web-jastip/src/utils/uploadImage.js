@@ -29,13 +29,15 @@ export const uploadImage = async (file, folder) => {
     {
       method: "POST",
       body: formData,
-    }
+    },
   );
 
   const data = await response.json();
 
   if (!data.secure_url) {
-    throw new Error(data.error?.message || "Gagal mendapatkan URL gambar dari Cloudinary");
+    throw new Error(
+      data.error?.message || "Gagal mendapatkan URL gambar dari Cloudinary",
+    );
   }
 
   return data.secure_url;
