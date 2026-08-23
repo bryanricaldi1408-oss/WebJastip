@@ -1,39 +1,12 @@
-import { Show, For } from "solid-js";
+import { Show, For, createSignal, onMount } from "solid-js";
+import { users, setCartCount } from "../store/WebStore";
 import cartIcon from "../assets/Cart.png";
 import "../style/Cart.css";
 
 // =====================================================
 // DATA DUMMY - Ganti dengan data asli dari API nanti
 // =====================================================
-const dummyCartItems = [
-  {
-    id: 1,
-    type: "product",       // "product" atau "request"
-    name: "Kemeja Flanel Kotak (Biru)",
-    category: "Pakaian",
-    image_url: null,       // isi dengan URL gambar asli
-    price: 350000,
-    quantity: 2,
-  },
-  {
-    id: 2,
-    type: "request",
-    name: "Sepatu Sneaker Canvas Limited Edition",
-    category: "Alas Kaki",
-    image_url: null,
-    price: 850000,
-    quantity: 1,
-  },
-  {
-    id: 3,
-    type: "product",
-    name: "Tas Ransel Kanvas",
-    category: "Aksesoris",
-    image_url: null,
-    price: 600000,
-    quantity: 1,
-  },
-];
+
 
 const formatPrice = (price) =>
   `Rp ${Number(price).toLocaleString("id-ID")}`;
@@ -42,9 +15,36 @@ export const Cart = () => {
   // =====================================================
   // LOGIC AREA - Silakan diisi sendiri
   // =====================================================
+  const [cartItems, setCartItems] = createSignal([]);
 
-  // TODO: Ganti dengan data cart dari API
-  const cartItems = () => dummyCartItems;
+  const fetchCartItems = async () => {
+    try {
+      const user = users();
+      if (!user || !user.currUser || !user.currUser.id) return;
+
+      const response = await fetch(`http://localhost:5000/api/cart?user_id=${user.currUser.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setCartItems(data.cart || []);
+        // Sinkronisasi badge keranjang belanja di header
+        const totalQty = (data.cart || []).reduce((sum, item) => sum + item.quantity, 0);
+        setCartCount(totalQty);
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+    }
+  };
+
+  onMount(() => {
+    fetchCartItems();
+  });
 
   // Total harga semua item
   const subtotal = () =>
@@ -53,20 +53,81 @@ export const Cart = () => {
   const totalItems = () =>
     cartItems().reduce((acc, item) => acc + item.quantity, 0);
 
-  // TODO: Tambahkan handler untuk:
-  const handleIncrement = (itemId) => {
-    // Tambah quantity item
-    console.log("increment", itemId);
+  const handleIncrement = async (itemId) => {
+    const item = cartItems().find((i) => i.id === itemId);
+    if (!item) return;
+
+    const newQty = item.quantity + 1;
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/cart/${itemId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ quantity: newQty }),
+      });
+
+      if (response.ok) {
+        setCartItems(prev => prev.map(i => i.id === itemId ? { ...i, quantity: newQty } : i));
+        setCartCount(prev => prev + 1);
+      } else {
+        console.error("Gagal menambah quantity");
+      }
+    } catch (error) {
+      console.error("Error incrementing:", error);
+    }
   };
 
-  const handleDecrement = (itemId) => {
-    // Kurangi quantity item (kalau 1, hapus item)
-    console.log("decrement", itemId);
+  const handleDecrement = async (itemId) => {
+    const item = cartItems().find((i) => i.id === itemId);
+    if (!item) return;
+
+    if (item.quantity <= 1) {
+      await handleDelete(itemId);
+      return;
+    }
+
+    const newQty = item.quantity - 1;
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/cart/${itemId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ quantity: newQty }),
+      });
+
+      if (response.ok) {
+        setCartItems(prev => prev.map(i => i.id === itemId ? { ...i, quantity: newQty } : i));
+        setCartCount(prev => prev - 1);
+      } else {
+        console.error("Gagal mengurangi quantity");
+      }
+    } catch (error) {
+      console.error("Error decrementing:", error);
+    }
   };
 
-  const handleDelete = (itemId) => {
-    // Hapus item dari cart
-    console.log("delete", itemId);
+  const handleDelete = async (itemId) => {
+    const item = cartItems().find((i) => i.id === itemId);
+    if (!item) return;
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/cart/${itemId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setCartItems(prev => prev.filter(i => i.id !== itemId));
+        setCartCount(prev => prev - item.quantity);
+      } else {
+        console.error("Gagal menghapus item");
+      }
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
   };
 
   const handleCheckout = () => {

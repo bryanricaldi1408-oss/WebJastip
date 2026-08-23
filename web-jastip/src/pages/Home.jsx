@@ -46,10 +46,19 @@ export const Home = () => {
         );
       }
     });
+
+    socket.on("new_product", (newProduct) => {
+      setProducts((prev) => {
+        const exists = prev.some((item) => item.id === newProduct.id);
+        if (exists) return prev;
+        return [newProduct, ...prev]; // Tambahkan ke depan list produk
+      });
+    });
   });
 
   onCleanup(() => {
     socket.off("request_status_changed");
+    socket.off("new_product");
   });
   const handleRequest = async (e) => {
     e.preventDefault();

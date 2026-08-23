@@ -5,9 +5,36 @@ import waIcon from "../assets/WAIcon.png";
 import profileIcon from "../assets/ProfileIcon.png";
 import { A } from "@solidjs/router";
 import { Show } from "solid-js";
-import { users, setUsers, cartCount } from "../store/WebStore";
-
+import { users, setUsers, cartCount, setCartCount} from "../store/WebStore";
+import { onMount } from "solid-js";
 export const Header = () => {
+  
+  onMount(() => {
+    fetchQty();
+  });
+
+  const fetchQty = async () => {
+    try {
+      const user = users();
+      if (!user || !user.currUser || !user.currUser.id) return;
+
+      const response = await fetch(`http://localhost:5000/api/cart?user_id=${user.currUser.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        // Karena server mengembalikan array 'cart', kita jumlahkan seluruh 'quantity' dari tiap item
+        const totalQty = data.cart.reduce((sum, item) => sum + item.quantity, 0);
+        setCartCount(totalQty);
+      }
+      console.log(data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <>
       <header>

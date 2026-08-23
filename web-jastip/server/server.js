@@ -153,9 +153,12 @@ app.post("/api/product", async (req, res) => {
       req.body.image_url,
     ]);
 
+    const newProduct = result.rows[0];
+    io.emit("new_product", newProduct);
+
     res.status(201).json({
       message: "Produk berhasil ditambahkan",
-      product: result.rows[0],
+      product: newProduct,
     });
   } catch (error) {
     console.error("Error adding product:", error);
@@ -458,6 +461,108 @@ app.post("/api/add-cart", async (req, res) => {
     res.status(500).json({ message: "Gagal menambahkan ke cart" });
   }
 });
+
+//GET QTY IN CART
+app.get("/api/cart", async (req, res) => {
+  try {
+    const { user_id } = req.query;
+
+    if (!user_id) {
+      return res.status(400).json({ message: "user_id diperlukan" });
+    }
+
+    // Mengambil semua item cart dengan LEFT JOIN ke tabel products dan requests
+    const query = `
+      SELECT 
+        c.id AS id,
+        c.quantity,
+        c.product_id,
+        c.request_id,
+        CASE 
+          WHEN c.product_id IS NOT NULL THEN 'product'
+          ELSE 'request'
+        END AS type,
+        COALESCE(p.name, r.name) AS name,
+        COALESCE(p.image_url, r.product_image_url) AS image_url,
+        COALESCE(r.category, 'Katalog') AS category,
+        COALESCE(p.price, r.price, 0) AS price
+      FROM cart c
+      LEFT JOIN products p ON c.product_id = p.id
+      LEFT JOIN requests r ON c.request_id = r.id
+      WHERE c.user_id = $1
+      ORDER BY c.created_at DESC
+    `;
+
+    const result = await dbPool.query(query, [user_id]);
+
+    res.status(200).json({ 
+      message: "Data cart berhasil di-retrieve", 
+      cart: result.rows
+    });
+  } catch (error) {
+    console.error("Error getting cart items:", error);
+    res.status(500).json({ message: "Gagal mendapatkan data cart" });
+  }
+});
+
+// UPDATE CART ITEM QUANTITY
+app.put("/api/cart/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    if (quantity === undefined || quantity < 1) {
+      return res.status(400).json({ message: "Quantity tidak valid" });
+    }
+
+    const query = `
+      UPDATE cart
+      SET quantity = $1
+      WHERE id = $2
+      RETURNING *
+    `;
+    const result = await dbPool.query(query, [quantity, id]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Item keranjang tidak ditemukan" });
+    }
+
+    res.status(200).json({ 
+      message: "Quantity berhasil diperbarui", 
+      cartItem: result.rows[0] 
+    });
+  } catch (error) {
+    console.error("Error updating cart quantity:", error);
+    res.status(500).json({ message: "Gagal memperbarui quantity" });
+  }
+});
+
+// DELETE CART ITEM
+app.delete("/api/cart/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const query = `
+      DELETE FROM cart
+      WHERE id = $1
+      RETURNING *
+    `;
+    const result = await dbPool.query(query, [id]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Item keranjang tidak ditemukan" });
+    }
+
+    res.status(200).json({ 
+      message: "Item berhasil dihapus dari keranjang", 
+      deletedItem: result.rows[0] 
+    });
+  } catch (error) {
+    console.error("Error deleting cart item:", error);
+    res.status(500).json({ message: "Gagal menghapus item dari keranjang" });
+  }
+});
+
 
 const PORT = 5000;
 server.listen(PORT, () => {

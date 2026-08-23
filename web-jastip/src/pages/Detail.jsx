@@ -168,7 +168,6 @@ export const Detail = () => {
                 </button>
               </div>
 
-              {/* Jaminan Estetik Dihapus */}
             </div>
           </div>
         </div>

@@ -1,11 +1,19 @@
 .product-card {
   width: 100%;
-  max-width: 240px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
   font-family: "Satoshi", sans-serif;
   box-sizing: border-box;
+  position: relative;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
 }
 
 .product-img-wrapper {
