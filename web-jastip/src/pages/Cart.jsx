@@ -1,4 +1,5 @@
 import { Show, For, createSignal, onMount } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 import { users, setCartCount } from "../store/WebStore";
 import cartIcon from "../assets/Cart.png";
 import "../style/Cart.css";
@@ -130,9 +131,10 @@ export const Cart = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   const handleCheckout = () => {
-    // Proses checkout
-    console.log("checkout");
+    navigate("/payment");
   };
 
   return (

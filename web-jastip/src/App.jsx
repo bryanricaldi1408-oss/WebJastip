@@ -7,9 +7,11 @@ import { Signup } from "./pages/Signup";
 import { HomeAdmin } from "../admin/pages/HomeAdmin";
 import { Catalog } from "../admin/pages/Catalog";
 import { Notification } from "./components/Notification";
-import { Payment } from "../admin/pages/Payment";
+import { Payment as AdminPayment } from "../admin/pages/Payment";
+import { Payment } from "./pages/Payment";
 import { Detail } from "./pages/Detail";
 import { Cart } from "./pages/Cart";
+import { Search }from "./pages/Search"
 
 const Layout = (props) => {
   return (
@@ -29,6 +31,7 @@ const App = () => {
         <Route path="/signup" component={Signup} />
         <Route path="/admin" component={HomeAdmin} />
         <Route path="/catalogs" component={Catalog} />
+        <Route path="/admin/payment" component={AdminPayment} />
         <Route path="/payment" component={Payment} />
 
         <Route component={Layout}>
@@ -38,6 +41,7 @@ const App = () => {
           <Route path="/product/:id" component={Detail} />
           <Route path="/request/:id" component={Detail} />
           <Route path="/cart" component={Cart} />
+          <Route path="/search" component={Search} />
         </Route>
       </Router>
     </>

@@ -16,6 +16,37 @@ export { notification };
 export { product, setProduct };
 export { cartCount, setCartCount};
 
+export const [products, setProducts] = createSignal([]);
+export const [requests, setRequests] = createSignal([]);
+
+export const fetchRequests = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/requests/approved",
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        setRequests(data.requests || []);
+      }
+    } catch (error) {
+      console.error("Gagal mengambil data request:", error);
+    }
+  };
+
+export const fetchProducts = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/products");
+    const data = await response.json();
+
+    if (response.ok) {
+      setProducts(data.products || []);
+    }
+  } catch (error) {
+    console.error("Gagal mengambil data produk: ", error);
+  }
+};
+
 export const setUsers = (key, value) => {
   setUsersSignal((prev) => ({ ...prev, [key]: value }));
   if (key === "currUser") {

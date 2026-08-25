@@ -111,7 +111,7 @@ export const HomeAdmin = () => {
             <a href="/catalogs" class="menu-item">
               Catalog View
             </a>
-            <a href="/payment" class="menu-item">
+            <a href="/admin/payment" class="menu-item">
               Payment
             </a>
             <a href="#" class="menu-item">

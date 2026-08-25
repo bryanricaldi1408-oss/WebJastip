@@ -3,7 +3,7 @@ import { A } from "@solidjs/router";
 import "../style/Home.css";
 import { Request } from "../components/Request";
 import { users } from "../store/WebStore";
-import { showNotification } from "../store/WebStore";
+import { showNotification, products, setProducts, requests, setRequests, fetchProducts, fetchRequests } from "../store/WebStore";
 import { io } from "socket.io-client";
 import { uploadImage } from "../utils/uploadImage";
 import { Product } from "../components/Product";
@@ -24,9 +24,7 @@ export const Home = () => {
   const [detail, setDetail] = createSignal("");
   const [selectedFile, setSelectedFile] = createSignal("");
   const [category, setCategory] = createSignal("");
-  const [requests, setRequests] = createSignal([]);
   const [isSubmitting, setIsSubmitting] = createSignal(false);
-  const [products, setProducts] = createSignal([]);
 
   onMount(() => {
     fetchRequests();
@@ -151,34 +149,6 @@ export const Home = () => {
     } else {
       setFileName("");
       setSelectedFile(null);
-    }
-  };
-
-  const fetchRequests = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/requests/approved",
-      );
-      const data = await response.json();
-
-      if (response.ok) {
-        setRequests(data.requests || []);
-      }
-    } catch (error) {
-      console.error("Gagal mengambil data request:", error);
-    }
-  };
-
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/products");
-      const data = await response.json();
-
-      if (response.ok) {
-        setProducts(data.products || []);
-      }
-    } catch (error) {
-      console.error("Gagal mengambil data produk: ", error);
     }
   };
 

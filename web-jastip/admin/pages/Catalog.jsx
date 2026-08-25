@@ -16,13 +16,13 @@ export const Catalog = () => {
             <span class="badge">Admin Panel</span>
           </div>
           <nav class="sidebar-menu">
-            <a href="index.html" class="menu-item">
+            <a href="/admin" class="menu-item">
               Dashboard
             </a>
-            <a href="catalog.html" class="menu-item active">
+            <a href="/catalogs" class="menu-item active">
               Catalog View
             </a>
-            <a href="payment.html" class="menu-item">
+            <a href="/admin/payment" class="menu-item">
               Payment
             </a>
             <a href="#" class="menu-item">

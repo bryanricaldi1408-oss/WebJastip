@@ -1,0 +1,403 @@
+/* ======================================================== */
+/* USER PAYMENT PAGE — Clean & Simplistic Premium Design    */
+/* ======================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --pay-primary: #0f172a;
+  --pay-secondary: #475569;
+  --pay-muted: #94a3b8;
+  --pay-blue: #4a7fc1;
+  --pay-blue-light: #eff6ff;
+  --pay-border: #e2e8f0;
+  --pay-bg: #f8fafc;
+  --pay-surface: #ffffff;
+  --pay-success: #10b981;
+  --pay-success-light: #ecfdf5;
+  --pay-radius: 12px;
+  --pay-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.pay-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  font-family: 'Inter', sans-serif;
+  color: var(--pay-primary);
+}
+
+/* Header */
+.pay-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pay-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  transition: color 0.2s ease;
+}
+
+.pay-back-link:hover {
+  color: var(--pay-blue);
+}
+
+.pay-header {
+  margin-bottom: 32px;
+}
+
+.pay-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px 0;
+}
+
+.pay-subtitle {
+  font-size: 14px;
+  color: var(--pay-secondary);
+  margin: 0;
+}
+
+/* Layout Grid */
+.pay-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Left Panel - Bank Transfer Info */
+.pay-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pay-instruction-card {
+  background: var(--pay-bg);
+  border: 1px solid var(--pay-border);
+  border-radius: var(--pay-radius);
+  padding: 24px;
+}
+
+.pay-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pay-bank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pay-bank-item {
+  background: var(--pay-surface);
+  border: 1px solid var(--pay-border);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pay-bank-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pay-bank-name {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--pay-blue);
+  letter-spacing: 0.05em;
+}
+
+.pay-bank-number {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.pay-bank-owner {
+  font-size: 13px;
+  color: var(--pay-secondary);
+}
+
+.pay-copy-btn {
+  background: var(--pay-bg);
+  border: 1px solid var(--pay-border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  color: var(--pay-secondary);
+}
+
+.pay-copy-btn:hover {
+  background: var(--pay-blue-light);
+  border-color: #bfdbfe;
+  color: var(--pay-blue);
+}
+
+.pay-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.pay-step-item {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--pay-secondary);
+}
+
+.pay-step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--pay-blue-light);
+  color: var(--pay-blue);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Right Panel - Form Upload */
+.pay-form-panel {
+  background: var(--pay-surface);
+  border: 1px solid var(--pay-border);
+  border-radius: var(--pay-radius);
+  padding: 32px;
+  box-shadow: var(--pay-shadow);
+}
+
+.pay-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pay-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pay-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pay-secondary);
+}
+
+.pay-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  border: 1px solid var(--pay-border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.pay-input:focus {
+  border-color: var(--pay-blue);
+  box-shadow: 0 0 0 3px rgba(74, 127, 193, 0.15);
+}
+
+/* Drag-Drop / Upload Area */
+.pay-upload-box {
+  border: 2px dashed var(--pay-border);
+  border-radius: 8px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--pay-bg);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pay-upload-box:hover {
+  border-color: var(--pay-blue);
+  background: var(--pay-blue-light);
+}
+
+.pay-upload-icon {
+  color: var(--pay-muted);
+}
+
+.pay-upload-box:hover .pay-upload-icon {
+  color: var(--pay-blue);
+}
+
+.pay-upload-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--pay-secondary);
+}
+
+.pay-upload-hint {
+  font-size: 11px;
+  color: var(--pay-muted);
+}
+
+/* Preview Image */
+.pay-preview-container {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--pay-border);
+  position: relative;
+  aspect-ratio: 16/9;
+  background: #000;
+}
+
+.pay-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pay-remove-preview {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(15, 23, 42, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.pay-remove-preview:hover {
+  background: rgba(239, 68, 68, 0.9);
+}
+
+/* Submit Button */
+.pay-submit-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  background: var(--pay-blue);
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pay-submit-btn:hover {
+  background: #3a6eb0;
+  transform: translateY(-1px);
+}
+
+.pay-submit-btn:disabled {
+  background: var(--pay-border);
+  color: var(--pay-muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Success State */
+.pay-success-container {
+  text-align: center;
+  padding: 40px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.pay-success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--pay-success-light);
+  color: var(--pay-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.pay-success-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.pay-success-text {
+  font-size: 14px;
+  color: var(--pay-secondary);
+  max-width: 320px;
+  margin: 0 0 16px 0;
+  line-height: 1.6;
+}
+
+.pay-home-btn {
+  padding: 12px 24px;
+  background: var(--pay-primary);
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.pay-home-btn:hover {
+  background: #1e293b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pay-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .pay-form-panel {
+    padding: 24px;
+  }
+}
