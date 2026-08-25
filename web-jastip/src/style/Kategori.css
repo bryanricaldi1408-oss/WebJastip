@@ -1,0 +1,509 @@
+﻿/* ============================================================
+   Kategori.css  — Halaman /kategori/:type
+   Menggunakan variabel yang sudah didefinisikan di Header.css
+   (:root { --my-blue: #88a8d7; --my-white: #f3f3f3; --bg-gray: #f8f8f8; })
+   ============================================================ */
+
+/* ── PAGE WRAPPER ─────────────────────────────────────────── */
+.kategori-page {
+  min-height: 80vh;
+  background-color: var(--bg-gray);
+}
+
+/* ── HERO BANNER ──────────────────────────────────────────── */
+.kategori-hero {
+  background: linear-gradient(135deg, #ffffff 0%, #eef3fb 100%);
+  border-bottom: 1px solid #e4ecf7;
+  padding: 40px 40px 36px;
+}
+
+.kategori-hero-inner {
+  max-width: 1700px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+/* Emoji besar di sebelah kiri */
+.kategori-emoji {
+  font-size: 72px;
+  line-height: 1;
+  flex-shrink: 0;
+  background: rgba(136, 168, 215, 0.12);
+  width: 110px;
+  height: 110px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(136, 168, 215, 0.2);
+}
+
+/* Teks hero */
+.kategori-hero-text {
+  flex: 1;
+}
+
+.kategori-breadcrumb {
+  font-family: "InstrumentSerif", serif;
+  font-size: 18px;
+  color: #888888;
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb-link {
+  color: var(--my-blue);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+  color: #7697c5;
+  text-decoration: underline;
+}
+
+.breadcrumb-sep {
+  color: #cccccc;
+}
+
+.breadcrumb-current {
+  color: #555555;
+}
+
+.kategori-title {
+  font-family: "Satoshi", sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0 0 6px 0;
+  color: #222222;
+  line-height: 1.1;
+}
+
+.kategori-subtitle {
+  font-family: "InstrumentSerif", serif;
+  font-size: 22px;
+  color: #666666;
+  margin: 0;
+}
+
+/* Stat box di kanan hero */
+.kategori-stat {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1.5px solid #dce9f8;
+  border-radius: 16px;
+  padding: 20px 32px;
+  box-shadow: 0 4px 12px rgba(136, 168, 215, 0.12);
+  min-width: 130px;
+}
+
+.stat-number {
+  font-family: "Satoshi", sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--my-blue);
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: "InstrumentSerif", serif;
+  font-size: 16px;
+  color: #888888;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+/* ── KATEGORI CHIPS ───────────────────────────────────────── */
+.kategori-chips-wrapper {
+  background: white;
+  border-bottom: 1px solid #eaeaea;
+  padding: 14px 40px;
+  position: sticky;
+  top: 120px;   /* tepat di bawah header sticky (±120px) */
+  z-index: 50;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.kategori-chips {
+  max-width: 1700px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.chip {
+  font-family: "InstrumentSerif", serif;
+  font-size: 18px;
+  color: #444444;
+  background-color: var(--my-white);
+  padding: 7px 18px;
+  border-radius: 50px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  background-color: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+.chip-active {
+  background-color: var(--my-blue);
+  color: white;
+  box-shadow: 0 4px 12px rgba(136, 168, 215, 0.35);
+}
+
+.chip-active:hover {
+  background-color: #7697c5;
+  transform: translateY(-1px);
+}
+
+.chip-emoji {
+  font-size: 16px;
+}
+
+/* ── KONTEN UTAMA ─────────────────────────────────────────── */
+.kategori-content {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 36px 40px 60px;
+  box-sizing: border-box;
+}
+
+/* ── TAB BAR ──────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 6px;
+  background: white;
+  border-radius: 12px;
+  padding: 6px;
+  width: fit-content;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  margin-bottom: 28px;
+}
+
+.tab-btn {
+  font-family: "InstrumentSerif", serif;
+  font-size: 19px;
+  color: #666666;
+  background: transparent;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.tab-btn:hover {
+  background-color: var(--my-white);
+  color: #333333;
+}
+
+.tab-active {
+  background-color: var(--my-blue) !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(136, 168, 215, 0.3);
+}
+
+/* Badge jumlah di tab */
+.tab-count {
+  font-family: "Satoshi", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 2px 8px;
+  border-radius: 50px;
+  min-width: 24px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.tab-active .tab-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+.tab-btn:not(.tab-active) .tab-count {
+  background: rgba(136, 168, 215, 0.15);
+  color: var(--my-blue);
+}
+
+/* ── LOADING STATE ────────────────────────────────────────── */
+.kategori-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+  gap: 16px;
+  color: #888888;
+  font-family: "InstrumentSerif", serif;
+  font-size: 20px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e0e9f5;
+  border-top-color: var(--my-blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── EMPTY STATE ──────────────────────────────────────────── */
+.kategori-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  background: white;
+  border-radius: 16px;
+  border: 1.5px dashed #d0dbe9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  gap: 12px;
+}
+
+.empty-icon {
+  font-size: 52px;
+  background: #eef3fb;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+  box-shadow: 0 4px 14px rgba(136, 168, 215, 0.2);
+}
+
+.kategori-empty h3 {
+  font-family: "Satoshi", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333333;
+  margin: 0;
+}
+
+.kategori-empty p {
+  font-family: "InstrumentSerif", serif;
+  font-size: 19px;
+  color: #777777;
+  margin: 0;
+  max-width: 420px;
+  line-height: 1.5;
+}
+
+.btn-back-home {
+  font-family: "InstrumentSerif", serif;
+  font-size: 18px;
+  background-color: var(--my-blue);
+  color: white;
+  padding: 10px 28px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  margin-top: 8px;
+  box-shadow: 0 4px 12px rgba(136, 168, 215, 0.3);
+}
+
+.btn-back-home:hover {
+  background-color: #7697c5;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(136, 168, 215, 0.4);
+}
+
+/* ── RESPONSIF TABLET ─────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .kategori-hero {
+    padding: 28px 20px;
+  }
+
+  .kategori-emoji {
+    width: 80px;
+    height: 80px;
+    font-size: 52px;
+    border-radius: 18px;
+  }
+
+  .kategori-title {
+    font-size: 2.2rem;
+  }
+
+  .kategori-subtitle {
+    font-size: 18px;
+  }
+
+  .kategori-chips-wrapper {
+    padding: 12px 20px;
+    top: 110px;
+  }
+
+  .kategori-content {
+    padding: 24px 20px 48px;
+  }
+
+  .kategori-stat {
+    padding: 16px 24px;
+  }
+
+  .stat-number {
+    font-size: 2.2rem;
+  }
+}
+
+/* ── RESPONSIF MOBILE ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .kategori-hero {
+    padding: 20px 16px 24px;
+  }
+
+  .kategori-hero-inner {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .kategori-emoji {
+    width: 64px;
+    height: 64px;
+    font-size: 38px;
+    border-radius: 14px;
+  }
+
+  .kategori-title {
+    font-size: 1.8rem;
+  }
+
+  .kategori-subtitle {
+    font-size: 16px;
+  }
+
+  .kategori-stat {
+    display: none; /* Sembunyikan stat di HP kecil */
+  }
+
+  .kategori-chips-wrapper {
+    padding: 10px 16px;
+    top: 100px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .kategori-chips-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .kategori-chips {
+    flex-wrap: nowrap;
+  }
+
+  .chip {
+    font-size: 15px;
+    padding: 6px 14px;
+    flex-shrink: 0;
+  }
+
+  .kategori-content {
+    padding: 20px 16px 40px;
+  }
+
+  .tab-bar {
+    width: 100%;
+  }
+
+  .tab-btn {
+    flex: 1;
+    font-size: 16px;
+    padding: 10px 12px;
+    justify-content: center;
+  }
+
+  .kategori-title {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .kategori-hero {
+    padding: 16px 12px 20px;
+  }
+
+  .kategori-title {
+    font-size: 1.4rem;
+  }
+
+  .kategori-chips-wrapper {
+    padding: 8px 12px;
+  }
+
+  .chip {
+    font-size: 14px;
+    padding: 5px 12px;
+  }
+
+  .tab-btn {
+    font-size: 15px;
+    padding: 9px 10px;
+  }
+
+  .tab-count {
+    font-size: 12px;
+    padding: 1px 6px;
+  }
+
+  .kategori-content {
+    padding: 16px 12px 36px;
+  }
+
+  .kategori-empty {
+    padding: 40px 16px;
+  }
+
+  .empty-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 40px;
+  }
+
+  .kategori-empty h3 {
+    font-size: 20px;
+  }
+
+  .kategori-empty p {
+    font-size: 16px;
+  }
+}

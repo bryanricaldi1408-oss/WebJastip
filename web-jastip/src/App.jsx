@@ -12,6 +12,7 @@ import { Payment } from "./pages/Payment";
 import { Detail } from "./pages/Detail";
 import { Cart } from "./pages/Cart";
 import { Search }from "./pages/Search"
+import { Kategori } from "./pages/Kategori"
 
 const Layout = (props) => {
   return (
@@ -36,7 +37,7 @@ const App = () => {
 
         <Route component={Layout}>
           <Route path="/" component={Home} />
-          <Route path="/kategori/:type" component={Home} />
+          <Route path="/kategori/:type" component={Kategori} />
           <Route path="/profile" component={Profile} />
           <Route path="/product/:id" component={Detail} />
           <Route path="/request/:id" component={Detail} />
