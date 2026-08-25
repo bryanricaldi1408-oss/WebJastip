@@ -57,7 +57,7 @@ export const Header = () => {
               <img class="wa-icon" src={waIcon} />
             </a>
             {/* 4. Cart */}
-            <A href="/cart">
+            <A href="/cart" class="cart-link">
               <div class="cart-container">
                 <img class="cart-icon" src={cartIcon} />
                 <Show when={cartCount() > 0}>
