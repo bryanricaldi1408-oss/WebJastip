@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    Kategori.css  — Halaman /kategori/:type
    Menggunakan variabel yang sudah didefinisikan di Header.css
    (:root { --my-blue: #88a8d7; --my-white: #f3f3f3; --bg-gray: #f8f8f8; })
@@ -351,13 +351,6 @@
     padding: 28px 20px;
   }
 
-  .kategori-emoji {
-    width: 80px;
-    height: 80px;
-    font-size: 52px;
-    border-radius: 18px;
-  }
-
   .kategori-title {
     font-size: 2.2rem;
   }
@@ -387,31 +380,24 @@
 /* ── RESPONSIF MOBILE ─────────────────────────────────────── */
 @media (max-width: 768px) {
   .kategori-hero {
-    padding: 20px 16px 24px;
+    padding: 16px 16px 20px;
   }
 
   .kategori-hero-inner {
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .kategori-emoji {
-    width: 64px;
-    height: 64px;
-    font-size: 38px;
-    border-radius: 14px;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .kategori-title {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
   }
 
   .kategori-subtitle {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .kategori-stat {
-    display: none; /* Sembunyikan stat di HP kecil */
+    display: none;
   }
 
   .kategori-chips-wrapper {
@@ -432,13 +418,13 @@
   }
 
   .chip {
-    font-size: 15px;
+    font-size: 14px;
     padding: 6px 14px;
     flex-shrink: 0;
   }
 
   .kategori-content {
-    padding: 20px 16px 40px;
+    padding: 16px 16px 40px;
   }
 
   .tab-bar {
@@ -447,13 +433,9 @@
 
   .tab-btn {
     flex: 1;
-    font-size: 16px;
+    font-size: 15px;
     padding: 10px 12px;
     justify-content: center;
-  }
-
-  .kategori-title {
-    font-size: 1.6rem;
   }
 }
 

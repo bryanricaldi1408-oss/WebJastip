@@ -505,13 +505,21 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .aest-detail-page {
-    padding: 28px 16px 64px;
+    padding: 20px 16px 56px;
+  }
+
+  .aest-grid {
+    gap: 20px;
+  }
+
+  .aest-left-panel {
+    max-width: 100%;
   }
 
   .aest-title {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .aest-price-tag {
@@ -519,7 +527,8 @@
   }
 
   .aest-trust-strip {
-    display: none;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
   .aest-actions {
@@ -529,6 +538,47 @@
   .aest-btn {
     width: 100%;
     padding: 14px 20px;
+    font-size: 15px;
+  }
+
+  .aest-info-card {
+    padding: 16px;
+  }
+
+  .aest-breadcrumb {
+    margin-bottom: 20px;
   }
 }
 
+@media (max-width: 480px) {
+  .aest-detail-page {
+    padding: 16px 12px 48px;
+  }
+
+  .aest-title {
+    font-size: 20px;
+  }
+
+  .aest-price-tag {
+    font-size: 18px;
+  }
+
+  .aest-trust-strip {
+    display: none;
+  }
+
+  .aest-badge {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  .aest-info-card {
+    padding: 12px 14px;
+  }
+
+  .aest-btn {
+    padding: 13px 16px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+}

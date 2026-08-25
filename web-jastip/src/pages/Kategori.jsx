@@ -1,18 +1,18 @@
-﻿import { useParams, A } from "@solidjs/router";
+import { useParams, A } from "@solidjs/router";
 import { createSignal, createMemo, onMount, For, Show } from "solid-js";
 import { Product } from "../components/Product";
 import { Request } from "../components/Request";
 import { fetchProducts, fetchRequests, products, requests } from "../store/WebStore";
 import "../style/Kategori.css";
 
-// Mapping URL param → label tampilan & emoji
+// Mapping URL param → label tampilan
 const CATEGORY_MAP = {
-  semua:       { label: "Semua Kategori",  emoji: "🛍️"  },
-  kosmetik:    { label: "Kosmetik",        emoji: "💄"  },
-  makanan:     { label: "Makanan",         emoji: "🍜"  },
-  suplementasi:{ label: "Suplementasi",    emoji: "💊"  },
-  fashion:     { label: "Fashion",         emoji: "👗"  },
-  others:      { label: "Lainnya",         emoji: "📦"  },
+  semua:       { label: "Semua Kategori" },
+  kosmetik:    { label: "Kosmetik" },
+  makanan:     { label: "Makanan" },
+  suplementasi:{ label: "Suplementasi" },
+  fashion:     { label: "Fashion" },
+  others:      { label: "Lainnya" },
 };
 
 export const Kategori = () => {
@@ -21,7 +21,7 @@ export const Kategori = () => {
   const [activeTab, setActiveTab] = createSignal("products");
 
   const categoryInfo = createMemo(() => {
-    return CATEGORY_MAP[params.type] ?? { label: params.type, emoji: "🏷️" };
+    return CATEGORY_MAP[params.type] ?? { label: params.type };
   });
 
   onMount(async () => {
@@ -57,7 +57,6 @@ export const Kategori = () => {
       {/* ── HERO BANNER ─────────────────────────────────── */}
       <div class="kategori-hero">
         <div class="kategori-hero-inner">
-          <div class="kategori-emoji">{categoryInfo().emoji}</div>
           <div class="kategori-hero-text">
             <p class="kategori-breadcrumb">
               <A href="/" class="breadcrumb-link">Beranda</A>
@@ -75,23 +74,6 @@ export const Kategori = () => {
             <span class="stat-number">{totalCount()}</span>
             <span class="stat-label">Item ditemukan</span>
           </div>
-        </div>
-      </div>
-
-      {/* ── KATEGORI CHIPS ──────────────────────────────── */}
-      <div class="kategori-chips-wrapper">
-        <div class="kategori-chips">
-          <For each={Object.entries(CATEGORY_MAP)}>
-            {([key, val]) => (
-              <A
-                href={`/kategori/${key}`}
-                class={`chip ${params.type === key ? "chip-active" : ""}`}
-              >
-                <span class="chip-emoji">{val.emoji}</span>
-                {val.label}
-              </A>
-            )}
-          </For>
         </div>
       </div>
 
@@ -133,7 +115,12 @@ export const Kategori = () => {
             when={filteredProducts().length > 0}
             fallback={
               <div class="kategori-empty">
-                <div class="empty-icon">🛒</div>
+                <div class="empty-icon">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--my-blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                  </svg>
+                </div>
                 <h3>Belum ada produk</h3>
                 <p>
                   Tidak ada produk di kategori{" "}
@@ -166,7 +153,14 @@ export const Kategori = () => {
             when={filteredRequests().length > 0}
             fallback={
               <div class="kategori-empty">
-                <div class="empty-icon">📋</div>
+                <div class="empty-icon">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--my-blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                  </svg>
+                </div>
                 <h3>Belum ada request</h3>
                 <p>
                   Tidak ada request jastip di kategori{" "}

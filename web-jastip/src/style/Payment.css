@@ -392,12 +392,70 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .pay-page {
+    padding: 24px 16px 60px;
+  }
+
   .pay-grid {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 24px;
   }
-  
+
   .pay-form-panel {
-    padding: 24px;
+    padding: 20px;
+  }
+
+  .pay-title {
+    font-size: 22px;
+  }
+
+  .pay-bank-number {
+    font-size: 16px;
+  }
+
+  .pay-bank-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .pay-copy-btn {
+    align-self: stretch;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .pay-page {
+    padding: 16px 12px 48px;
+  }
+
+  .pay-title {
+    font-size: 20px;
+  }
+
+  .pay-subtitle {
+    font-size: 13px;
+  }
+
+  .pay-instruction-card {
+    padding: 16px;
+  }
+
+  .pay-form-panel {
+    padding: 16px;
+  }
+
+  .pay-upload-box {
+    padding: 20px 12px;
+  }
+
+  .pay-submit-btn {
+    width: 100%;
+    padding: 14px;
+  }
+
+  .pay-step-item {
+    font-size: 13px;
   }
 }

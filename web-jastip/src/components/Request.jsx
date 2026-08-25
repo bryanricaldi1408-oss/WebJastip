@@ -1,5 +1,11 @@
 import "../style/Request.css";
 
+const truncateText = (text, maxLength = 70) => {
+  if (!text) return "Tidak ada detail barang";
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength).trim() + "...";
+};
+
 export const Request = (props) => {
   return (
     <div class="request-item-card">
@@ -19,7 +25,7 @@ export const Request = (props) => {
       {/* Bagian Detail Informasi Request */}
       <div class="request-info">
         <h3 class="request-title">{props.name || "Request Barang"}</h3>
-        <p class="request-desc">{props.desc || "Tidak ada detail barang"}</p>
+        <p class="request-desc">{truncateText(props.desc, 70)}</p>
 
         {/* Informasi Request dari Siapa */}
         <div class="request-user-box">

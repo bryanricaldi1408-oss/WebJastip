@@ -1,5 +1,11 @@
 import "../style/Product.css";
 
+const truncateText = (text, maxLength = 50) => {
+  if (!text) return "Tidak ada deskripsi";
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength).trim() + "...";
+};
+
 export const Product = (props) => {
   return (
     <div class="product-card">
@@ -19,7 +25,7 @@ export const Product = (props) => {
       {/* Bagian Detail Informasi Produk */}
       <div class="product-info">
         <h3 class="product-name">{props.name || "Nama"}</h3>
-        <p class="product-desc">{props.description || props.desc || "Tidak ada detail barang"}</p>
+        <p class="product-desc">{truncateText(props.description)}</p>
         <p class="product-price">
           {props.price ? `Rp ${Number(props.price).toLocaleString("id-ID")}` : "Err"}
         </p>
