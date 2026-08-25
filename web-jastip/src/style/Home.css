@@ -90,53 +90,137 @@
 }
 
 .file-upload-card {
+  display: block;
+  width: 100%;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  background-color: #ffffff;
+  padding: 16px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.25s ease;
+}
+
+.file-upload-card:hover {
+  border-color: var(--my-blue, #88a8d7);
+  background-color: #f8fafc;
+  box-shadow: 0 4px 12px rgba(136, 168, 215, 0.15);
+}
+
+.file-upload-card.has-preview {
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  padding: 12px;
+}
+
+.file-upload-card.has-preview:hover {
+  border-color: var(--my-blue, #88a8d7);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+/* Dropzone Content */
+.upload-dropzone-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--my-blue);
-  color: white;
-  border-radius: 8px;
-  padding: 18px;
-  cursor: pointer;
   gap: 6px;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease,
-    box-shadow 0.3s ease;
-  box-sizing: border-box;
-  width: 100%;
+  padding: 10px 0;
+  color: #64748b;
+  text-align: center;
 }
 
-.file-upload-card:hover {
-  background-color: #7697c5;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(136, 168, 215, 0.4);
+.upload-svg-icon {
+  color: var(--my-blue, #88a8d7);
+  margin-bottom: 2px;
+  transition: transform 0.2s ease;
 }
 
-.file-upload-card:active {
-  transform: translateY(-1px) scale(0.98);
-}
-
-/* State ketika gambar sudah berhasil diunggah */
-.file-upload-card.uploaded {
-  background-color: #70a58a; /* Hijau sage premium untuk status sukses */
-}
-
-.file-upload-card.uploaded:hover {
-  background-color: #5d8f74;
-  box-shadow: 0 6px 16px rgba(112, 165, 138, 0.4);
-}
-
-.upload-icon {
-  font-size: 28px;
-  font-weight: bold;
-  line-height: 1;
+.file-upload-card:hover .upload-svg-icon {
+  transform: translateY(-2px);
 }
 
 .upload-text {
-  font-family: "InstrumentSerif";
-  font-size: 20px;
+  font-family: "Satoshi", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.upload-subtext {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* Preview Card */
+.req-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.req-preview-img-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.req-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.req-preview-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.req-preview-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #10b981;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.req-preview-filename {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.req-change-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--my-blue, #88a8d7);
+  margin-top: 2px;
+  transition: color 0.2s ease;
+}
+
+.file-upload-card:hover .req-change-btn {
+  color: #3b82f6;
+  text-decoration: underline;
 }
 
 .hidden-file-input {
@@ -244,6 +328,9 @@
   border: 1px dashed var(--my-blue);
   padding: 6px 18px;
   border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* Tombol Navigasi Panah Kiri & Kanan */
