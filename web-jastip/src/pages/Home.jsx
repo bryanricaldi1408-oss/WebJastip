@@ -25,6 +25,7 @@ export const Home = () => {
   const [selectedFile, setSelectedFile] = createSignal("");
   const [category, setCategory] = createSignal("");
   const [isSubmitting, setIsSubmitting] = createSignal(false);
+  const [imagePreview, setImagePreview] = createSignal(null);
 
   onMount(() => {
     fetchRequests();
@@ -126,6 +127,7 @@ export const Home = () => {
         setCategory("");
         setFileName("");
         setSelectedFile(null);
+        setImagePreview(null);
         fetchRequests();
       } else {
         showNotification(
@@ -146,9 +148,11 @@ export const Home = () => {
     if (file) {
       setFileName(file.name);
       setSelectedFile(file);
+      setImagePreview(URL.createObjectURL(file));
     } else {
       setFileName("");
       setSelectedFile(null);
+      setImagePreview(null);
     }
   };
 
@@ -187,7 +191,22 @@ export const Home = () => {
               />
             ) : (
               <div class="no-image-card">
-                <div class="no-image-icon">🖼️</div>
+                <div class="no-image-icon">
+                  <svg
+                    width="36"
+                    height="36"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--my-blue)"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
+                  </svg>
+                </div>
                 <h2 class="no-image-title">
                   <span class="blue">Promo & Info</span> Banner
                 </h2>
@@ -195,16 +214,32 @@ export const Home = () => {
                   Belum ada gambar promo di folder <code>/src/images</code>
                 </p>
                 <div class="no-image-badge">
-                  ✨ Tempat Banner Carousel Promo
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                  <span>Tempat Banner Carousel Promo</span>
                 </div>
               </div>
             )}
             {/* Tombol Navigasi Panah Kiri & Kanan */}
-            <button class="nav-btn prev-btn" onClick={prevSlide}>
-              ❮
+            <button class="nav-btn prev-btn" onClick={prevSlide} aria-label="Previous slide">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
             </button>
-            <button class="nav-btn next-btn" onClick={nextSlide}>
-              ❯
+            <button class="nav-btn next-btn" onClick={nextSlide} aria-label="Next slide">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
             </button>
             {/* Indikator Halaman (misal: 1 / 3) */}
             <div class="page-indicator">
@@ -284,14 +319,57 @@ export const Home = () => {
               <div class="form-group">
                 <label>Foto Produk</label>
                 <label
-                  class={`file-upload-card ${fileName() ? "uploaded" : ""}`}
+                  class={`file-upload-card ${imagePreview() ? "has-preview" : ""}`}
                 >
-                  <span class="upload-icon">{fileName() ? "✓" : "+"}</span>
-                  <span class="upload-text">
-                    {fileName()
-                      ? `Berhasil Unggah: ${fileName()}`
-                      : "Upload Foto Produk"}
-                  </span>
+                  <Show
+                    when={imagePreview()}
+                    fallback={
+                      <div class="upload-dropzone-content">
+                        <svg
+                          class="upload-svg-icon"
+                          width="28"
+                          height="28"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="17 8 12 3 7 8" />
+                          <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg>
+                        <span class="upload-text">Upload Foto Produk</span>
+                        <span class="upload-subtext">Klik untuk pilih gambar</span>
+                      </div>
+                    }
+                  >
+                    <div class="req-preview-card">
+                      <div class="req-preview-img-wrapper">
+                        <img
+                          src={imagePreview()}
+                          alt="Preview"
+                          class="req-preview-img"
+                        />
+                      </div>
+                      <div class="req-preview-details">
+                        <span class="req-preview-status">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                          </svg>
+                          Gambar Terpilih
+                        </span>
+                        <span class="req-preview-filename">{fileName()}</span>
+                        <span class="req-change-btn">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                          </svg>
+                          Ganti Foto
+                        </span>
+                      </div>
+                    </div>
+                  </Show>
                   <input
                     type="file"
                     accept="image/*"
