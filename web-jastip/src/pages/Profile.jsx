@@ -7,6 +7,7 @@ import { useNavigate } from "@solidjs/router";
 import { onMount, onCleanup, createSignal, Show, For } from "solid-js";
 import { UserRequestRow } from "../components/UserRequestRow";
 import { io } from "socket.io-client";
+import { API_URL } from "../config";
 export const Profile = () => {
   const [name, setName] = createSignal(users().currUser?.name || "");
   const [phone, setPhone] = createSignal(users().currUser?.phone_number || "");
@@ -17,12 +18,12 @@ export const Profile = () => {
   const [mapQuery, setMapQuery] = createSignal("");
   const [myRequests, setMyRequests] = createSignal([]);
 
-  const socket = io("http://localhost:5000");
+  const socket = io(API_URL);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/update-profile", {
+      const response = await fetch(`${API_URL}/api/update-profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +62,7 @@ export const Profile = () => {
     // Fetch requests milik user ini
     try {
       const response = await fetch(
-        `http://localhost:5000/api/requests?email=${encodeURIComponent(users().currUser?.email)}`,
+        `${API_URL}/api/requests?email=${encodeURIComponent(users().currUser?.email)}`,
       );
       const data = await response.json();
       if (response.ok) {
@@ -116,7 +117,7 @@ export const Profile = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/update-password",
+        `${API_URL}/api/update-password`,
         {
           method: "PUT",
           headers: {

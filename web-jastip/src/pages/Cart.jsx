@@ -3,6 +3,7 @@ import { useNavigate } from "@solidjs/router";
 import { users, setCartCount } from "../store/WebStore";
 import cartIcon from "../assets/Cart.png";
 import "../style/Cart.css";
+import { API_URL } from "../config";
 
 // =====================================================
 // DATA DUMMY - Ganti dengan data asli dari API nanti
@@ -23,7 +24,7 @@ export const Cart = () => {
       const user = users();
       if (!user || !user.currUser || !user.currUser.id) return;
 
-      const response = await fetch(`http://localhost:5000/api/cart?user_id=${user.currUser.id}`, {
+      const response = await fetch(`${API_URL}/api/cart?user_id=${user.currUser.id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +62,7 @@ export const Cart = () => {
     const newQty = item.quantity + 1;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/cart/${itemId}`, {
+      const response = await fetch(`${API_URL}/api/cart/${itemId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +93,7 @@ export const Cart = () => {
     const newQty = item.quantity - 1;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/cart/${itemId}`, {
+      const response = await fetch(`${API_URL}/api/cart/${itemId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -116,7 +117,7 @@ export const Cart = () => {
     if (!item) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/cart/${itemId}`, {
+      const response = await fetch(`${API_URL}/api/cart/${itemId}`, {
         method: "DELETE",
       });
 

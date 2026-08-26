@@ -1,4 +1,5 @@
 import { createSignal } from "solid-js";
+import { API_URL } from "../config";
 
 const storedUser = localStorage.getItem("currUser");
 const initialUser = storedUser ? JSON.parse(storedUser) : null;
@@ -22,7 +23,7 @@ export const [requests, setRequests] = createSignal([]);
 export const fetchRequests = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/requests/approved",
+        `${API_URL}/api/requests/approved`,
       );
       const data = await response.json();
 
@@ -36,7 +37,7 @@ export const fetchRequests = async () => {
 
 export const fetchProducts = async () => {
   try {
-    const response = await fetch("http://localhost:5000/api/products");
+    const response = await fetch(`${API_URL}/api/products`);
     const data = await response.json();
 
     if (response.ok) {

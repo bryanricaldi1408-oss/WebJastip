@@ -7,19 +7,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const dbPool = new Pool({
-  user: "postgres",
-  password: "postgres",
-  host: "localhost",
-  port: 5432,
-  database: "jastip",
-});
+const dbPool = new Pool(
+  process.env.DATABASE_URL
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+      }
+    : {
+        user: "postgres",
+        password: "postgres",
+        host: "localhost",
+        port: 5432,
+        database: "jastip",
+      }
+);
 
 dbPool.connect((err, client, release) => {
   if (err) {
     console.error("Gagal terkoneksi ke database", err.stack);
   } else {
-    console.log("Suskses terkonkesi ke database");
+    console.log("Sukses terkoneksi ke database");
     release();
   }
 });
@@ -564,7 +571,7 @@ app.delete("/api/cart/:id", async (req, res) => {
 });
 
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server Listening at PORT:${PORT}...`);
 });

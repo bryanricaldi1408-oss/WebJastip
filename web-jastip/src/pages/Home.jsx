@@ -7,6 +7,7 @@ import { showNotification, products, setProducts, requests, setRequests, fetchPr
 import { io } from "socket.io-client";
 import { uploadImage } from "../utils/uploadImage";
 import { Product } from "../components/Product";
+import { API_URL } from "../config";
 
 const imageModules = import.meta.glob("../images/*.{png, jpeg,jpg}", {
   eager: true,
@@ -14,7 +15,7 @@ const imageModules = import.meta.glob("../images/*.{png, jpeg,jpg}", {
 });
 
 const banners = Object.values(imageModules);
-const socket = io("http://localhost:5000");
+const socket = io(API_URL);
 
 export const Home = () => {
   // State untuk melacak file gambar yang diunggah
@@ -100,7 +101,7 @@ export const Home = () => {
         }
       }
 
-      const response = await fetch("http://localhost:5000/api/request", {
+      const response = await fetch(`${API_URL}/api/request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

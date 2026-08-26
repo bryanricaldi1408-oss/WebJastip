@@ -7,6 +7,7 @@ import { A } from "@solidjs/router";
 import { Show } from "solid-js";
 import { users, setUsers, cartCount, setCartCount} from "../store/WebStore";
 import { onMount } from "solid-js";
+import { API_URL } from "../config";
 export const Header = () => {
   
   onMount(() => {
@@ -18,7 +19,7 @@ export const Header = () => {
       const user = users();
       if (!user || !user.currUser || !user.currUser.id) return;
 
-      const response = await fetch(`http://localhost:5000/api/cart?user_id=${user.currUser.id}`, {
+      const response = await fetch(`${API_URL}/api/cart?user_id=${user.currUser.id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

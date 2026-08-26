@@ -1,6 +1,7 @@
 import { useLocation, useParams } from "@solidjs/router";
 import { createSignal, onMount, Show } from "solid-js";
 import "../style/Detail.css";
+import { API_URL } from "../config";
 import { cartCount, setCartCount, showNotification } from "../store/WebStore";
 import { users } from "../store/WebStore";
 export const Detail = () => {
@@ -27,7 +28,7 @@ export const Detail = () => {
   const fetchProductById = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/products/${params.id}`
+        `${API_URL}/api/products/${params.id}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -41,7 +42,7 @@ export const Detail = () => {
   const fetchRequestById = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/requests/${params.id}`
+        `${API_URL}/api/requests/${params.id}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -79,7 +80,7 @@ export const Detail = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/add-cart', {
+      const response = await fetch(`${API_URL}/api/add-cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
