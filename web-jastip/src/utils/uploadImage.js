@@ -34,10 +34,17 @@ export const uploadImage = async (file, folder) => {
 
   const data = await response.json();
 
-  if (!data.secure_url) {
-    throw new Error(
-      data.error?.message || "Gagal mendapatkan URL gambar dari Cloudinary",
-    );
+  // Log detail dari Cloudinary untuk debugging
+  if (!response.ok || !data.secure_url) {
+    const errMsg = data.error?.message || `HTTP ${response.status}: Gagal upload ke Cloudinary`;
+    console.error("[Cloudinary Error]", {
+      status: response.status,
+      cloudName: CLOUD_NAME,
+      preset: UPLOAD_PRESET,
+      folder,
+      errorDetail: data.error || data,
+    });
+    throw new Error(errMsg);
   }
 
   return data.secure_url;

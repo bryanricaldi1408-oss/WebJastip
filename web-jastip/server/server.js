@@ -28,13 +28,56 @@ dbPool.connect((err, client, release) => {
   } else {
     console.log("Sukses terkoneksi ke database");
     client.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(150) UNIQUE NOT NULL,
+        phone_number VARCHAR(20),
+        password VARCHAR(255) NOT NULL,
+        addresses VARCHAR(255),
+        role VARCHAR(20) DEFAULT 'user',
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        description TEXT,
+        price NUMERIC(12, 2) NOT NULL,
+        image_url TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS requests (
+        id SERIAL PRIMARY KEY,
+        user_id INT REFERENCES users(id) ON DELETE CASCADE,
+        name VARCHAR(255) NOT NULL,
+        item_link TEXT,
+        details TEXT,
+        category VARCHAR(100),
+        price NUMERIC(12, 2),
+        product_image_url TEXT,
+        status VARCHAR(50) DEFAULT 'incomplete',
+        approval_status VARCHAR(50) DEFAULT 'pending',
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+
       CREATE TABLE IF NOT EXISTS banners (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255),
         image_url TEXT NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
-    `).catch(e => console.error("Error auto-creating banners table:", e.message));
+
+      CREATE TABLE IF NOT EXISTS cart (
+        id SERIAL PRIMARY KEY,
+        user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        product_id INT REFERENCES products(id) ON DELETE CASCADE,
+        request_id INT REFERENCES requests(id) ON DELETE CASCADE,
+        quantity INT DEFAULT 1,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `).catch(e => console.error("Error auto-creating tables:", e.message));
     release();
   }
 });
@@ -156,16 +199,25 @@ app.put("/api/update-password", async (req, res) => {
 // Send Product
 app.post("/api/product", async (req, res) => {
   try {
+    const { name, description, price, image_url } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ message: "Nama produk wajib diisi" });
+    }
+
+    const rawPrice = String(price || "").replace(/\./g, "").replace(/\D/g, "");
+    const numericPrice = parseFloat(rawPrice) || 0;
+
     const query = `
-            INSERT INTO products (name, description, price, image_url)
-            VALUES ($1, $2, $3, $4) RETURNING *
-        `;
+      INSERT INTO products (name, description, price, image_url)
+      VALUES ($1, $2, $3, $4) RETURNING *
+    `;
 
     const result = await dbPool.query(query, [
-      req.body.name,
-      req.body.description,
-      req.body.price,
-      req.body.image_url,
+      name,
+      description || "",
+      numericPrice,
+      image_url || "",
     ]);
 
     const newProduct = result.rows[0];
@@ -177,7 +229,7 @@ app.post("/api/product", async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding product:", error);
-    res.status(500).json({ message: "Gagal menambahkan produk" });
+    res.status(500).json({ message: `Gagal menambahkan produk: ${error.message}` });
   }
 });
 
@@ -401,6 +453,24 @@ app.get("/api/products/:id", async (req,res) => {
     res.status(500).json({ message: "Gagal mengambil detail produk" });
   }
 });
+
+// DELETE product
+app.delete("/api/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await dbPool.query("DELETE FROM cart WHERE product_id = $1", [id]).catch(() => {});
+    const result = await dbPool.query("DELETE FROM products WHERE id = $1 RETURNING *", [id]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Produk tidak ditemukan" });
+    }
+    io.emit("delete_product", { id: Number(id) });
+    res.status(200).json({ message: "Produk berhasil dihapus", deleted: result.rows[0] });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).json({ message: "Gagal menghapus produk" });
+  }
+});
+
 // Submit Request Titipan
 app.post("/api/request", async (req, res) => {
   try {

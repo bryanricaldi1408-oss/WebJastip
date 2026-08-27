@@ -24,18 +24,19 @@ export const Header = () => {
         headers: {
           "Content-Type": "application/json",
         }
-      });
-      const data = await response.json();
-      if (response.ok) {
-        // Karena server mengembalikan array 'cart', kita jumlahkan seluruh 'quantity' dari tiap item
+      }).catch(() => null);
+
+      if (!response || !response.ok) return;
+
+      const data = await response.json().catch(() => null);
+      if (data && data.cart) {
         const totalQty = data.cart.reduce((sum, item) => sum + item.quantity, 0);
         setCartCount(totalQty);
       }
-      console.log(data.message);
     } catch (error) {
-      console.log(error);
+      // Ignore network errors silently when backend server is offline
     }
-  }
+  };
   return (
     <>
       <header>

@@ -1,14 +1,20 @@
+import { createSignal } from "solid-js";
 import "../style/Catalog.css";
 import { A, useNavigate } from "@solidjs/router";
 import { setUsers } from "../../src/store/WebStore";
 
 export const Catalog = () => {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = createSignal(false);
 
   return (
     <>
       <div class="admin-layout">
-        <aside class="sidebar">
+        <div
+          class={`sidebar-overlay ${sidebarOpen() ? "active" : ""}`}
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+        <aside class={`sidebar ${sidebarOpen() ? "open" : ""}`}>
           <div class="sidebar-header">
             <h2>
               <span class="blue-t">Jastip</span> Stella
@@ -47,11 +53,21 @@ export const Catalog = () => {
 
         <main class="main-content">
           <header class="topbar">
-            <div>
-              <h1>Catalog Products</h1>
-              <p class="subtitle">
-                Tampilan grid produk mirip dengan halaman depan web (Home).
-              </p>
+            <div class="topbar-left">
+              <button
+                class="hamburger-btn"
+                onClick={() => setSidebarOpen(!sidebarOpen())}
+              >
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+              </button>
+              <div>
+                <h1>Catalog Products</h1>
+                <p class="subtitle">
+                  Tampilan grid produk mirip dengan halaman depan web (Home).
+                </p>
+              </div>
             </div>
             <div class="admin-profile">
               <div class="avatar">A</div>

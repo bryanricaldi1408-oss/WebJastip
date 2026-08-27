@@ -69,7 +69,7 @@ export const Setting = () => {
     e.preventDefault();
     setIsDragOver(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFilesSelect(e.target.files);
+      handleFilesSelect(e.dataTransfer.files); // ✅ Fix: pakai dataTransfer, bukan e.target
     }
   };
 
@@ -134,6 +134,8 @@ export const Setting = () => {
               : f
           )
         );
+        // Tampilkan error spesifik dari Cloudinary ke notifikasi
+        showNotification(`Gagal upload "${item.file.name}": ${err.message}`, "error");
       }
     }
 
@@ -197,6 +199,10 @@ export const Setting = () => {
 
   return (
     <div class="admin-layout">
+      <div
+        class={`sidebar-overlay ${sidebarOpen() ? "active" : ""}`}
+        onClick={() => setSidebarOpen(false)}
+      ></div>
       <aside class={`sidebar ${sidebarOpen() ? "open" : ""}`}>
         <div class="sidebar-header">
           <h2>

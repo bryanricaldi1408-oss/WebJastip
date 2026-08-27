@@ -24,12 +24,11 @@ export const fetchRequests = async () => {
     try {
       const response = await fetch(
         `${API_URL}/api/requests/approved`,
-      );
-      const data = await response.json();
+      ).catch(() => null);
+      if (!response || !response.ok) return;
+      const data = await response.json().catch(() => ({}));
 
-      if (response.ok) {
-        setRequests(data.requests || []);
-      }
+      setRequests(data.requests || []);
     } catch (error) {
       console.error("Gagal mengambil data request:", error);
     }
@@ -37,12 +36,11 @@ export const fetchRequests = async () => {
 
 export const fetchProducts = async () => {
   try {
-    const response = await fetch(`${API_URL}/api/products`);
-    const data = await response.json();
+    const response = await fetch(`${API_URL}/api/products`).catch(() => null);
+    if (!response || !response.ok) return;
+    const data = await response.json().catch(() => ({}));
 
-    if (response.ok) {
-      setProducts(data.products || []);
-    }
+    setProducts(data.products || []);
   } catch (error) {
     console.error("Gagal mengambil data produk: ", error);
   }

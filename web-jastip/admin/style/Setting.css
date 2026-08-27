@@ -338,3 +338,56 @@
   border-radius: 12px;
   border: 1px dashed var(--border-color);
 }
+
+/* ===========================
+   Responsive Mobile Adjustments
+   =========================== */
+@media (max-width: 768px) {
+  .settings-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+  }
+
+  .tab-btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .dropzone-container {
+    padding: 24px 14px;
+  }
+
+  .dropzone-title {
+    font-size: 15px;
+  }
+
+  .dropzone-subtitle {
+    font-size: 12px;
+  }
+
+  .preview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .banners-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .upload-actions {
+    justify-content: stretch;
+  }
+
+  .upload-actions .btn {
+    width: 100%;
+    padding: 12px;
+  }
+}
