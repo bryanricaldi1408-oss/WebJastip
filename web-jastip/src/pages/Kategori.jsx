@@ -7,12 +7,62 @@ import "../style/Kategori.css";
 
 // Mapping URL param → label tampilan
 const CATEGORY_MAP = {
-  semua:       { label: "Semua Kategori" },
-  kosmetik:    { label: "Kosmetik" },
-  makanan:     { label: "Makanan" },
-  suplementasi:{ label: "Suplementasi" },
-  fashion:     { label: "Fashion" },
-  others:      { label: "Lainnya" },
+  semua:        { label: "Semua Kategori" },
+  kosmetik:     { label: "Kosmetik & Skincare" },
+  makanan:      { label: "Makanan & Kuliner" },
+  suplementasi: { label: "Suplementasi & Vitamin" },
+  fashion:      { label: "Fashion & Pakaian" },
+  others:       { label: "Kategori Lainnya (Others)" },
+};
+
+const PREDEFINED_CATEGORIES = ["kosmetik", "makanan", "suplementasi", "fashion"];
+
+// Fungsi pencocokan kategori yang cerdas
+const isCategoryMatch = (itemCategory, targetType) => {
+  if (!targetType || targetType === "semua") return true;
+
+  const cat = (itemCategory || "").toLowerCase().trim();
+
+  // Kategori "others" menampung semua item yang TIDAK masuk ke kategori utama (kosmetik, makanan, suplementasi, fashion)
+  if (targetType === "others") {
+    if (!cat || cat === "others" || cat === "lainnya") return true;
+
+    // Cek apakah item ini cocok dengan salah satu dari kategori utama
+    const matchesMainCategory = PREDEFINED_CATEGORIES.some((mainCat) => {
+      if (mainCat === "kosmetik") {
+        return cat.includes("kosmetik") || cat.includes("skincare") || cat.includes("makeup") || cat.includes("kecantikan");
+      }
+      if (mainCat === "makanan") {
+        return cat.includes("makanan") || cat.includes("food") || cat.includes("snack") || cat.includes("kuliner");
+      }
+      if (mainCat === "suplementasi") {
+        return cat.includes("suplementasi") || cat.includes("suplemen") || cat.includes("vitamin") || cat.includes("health");
+      }
+      if (mainCat === "fashion") {
+        return cat.includes("fashion") || cat.includes("pakaian") || cat.includes("baju") || cat.includes("aksesoris");
+      }
+      return cat === mainCat;
+    });
+
+    // Jika TIDAK masuk ke kategori utama manapun, maka masuk ke Others!
+    return !matchesMainCategory;
+  }
+
+  // Untuk tab kategori utama
+  if (targetType === "kosmetik") {
+    return cat.includes("kosmetik") || cat.includes("skincare") || cat.includes("makeup") || cat.includes("kecantikan");
+  }
+  if (targetType === "makanan") {
+    return cat.includes("makanan") || cat.includes("food") || cat.includes("snack") || cat.includes("kuliner");
+  }
+  if (targetType === "suplementasi") {
+    return cat.includes("suplementasi") || cat.includes("suplemen") || cat.includes("vitamin") || cat.includes("health");
+  }
+  if (targetType === "fashion") {
+    return cat.includes("fashion") || cat.includes("pakaian") || cat.includes("baju") || cat.includes("aksesoris");
+  }
+
+  return cat === targetType.toLowerCase();
 };
 
 export const Kategori = () => {
@@ -35,17 +85,11 @@ export const Kategori = () => {
   });
 
   const filteredProducts = createMemo(() => {
-    if (params.type === "semua") return products();
-    return products().filter(
-      (p) => p.category?.toLowerCase() === params.type.toLowerCase()
-    );
+    return products().filter((p) => isCategoryMatch(p.category, params.type));
   });
 
   const filteredRequests = createMemo(() => {
-    if (params.type === "semua") return requests();
-    return requests().filter(
-      (r) => r.category?.toLowerCase() === params.type.toLowerCase()
-    );
+    return requests().filter((r) => isCategoryMatch(r.category, params.type));
   });
 
   const totalCount = createMemo(

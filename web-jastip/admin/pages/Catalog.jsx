@@ -1,5 +1,5 @@
 import "../style/Catalog.css";
-import { useNavigate } from "@solidjs/router";
+import { A, useNavigate } from "@solidjs/router";
 import { setUsers } from "../../src/store/WebStore";
 
 export const Catalog = () => {
@@ -16,18 +16,18 @@ export const Catalog = () => {
             <span class="badge">Admin Panel</span>
           </div>
           <nav class="sidebar-menu">
-            <a href="/admin" class="menu-item">
+            <A href="/admin" class="menu-item">
               Dashboard
-            </a>
-            <a href="/catalogs" class="menu-item active">
+            </A>
+            <A href="/catalogs" class="menu-item active">
               Catalog View
-            </a>
-            <a href="/admin/payment" class="menu-item">
+            </A>
+            <A href="/admin/payment" class="menu-item">
               Payment
-            </a>
-            <a href="#" class="menu-item">
+            </A>
+            <A href="/admin/settings" class="menu-item">
               Settings
-            </a>
+            </A>
           </nav>
           <div class="sidebar-footer">
             <button

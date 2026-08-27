@@ -108,15 +108,12 @@ export const HomeAdmin = () => {
             <A href="/admin" class="menu-item active">
               Dashboard
             </A>
-            <a href="/catalogs" class="menu-item">
-              Catalog View
-            </a>
-            <a href="/admin/payment" class="menu-item">
+            <A href="/admin/payment" class="menu-item">
               Payment
-            </a>
-            <a href="#" class="menu-item">
+            </A>
+            <A href="/admin/settings" class="menu-item">
               Settings
-            </a>
+            </A>
           </nav>
           <div class="sidebar-footer">
             <button

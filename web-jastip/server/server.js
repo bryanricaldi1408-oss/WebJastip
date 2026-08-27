@@ -27,6 +27,14 @@ dbPool.connect((err, client, release) => {
     console.error("Gagal terkoneksi ke database", err.stack);
   } else {
     console.log("Sukses terkoneksi ke database");
+    client.query(`
+      CREATE TABLE IF NOT EXISTS banners (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255),
+        image_url TEXT NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `).catch(e => console.error("Error auto-creating banners table:", e.message));
     release();
   }
 });
@@ -570,8 +578,66 @@ app.delete("/api/cart/:id", async (req, res) => {
   }
 });
 
+// BANNERS API
+// GET BANNERS
+app.get("/api/banners", async (req, res) => {
+  try {
+    const result = await dbPool.query("SELECT * FROM banners ORDER BY id DESC");
+    res.status(200).json({ banners: result.rows });
+  } catch (error) {
+    console.error("Error fetching banners:", error);
+    res.status(500).json({ message: "Gagal mengambil data banner" });
+  }
+});
+
+// ADD BANNER(S)
+app.post("/api/banners", async (req, res) => {
+  try {
+    const { banners } = req.body;
+    if (Array.isArray(banners) && banners.length > 0) {
+      const inserted = [];
+      for (const item of banners) {
+        const result = await dbPool.query(
+          "INSERT INTO banners (title, image_url) VALUES ($1, $2) RETURNING *",
+          [item.title || "Banner", item.image_url]
+        );
+        inserted.push(result.rows[0]);
+      }
+      return res.status(201).json({ message: "Banner berhasil disimpan", banners: inserted });
+    } else if (req.body.image_url) {
+      const { title, image_url } = req.body;
+      const result = await dbPool.query(
+        "INSERT INTO banners (title, image_url) VALUES ($1, $2) RETURNING *",
+        [title || "Banner", image_url]
+      );
+      return res.status(201).json({ message: "Banner berhasil disimpan", banner: result.rows[0] });
+    } else {
+      return res.status(400).json({ message: "Data banner tidak valid" });
+    }
+  } catch (error) {
+    console.error("Error saving banner:", error);
+    res.status(500).json({ message: "Gagal menyimpan banner" });
+  }
+});
+
+// DELETE BANNER
+app.delete("/api/banners/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await dbPool.query("DELETE FROM banners WHERE id = $1 RETURNING *", [id]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Banner tidak ditemukan" });
+    }
+    res.status(200).json({ message: "Banner berhasil dihapus", deleted: result.rows[0] });
+  } catch (error) {
+    console.error("Error deleting banner:", error);
+    res.status(500).json({ message: "Gagal menghapus banner" });
+  }
+});
+
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server Listening at PORT:${PORT}...`);
 });
+

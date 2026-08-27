@@ -1,5 +1,5 @@
 import "../style/Payment.css";
-import { useNavigate } from "@solidjs/router";
+import { A, useNavigate } from "@solidjs/router";
 import { setUsers } from "../../src/store/WebStore";
 
 export const Payment = () => {
@@ -15,18 +15,15 @@ export const Payment = () => {
             <span class="badge">Admin Panel</span>
           </div>
           <nav class="sidebar-menu">
-            <a href="/admin" class="menu-item">
+            <A href="/admin" class="menu-item">
               Dashboard
-            </a>
-            <a href="/catalogs" class="menu-item">
-              Catalog View
-            </a>
-            <a href="/admin/payment" class="menu-item active">
+            </A>
+            <A href="/admin/payment" class="menu-item active">
               Payment
-            </a>
-            <a href="#" class="menu-item">
+            </A>
+            <A href="/admin/settings" class="menu-item">
               Settings
-            </a>
+            </A>
           </nav>
           <div class="sidebar-footer">
             <button

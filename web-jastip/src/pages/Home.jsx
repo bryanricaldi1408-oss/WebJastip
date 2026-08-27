@@ -14,7 +14,7 @@ const imageModules = import.meta.glob("../images/*.{png, jpeg,jpg}", {
   import: "default",
 });
 
-const banners = Object.values(imageModules);
+const localBanners = Object.values(imageModules);
 const socket = io(API_URL);
 
 export const Home = () => {
@@ -157,23 +157,50 @@ export const Home = () => {
     }
   };
 
+  // State untuk banners dari database
+  const [dbBanners, setDbBanners] = createSignal([]);
+
+  const activeBanners = () => {
+    if (dbBanners().length > 0) {
+      return dbBanners().map((b) => b.image_url);
+    }
+    return localBanners;
+  };
+
   // State untuk melacak slide aktif (dimulai dari index 0)
   const [currentIndex, setCurrentIndex] = createSignal(0);
+
   // Fungsi navigasi slide berikutnya
   const nextSlide = () => {
-    if (banners.length === 0) return;
-    setCurrentIndex((prev) => (prev + 1) % banners.length);
+    const list = activeBanners();
+    if (list.length === 0) return;
+    setCurrentIndex((prev) => (prev + 1) % list.length);
   };
   // Fungsi navigasi slide sebelumnya
   const prevSlide = () => {
-    if (banners.length === 0) return;
-    setCurrentIndex((prev) => (prev - 1 + banners.length) % banners.length);
+    const list = activeBanners();
+    if (list.length === 0) return;
+    setCurrentIndex((prev) => (prev - 1 + list.length) % list.length);
   };
-  // Auto-play berpindah otomatis setiap 4 detik
+  // Auto-play berpindah otomatis setiap 4 detik & fetch dynamic banners
   onMount(() => {
     fetchRequests();
-    if (banners.length === 0) return;
-    const timer = setInterval(nextSlide, 4000);
+    fetch(`${API_URL}/api/banners`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.banners && data.banners.length > 0) {
+          setDbBanners(data.banners);
+        }
+      })
+      .catch((err) => console.error("Error fetching banners:", err));
+
+    const timer = setInterval(() => {
+      const list = activeBanners();
+      if (list.length > 0) {
+        setCurrentIndex((prev) => (prev + 1) % list.length);
+      }
+    }, 4000);
+
     onCleanup(() => clearInterval(timer));
   });
 
@@ -184,10 +211,10 @@ export const Home = () => {
         <div class="banner-card">
           <div class="carousel-wrapper">
             {/* Tampilkan gambar yang sedang aktif jika gambar tersedia */}
-            {banners.length > 0 ? (
+            {activeBanners().length > 0 ? (
               <img
                 class="carousel-img"
-                src={banners[currentIndex()]}
+                src={activeBanners()[currentIndex() % activeBanners().length]}
                 alt={`Banner ${currentIndex() + 1}`}
               />
             ) : (
@@ -212,7 +239,7 @@ export const Home = () => {
                   <span class="blue">Promo & Info</span> Banner
                 </h2>
                 <p class="no-image-subtitle">
-                  Belum ada gambar promo di folder <code>/src/images</code>
+                  Belum ada gambar promo di database atau folder local
                 </p>
                 <div class="no-image-badge">
                   <svg
@@ -244,7 +271,7 @@ export const Home = () => {
             </button>
             {/* Indikator Halaman (misal: 1 / 3) */}
             <div class="page-indicator">
-              {currentIndex() + 1} / {banners.length}
+              {currentIndex() + 1} / {activeBanners().length}
             </div>
           </div>
         </div>
