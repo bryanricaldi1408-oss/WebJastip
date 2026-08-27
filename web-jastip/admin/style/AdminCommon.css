@@ -301,6 +301,7 @@ body {
 .admin-table td {
   padding: 16px 24px;
   border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.2s ease;
 }
 
 .admin-table th {
@@ -309,6 +310,23 @@ body {
   font-weight: bold;
   font-size: 14px;
   text-transform: uppercase;
+}
+
+/* Hover Animation for Table Rows */
+.req-row {
+  transition: background-color 0.2s ease;
+}
+
+.req-row:hover td {
+  background-color: #f8fafc;
+}
+
+.req-row .request-img-thumb img {
+  transition: transform 0.3s ease;
+}
+
+.req-row:hover .request-img-thumb img {
+  transform: scale(1.08);
 }
 
 /* Table Cells Inner Styling */
@@ -525,6 +543,145 @@ body {
   color: var(--text-muted);
   border-color: var(--border-color);
   cursor: not-allowed;
+}
+
+/* ── Price Column ── */
+.req-cell--price {
+  min-width: 160px;
+}
+
+.price-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 0;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.price-display:hover {
+  background: #f1f5f9;
+}
+
+.price-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.price-empty {
+  font-size: 13px;
+  color: #c0ccd8;
+  font-style: italic;
+}
+
+.price-set-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #b0c4de;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.2s ease, background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.price-set-btn:hover {
+  color: var(--my-blue);
+  background: #e8f0fc;
+}
+
+.price-edit-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.price-input-row {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--my-blue);
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(136, 168, 215, 0.18);
+}
+
+.price-input-prefix {
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: #f1f5f9;
+  border-right: 1.5px solid var(--border-color);
+  height: 36px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.price-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0 10px;
+  height: 36px;
+  font-size: 14px;
+  font-family: "Satoshi", sans-serif;
+  color: var(--text-dark);
+  width: 100%;
+}
+
+.price-input::-webkit-inner-spin-button,
+.price-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.price-edit-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.price-save-btn {
+  flex: 1;
+  background: var(--success);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  height: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.price-save-btn:hover:not(:disabled) {
+  background: var(--success-hover);
+}
+
+.price-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.price-cancel-btn {
+  flex: 1;
+  background: #f1f5f9;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  height: 30px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.price-cancel-btn:hover:not(:disabled) {
+  background: #e2e8f0;
+  color: var(--text-dark);
 }
 
 /* Buttons */
@@ -1039,6 +1196,13 @@ body {
     margin-bottom: 16px;
     overflow: hidden;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
+  }
+
+  .requests-table .req-row:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-color: #cbd5e1;
   }
 
   /* All cells → block */

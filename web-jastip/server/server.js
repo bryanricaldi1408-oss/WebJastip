@@ -404,6 +404,7 @@ app.get("/api/requests/:id", async (req, res) => {
                 r.item_link,
                 r.details,
                 r.category,
+                r.price,
                 r.product_image_url,
                 r.status,
                 r.approval_status,
@@ -425,6 +426,29 @@ app.get("/api/requests/:id", async (req, res) => {
     res.status(500).json({ message: "Gagal mengambil detail barang" });
   }
 });
+
+// SET PRICE BY ADMIN
+app.put("/api/request-price", async (req, res) => {
+  const { price, reqId } = req.body;
+  try {
+    const query = `
+      UPDATE requests
+      SET price = $1
+      WHERE id = $2 RETURNING *
+    `;
+    const result = await dbPool.query(query, [price, reqId]);
+    const updatedItem = result.rows[0];
+    io.emit("request_price_set", updatedItem);
+    res.status(200).json({
+      message: "Harga berhasil ditetapkan",
+      request: updatedItem,
+    });
+  } catch (error) {
+    console.error("Error setting price:", error);
+    res.status(500).json({ message: "Gagal menetapkan harga" });
+  }
+});
+
 
 
 //Get product by id

@@ -1,3 +1,443 @@
 @import "./AdminCommon.css";
 
 /* HomeAdmin Dashboard specific styles */
+
+/* =====================
+   PRICE BASELINE SECTION
+   ===================== */
+.price-baseline-section {
+  padding: 0;
+  margin-bottom: 32px;
+}
+
+.pb-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(136, 168, 215, 0.08);
+}
+
+/* Header */
+.pb-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 28px;
+  background: linear-gradient(135deg, #f0f5ff 0%, #e8f0fc 100%);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pb-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.pb-edit-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1.5px solid var(--border-color);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: "Satoshi", sans-serif;
+  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pb-edit-btn:hover {
+  border-color: var(--my-blue);
+  color: var(--my-blue);
+  box-shadow: 0 0 0 3px rgba(136, 168, 215, 0.12);
+}
+
+.pb-icon {
+  width: 44px;
+  height: 44px;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--my-blue);
+  box-shadow: 0 2px 8px rgba(136, 168, 215, 0.25);
+  flex-shrink: 0;
+}
+
+.pb-title-group {
+  flex: 1;
+}
+
+.pb-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 2px;
+}
+
+.pb-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.pb-formula-badge {
+  background: white;
+  border: 1.5px solid var(--my-blue);
+  border-radius: 100px;
+  padding: 6px 18px;
+  flex-shrink: 0;
+}
+
+.pb-formula-text {
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--my-blue);
+  letter-spacing: 0.5px;
+}
+
+/* Body */
+.pb-body {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  padding: 28px 28px 24px;
+}
+
+.pb-input-group,
+.pb-result-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.pb-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.pb-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  background: #fafafa;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pb-input-wrapper:focus-within {
+  border-color: var(--my-blue);
+  box-shadow: 0 0 0 3px rgba(136, 168, 215, 0.18);
+  background: white;
+}
+
+.pb-currency-select {
+  border: none;
+  outline: none;
+  background: #f1f5f9;
+  border-right: 1.5px solid var(--border-color);
+  height: 48px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: "Satoshi", sans-serif;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  max-width: 190px;
+  transition: background 0.2s ease;
+}
+
+.pb-currency-select:focus {
+  background: #e8f0fc;
+  color: var(--my-blue);
+}
+
+.pb-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0 16px;
+  height: 48px;
+  font-size: 15px;
+  font-family: "Satoshi", sans-serif;
+  color: var(--text-dark);
+  width: 100%;
+}
+
+.pb-input::placeholder {
+  color: #c0cfe0;
+}
+
+.pb-input::-webkit-inner-spin-button,
+.pb-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.pb-arrow {
+  color: #c0cfe0;
+  padding-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.pb-result {
+  height: 48px;
+  border-radius: 12px;
+  border: 1.5px dashed #d0ddf0;
+  background: #f8faff;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #b0c4de;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pb-result--active {
+  border-style: solid;
+  border-color: var(--my-blue);
+  background: linear-gradient(135deg, #eef4ff 0%, #e8f0fc 100%);
+  color: var(--text-dark);
+  box-shadow: 0 2px 10px rgba(136, 168, 215, 0.2);
+}
+
+.pb-result-placeholder {
+  font-weight: 400;
+  font-size: 14px;
+  color: #c0cfe0;
+  font-style: italic;
+}
+
+/* Formula Editor */
+.pb-formula-editor {
+  padding: 18px 28px;
+  background: #fffbeb;
+  border-bottom: 1px solid #fde68a;
+  animation: pb-fade-in 0.25s ease;
+}
+
+.pb-formula-editor-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pb-formula-editor-fields {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.pb-formula-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.pb-formula-input {
+  border: 1.5px solid #fde68a;
+  border-radius: 10px;
+  padding: 0 14px;
+  height: 42px;
+  font-size: 15px;
+  font-family: "Satoshi", sans-serif;
+  font-weight: 600;
+  color: var(--text-dark);
+  background: white;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pb-formula-input:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+.pb-formula-input::-webkit-inner-spin-button,
+.pb-formula-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.pb-formula-sep {
+  font-size: 22px;
+  font-weight: 700;
+  color: #d97706;
+  padding-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.pb-formula-input-pct {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pb-formula-input-pct .pb-formula-input {
+  padding-right: 36px;
+}
+
+.pb-pct-label {
+  position: absolute;
+  right: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #d97706;
+  pointer-events: none;
+}
+
+.pb-formula-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  padding-bottom: 2px;
+}
+
+.pb-save-btn {
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0 18px;
+  height: 42px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: "Satoshi", sans-serif;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pb-save-btn:hover {
+  background: #d97706;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.pb-cancel-btn {
+  background: white;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0 16px;
+  height: 42px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Satoshi", sans-serif;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.pb-cancel-btn:hover {
+  border-color: #aaa;
+  color: var(--text-dark);
+}
+
+/* Breakdown */
+.pb-breakdown {
+  margin: 0 28px 24px;
+  background: #f8faff;
+  border: 1px solid #dce9ff;
+  border-radius: 14px;
+  padding: 16px 20px;
+  animation: pb-fade-in 0.3s ease;
+}
+
+@keyframes pb-fade-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pb-breakdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.pb-breakdown-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.pb-breakdown-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.pb-breakdown-divider {
+  height: 1px;
+  background: #dce9ff;
+  margin: 8px 0;
+}
+
+.pb-breakdown-margin .pb-breakdown-label {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.pb-breakdown-margin .pb-breakdown-value {
+  color: #16a34a;
+}
+
+.pb-breakdown-total .pb-breakdown-label,
+.pb-breakdown-total .pb-breakdown-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--my-blue);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .price-baseline-section {
+    padding: 0;
+    margin-bottom: 24px;
+  }
+
+  .pb-header {
+    flex-wrap: wrap;
+    padding: 18px;
+    gap: 12px;
+  }
+
+  .pb-header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .pb-formula-badge {
+    flex: 1;
+    text-align: center;
+  }
+
+  .pb-body {
+    flex-direction: column;
+    padding: 20px 18px 18px;
+    gap: 16px;
+  }
+
+  .pb-arrow {
+    transform: rotate(90deg);
+    align-self: center;
+    padding-bottom: 0;
+  }
+
+  .pb-breakdown {
+    margin: 0 18px 18px;
+  }
+}

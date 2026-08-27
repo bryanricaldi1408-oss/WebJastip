@@ -1,4 +1,4 @@
-import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
+import { createSignal, createMemo, For, onCleanup, onMount, Show } from "solid-js";
 import "../style/HomeAdmin.css";
 import { A, useNavigate } from "@solidjs/router";
 import { RequestTable } from "../components/RequestTable";
@@ -17,6 +17,76 @@ export const HomeAdmin = () => {
   const [searchQuery, setSearchQuery] = createSignal("");
   const [statusFilter, setStatusFilter] = createSignal("all");
   const [catalogSearch, setCatalogSearch] = createSignal("");
+
+  // Price Baseline
+  const CURRENCIES = [
+    { code: "JPY", label: "Yen Jepang",          symbol: "¥",   defaultKurs: 105   },
+    { code: "KRW", label: "Won Korea Selatan",    symbol: "₩",   defaultKurs: 11    },
+    { code: "CNY", label: "Yuan China",           symbol: "¥",   defaultKurs: 2250  },
+    { code: "HKD", label: "Dolar Hong Kong",      symbol: "HK$", defaultKurs: 2100  },
+    { code: "TWD", label: "Dolar Taiwan",         symbol: "NT$", defaultKurs: 505   },
+    { code: "SGD", label: "Dolar Singapura",      symbol: "S$",  defaultKurs: 12200 },
+    { code: "MYR", label: "Ringgit Malaysia",     symbol: "RM",  defaultKurs: 3500  },
+    { code: "THB", label: "Baht Thailand",        symbol: "฿",   defaultKurs: 455   },
+    { code: "USD", label: "Dolar AS",             symbol: "$",   defaultKurs: 16300 },
+    { code: "EUR", label: "Euro",                 symbol: "€",   defaultKurs: 17500 },
+    { code: "GBP", label: "Poundsterling",        symbol: "£",   defaultKurs: 21000 },
+    { code: "AUD", label: "Dolar Australia",      symbol: "A$",  defaultKurs: 10600 },
+  ];
+
+
+
+  const [priceInput, setPriceInput] = createSignal("");
+  const [selectedCurrency, setSelectedCurrency] = createSignal("JPY");
+  const [kurs, setKurs] = createSignal(105);
+  const [marginPct, setMarginPct] = createSignal(40);
+  const [isEditingFormula, setIsEditingFormula] = createSignal(false);
+  const [tempKurs, setTempKurs] = createSignal("105");
+  const [tempMargin, setTempMargin] = createSignal("40");
+
+  const currentCurrency = createMemo(() =>
+    CURRENCIES.find((c) => c.code === selectedCurrency()) || CURRENCIES[0]
+  );
+
+  const idrBase = createMemo(() => {
+    const a = parseFloat(priceInput());
+    if (isNaN(a) || priceInput() === "") return null;
+    return a * kurs();
+  });
+
+  const pbResult = createMemo(() => {
+    if (idrBase() === null) return null;
+    return idrBase() * (1 + marginPct() / 100);
+  });
+
+  const formatIDR = (val) =>
+    new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(val);
+
+  const formatForeign = (val) =>
+    new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 }).format(val);
+
+  const handleCurrencyChange = (code) => {
+    const cur = CURRENCIES.find((c) => c.code === code);
+    if (cur) {
+      setSelectedCurrency(code);
+      setKurs(cur.defaultKurs);
+      setTempKurs(String(cur.defaultKurs));
+    }
+  };
+
+  const openFormulaEditor = () => {
+    setTempKurs(String(kurs()));
+    setTempMargin(String(marginPct()));
+    setIsEditingFormula(true);
+  };
+
+  const saveFormula = () => {
+    const k = parseFloat(tempKurs());
+    const m = parseFloat(tempMargin());
+    if (!isNaN(k) && k > 0) setKurs(k);
+    if (!isNaN(m) && m >= 0) setMarginPct(m);
+    setIsEditingFormula(false);
+  };
 
   const filteredRequests = () => {
     const query = searchQuery().toLowerCase().trim();
@@ -249,6 +319,145 @@ export const HomeAdmin = () => {
             </div>
           </header>
 
+          <section class="price-baseline-section">
+            <div class="pb-card">
+
+              {/* Header */}
+              <div class="pb-header">
+                <div class="pb-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                </div>
+                <div class="pb-title-group">
+                  <h2 class="pb-title">Price Baseline</h2>
+                  <p class="pb-subtitle">Harga asing × kurs IDR, ditambah margin {marginPct()}%</p>
+                </div>
+                <div class="pb-header-right">
+                  <div class="pb-formula-badge">
+                    <span class="pb-formula-text">( a × kurs ) × {(1 + marginPct() / 100).toFixed(2)}</span>
+                  </div>
+                  <button class="pb-edit-btn" onClick={openFormulaEditor} title="Edit kurs &amp; margin">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Edit Formula
+                  </button>
+                </div>
+              </div>
+
+              {/* Formula Editor */}
+              {isEditingFormula() && (
+                <div class="pb-formula-editor">
+                  <div class="pb-formula-editor-title">Edit Formula: ( a × Kurs ) × ( 1 + Margin% )</div>
+                  <div class="pb-formula-editor-fields">
+                    <div class="pb-formula-field">
+                      <label class="pb-label">Kurs IDR per {selectedCurrency()}</label>
+                      <input
+                        type="number"
+                        class="pb-formula-input"
+                        value={tempKurs()}
+                        onInput={(e) => setTempKurs(e.target.value)}
+                        placeholder="contoh: 105"
+                        min="0"
+                      />
+                    </div>
+                    <div class="pb-formula-sep">×</div>
+                    <div class="pb-formula-field">
+                      <label class="pb-label">Margin (%)</label>
+                      <div class="pb-formula-input-pct">
+                        <input
+                          type="number"
+                          class="pb-formula-input"
+                          value={tempMargin()}
+                          onInput={(e) => setTempMargin(e.target.value)}
+                          placeholder="40"
+                          min="0"
+                          max="1000"
+                        />
+                        <span class="pb-pct-label">%</span>
+                      </div>
+                    </div>
+                    <div class="pb-formula-actions">
+                      <button class="pb-save-btn" onClick={saveFormula}>Simpan</button>
+                      <button class="pb-cancel-btn" onClick={() => setIsEditingFormula(false)}>Batal</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Currency Selector + Input */}
+              <div class="pb-body">
+                <div class="pb-input-group">
+                  <label class="pb-label" for="pb-price-input">Harga Asing</label>
+                  <div class="pb-input-wrapper">
+                    <select
+                      class="pb-currency-select"
+                      value={selectedCurrency()}
+                      onChange={(e) => handleCurrencyChange(e.target.value)}
+                    >
+                      {CURRENCIES.map((c) => (
+                        <option value={c.code}>{c.symbol} {c.code} — {c.label}</option>
+                      ))}
+                    </select>
+                    <input
+                      id="pb-price-input"
+                      type="number"
+                      class="pb-input"
+                      placeholder={`Masukkan harga dalam ${selectedCurrency()}...`}
+                      min="0"
+                      value={priceInput()}
+                      onInput={(e) => setPriceInput(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div class="pb-arrow">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </div>
+
+                <div class="pb-result-group">
+                  <label class="pb-label">Harga Jual Estimasi (IDR)</label>
+                  <div class={`pb-result ${pbResult() !== null ? "pb-result--active" : ""}`}>
+                    {pbResult() !== null
+                      ? formatIDR(pbResult())
+                      : <span class="pb-result-placeholder">— Masukkan harga asing —</span>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              {/* Breakdown */}
+              {pbResult() !== null && (
+                <div class="pb-breakdown">
+                  <div class="pb-breakdown-item">
+                    <span class="pb-breakdown-label">Harga Asing ({selectedCurrency()})</span>
+                    <span class="pb-breakdown-value">{currentCurrency().symbol} {formatForeign(parseFloat(priceInput()))}</span>
+                  </div>
+                  <div class="pb-breakdown-item">
+                    <span class="pb-breakdown-label">× Kurs IDR (1 {selectedCurrency()} = Rp {formatForeign(kurs())})</span>
+                    <span class="pb-breakdown-value">{formatIDR(idrBase())}</span>
+                  </div>
+                  <div class="pb-breakdown-item pb-breakdown-margin">
+                    <span class="pb-breakdown-label">+ Margin {marginPct()}% dari hasil konversi</span>
+                    <span class="pb-breakdown-value">+{formatIDR(idrBase() * (marginPct() / 100))}</span>
+                  </div>
+                  <div class="pb-breakdown-divider"></div>
+                  <div class="pb-breakdown-item pb-breakdown-total">
+                    <span class="pb-breakdown-label">Total Estimasi</span>
+                    <span class="pb-breakdown-value">{formatIDR(pbResult())}</span>
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </section>
+
           <section class="admin-section catalog-section">
             <div class="section-header">
               <h3>Catalog Products</h3>
@@ -447,6 +656,7 @@ export const HomeAdmin = () => {
                       <th>Gambar Produk</th>
                       <th>Info Pemesan</th>
                       <th>Detail Barang Incaran</th>
+                      <th>Harga</th>
                       <th>Persetujuan (Approve/Deny)</th>
                       <th>Status Barang</th>
                     </tr>
@@ -456,7 +666,7 @@ export const HomeAdmin = () => {
                       each={filteredRequests()}
                       fallback={
                         <tr>
-                          <td colspan="5" class="empty-search-td">
+                          <td colspan="6" class="empty-search-td">
                             <div class="empty-search-state">
                               <svg
                                 width="32"
@@ -494,6 +704,7 @@ export const HomeAdmin = () => {
                           product_image_url={item.product_image_url}
                           approval_status={item.approval_status}
                           status={item.status}
+                          price={item.price}
                         />
                       )}
                     </For>
