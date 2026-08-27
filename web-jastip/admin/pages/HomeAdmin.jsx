@@ -5,8 +5,9 @@ import { RequestTable } from "../components/RequestTable";
 import { io } from "socket.io-client";
 import { setUsers, showNotification } from "../../src/store/WebStore";
 import { uploadImage } from "../../src/utils/uploadImage";
+import { API_URL } from "../../src/config";
 
-const socket = io("http://localhost:5000");
+const socket = io(API_URL);
 
 export const HomeAdmin = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export const HomeAdmin = () => {
         try {
           imageUrl = await uploadImage(newProductImage(), "products");
 
-          const response = await fetch("http://localhost:5000/api/product", {
+          const response = await fetch(`${API_URL}/api/product`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -82,7 +83,7 @@ export const HomeAdmin = () => {
   };
 
   onMount(async () => {
-    const response = await fetch("http://localhost:5000/api/requests");
+    const response = await fetch(`${API_URL}/api/requests`);
     const data = await response.json();
     setRequests(data.requests); // Menyimpan array data dari backend
 

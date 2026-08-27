@@ -1,5 +1,6 @@
 import { createSignal } from "solid-js";
 import { showNotification } from "../../src/store/WebStore";
+import { API_URL } from "../../src/config";
 
 export const RequestTable = (props) => {
   const [approvalStatus, setApprovalStatus] = createSignal(
@@ -13,7 +14,7 @@ export const RequestTable = (props) => {
     if (isProcessing()) return;
     setIsProcessing(true);
     try {
-      const response = await fetch("http://localhost:5000/api/approval", {
+      const response = await fetch(`${API_URL}/api/approval`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +51,7 @@ export const RequestTable = (props) => {
     if (isProcessing()) return;
     setIsProcessing(true);
     try {
-      const response = await fetch("http://localhost:5000/api/request-status", {
+      const response = await fetch(`${API_URL}/api/request-status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
