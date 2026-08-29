@@ -25,6 +25,7 @@ export const Home = () => {
   const [detail, setDetail] = createSignal("");
   const [selectedFile, setSelectedFile] = createSignal("");
   const [category, setCategory] = createSignal("");
+  const [isCustomCategory, setIsCustomCategory] = createSignal(false);
   const [isSubmitting, setIsSubmitting] = createSignal(false);
   const [imagePreview, setImagePreview] = createSignal(null);
 
@@ -126,6 +127,7 @@ export const Home = () => {
         setLink("");
         setDetail("");
         setCategory("");
+        setIsCustomCategory(false);
         setFileName("");
         setSelectedFile(null);
         setImagePreview(null);
@@ -335,13 +337,45 @@ export const Home = () => {
 
               <div class="form-group">
                 <label>Kategori</label>
-                <input
-                  type="text"
-                  placeholder="Kosmetik/Makanan/Fashion/dll."
-                  class="req-input"
-                  value={category()}
-                  onInput={(e) => setCategory(e.target.value)}
-                />
+                <div class="category-buttons">
+                  <For each={["Kosmetik", "Makanan", "Suplementasi", "Fashion"]}>
+                    {(catName) => (
+                      <button
+                        type="button"
+                        class={`category-btn ${category() === catName && !isCustomCategory() ? "active" : ""}`}
+                        onClick={() => {
+                          setCategory(catName);
+                          setIsCustomCategory(false);
+                        }}
+                      >
+                        {catName}
+                      </button>
+                    )}
+                  </For>
+                  <button
+                    type="button"
+                    class={`category-btn ${isCustomCategory() ? "active" : ""}`}
+                    onClick={() => {
+                      setIsCustomCategory(true);
+                      if (!category() || ["Kosmetik", "Makanan", "Suplementasi", "Fashion"].includes(category())) {
+                        setCategory("Silahkan Ketik category yang baru");
+                      }
+                    }}
+                  >
+                    Lainnya
+                  </button>
+                </div>
+
+                <Show when={isCustomCategory()}>
+                  <div class="custom-category-input-wrapper">
+                    <input
+                      type="text"
+                      placeholder={category()}
+                      class="req-input"
+                      onInput={(e) => setCategory(e.target.value)}
+                    />
+                  </div>
+                </Show>
               </div>
 
               <div class="form-group">

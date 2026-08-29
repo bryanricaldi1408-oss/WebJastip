@@ -135,7 +135,7 @@ export const Cart = () => {
   const navigate = useNavigate();
 
   const handleCheckout = () => {
-    navigate("/payment");
+    navigate("/payment", { state: { amount: subtotal() } });
   };
 
   return (

@@ -429,7 +429,9 @@
 
 .aest-btn-added,
 .aest-btn-added:hover,
-.aest-btn-added:active {
+.aest-btn-added:active,
+.aest-btn:disabled,
+.aest-btn[disabled] {
   background: #cbd5e1 !important;
   color: #64748b !important;
   box-shadow: none !important;

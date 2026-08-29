@@ -8,10 +8,10 @@ import "../style/Kategori.css";
 // Mapping URL param → label tampilan
 const CATEGORY_MAP = {
   semua:        { label: "Semua Kategori" },
-  kosmetik:     { label: "Kosmetik & Skincare" },
-  makanan:      { label: "Makanan & Kuliner" },
-  suplementasi: { label: "Suplementasi & Vitamin" },
-  fashion:      { label: "Fashion & Pakaian" },
+  kosmetik:     { label: "Kosmetik" },
+  makanan:      { label: "Makanan" },
+  suplementasi: { label: "Suplementasi" },
+  fashion:      { label: "Fashion" },
   others:       { label: "Kategori Lainnya (Others)" },
 };
 
