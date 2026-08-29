@@ -217,6 +217,79 @@
   font-size: 12px;
 }
 
+/* ===========================
+   Payment Status Badges
+   =========================== */
+.ur-badge--pay-verified {
+  background-color: #ecfdf5;
+  color: #059669;
+  border-color: #a7f3d0;
+}
+.ur-badge--pay-verified::before {
+  content: "✓";
+  font-size: 11px;
+}
+
+.ur-badge--pay-rejected {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+.ur-badge--pay-rejected::before {
+  content: "✕";
+  font-size: 11px;
+}
+
+.ur-badge--pay-pending {
+  background-color: #fffbeb;
+  color: #d97706;
+  border-color: #fde68a;
+}
+.ur-badge--pay-pending::before {
+  content: "⏳";
+  font-size: 11px;
+}
+
+.ur-badge--pay-unpaid {
+  background-color: #f8fafc;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+.ur-badge--pay-unpaid::before {
+  content: "—";
+  font-size: 11px;
+}
+
+/* Payment cell layout */
+.ur-payment-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* Contact Admin Button */
+.ur-contact-admin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+}
+
+.ur-contact-admin-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
 /* Empty state */
 .ur-empty-state {
   text-align: center;

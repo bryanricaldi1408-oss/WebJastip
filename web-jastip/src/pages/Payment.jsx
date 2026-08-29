@@ -1,6 +1,8 @@
 import { createSignal, Show } from "solid-js";
 import { useLocation } from "@solidjs/router";
 import "../style/Payment.css";
+import { API_URL } from "../config";
+import { users, setCartCount } from "../store/WebStore";
 
 export const Payment = () => {
   const location = useLocation();
@@ -22,6 +24,7 @@ export const Payment = () => {
   const [imageFile, setImageFile] = createSignal(null);
   const [isCopiedBCA, setIsCopiedBCA] = createSignal(false);
   const [isSuccess, setIsSuccess] = createSignal(false);
+  const [isSubmitting, setIsSubmitting] = createSignal(false);
 
   // local file selection preview handler
   const handleFileChange = (e) => {
@@ -43,11 +46,52 @@ export const Payment = () => {
     setTimeout(() => setIsCopiedBCA(false), 2000);
   };
 
-  // Dummy submit handler to trigger success state
-  const handleSubmit = (e) => {
+  // Submit handler to upload payment proof to backend
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // User will replace this with their actual upload logic and backend API call
-    setIsSuccess(true);
+    if (!imageFile() || isSubmitting()) return;
+
+    setIsSubmitting(true);
+
+    try {
+      // Convert image to base64 data URL
+      const receiptUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (err) => reject(err);
+        reader.readAsDataURL(imageFile());
+      });
+
+      const currentUser = users()?.currUser;
+      const userId = currentUser ? currentUser.id : null;
+
+      const response = await fetch(`${API_URL}/api/orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          bank_name: bankName(),
+          sender_name: senderName(),
+          total_price: totalAmount(),
+          payment_receipt_url: receiptUrl,
+        }),
+      });
+
+      if (response.ok) {
+        setIsSuccess(true);
+        setCartCount(0);
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || "Gagal mengirim bukti pembayaran");
+      }
+    } catch (error) {
+      console.error("Error uploading payment proof:", error);
+      alert("Terjadi kesalahan saat mengunggah bukti pembayaran.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -280,12 +324,21 @@ export const Payment = () => {
                 </Show>
               </div>
 
-              <button type="submit" class="pay-submit-btn" disabled={!imageFile()}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-                Kirim Bukti Pembayaran
+              <button type="submit" class="pay-submit-btn" disabled={!imageFile() || isSubmitting()}>
+                <Show
+                  when={isSubmitting()}
+                  fallback={
+                    <>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                      </svg>
+                      Kirim Bukti Pembayaran
+                    </>
+                  }
+                >
+                  Mengirim Bukti...
+                </Show>
               </button>
             </form>
           </div>

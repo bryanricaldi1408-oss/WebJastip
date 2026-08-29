@@ -1,4 +1,5 @@
 import "../style/Product.css";
+import { Show } from "solid-js";
 
 const truncateText = (text, maxLength = 50) => {
   if (!text) return "Tidak ada deskripsi";
@@ -20,6 +21,9 @@ export const Product = (props) => {
             e.target.src = "https://via.placeholder.com/300?text=Gagal+Dimuat";
           }}
         />
+        <Show when={props.category}>
+          <span class="product-badge">{props.category}</span>
+        </Show>
       </div>
 
       {/* Bagian Detail Informasi Produk */}

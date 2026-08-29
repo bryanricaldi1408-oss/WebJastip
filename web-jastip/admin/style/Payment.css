@@ -1,3 +1,105 @@
 @import "./AdminCommon.css";
 
 /* Payment Verification specific styles */
+.receipt-modal-content {
+  max-width: 600px !important;
+  width: 90% !important;
+}
+
+.admin-search-wrapper {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.admin-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.filter-select-container {
+  flex-shrink: 0;
+}
+
+/* Mobile Responsiveness for Payment Page */
+@media (max-width: 768px) {
+  .admin-search-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .filter-select-container,
+  .filter-select {
+    width: 100%;
+  }
+
+  .payment-card {
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .payment-section .table-responsive {
+    overflow-x: visible;
+  }
+
+  .payment-table,
+  .payment-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .payment-table thead {
+    display: none;
+  }
+
+  .payment-table tr {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .payment-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+  }
+
+  .payment-table td:last-child {
+    border-bottom: none;
+    background: #fafafa;
+  }
+
+  .payment-table td::before {
+    content: attr(data-label);
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .payment-table .approval-actions {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+
+  .payment-table .approval-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+}

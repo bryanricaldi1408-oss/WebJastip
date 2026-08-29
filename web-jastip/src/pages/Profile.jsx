@@ -9,19 +9,95 @@ import { UserRequestRow } from "../components/UserRequestRow";
 import { io } from "socket.io-client";
 import { API_URL } from "../config";
 export const Profile = () => {
+  const getInitialAddress = () =>
+    users().currUser?.addresses || users().currUser?.address || "";
+
+  const parseAddressString = (fullStr) => {
+    if (!fullStr) return { jalan: "", rtRw: "", kelurahan: "", kecamatan: "", kodePos: "" };
+
+    let temp = fullStr;
+    let kodePosVal = "";
+    let kecamatanVal = "";
+    let kelurahanVal = "";
+    let rtRwVal = "";
+
+    const kpMatch = temp.match(/,?\s*Kode Pos\s*:?\s*(\d+)/i);
+    if (kpMatch) {
+      kodePosVal = kpMatch[1];
+      temp = temp.replace(kpMatch[0], "");
+    }
+
+    const kecMatch = temp.match(/,?\s*Kec\.\s*:?\s*([^,]+)/i);
+    if (kecMatch) {
+      kecamatanVal = kecMatch[1].trim();
+      temp = temp.replace(kecMatch[0], "");
+    }
+
+    const kelMatch = temp.match(/,?\s*Kel\.\s*:?\s*([^,]+)/i);
+    if (kelMatch) {
+      kelurahanVal = kelMatch[1].trim();
+      temp = temp.replace(kelMatch[0], "");
+    }
+
+    const rtMatch = temp.match(/,?\s*RT\/RW\s*:?\s*([^,]+)/i);
+    if (rtMatch) {
+      rtRwVal = rtMatch[1].trim();
+      temp = temp.replace(rtMatch[0], "");
+    }
+
+    return {
+      jalan: temp.trim().replace(/^,|,$/g, "").trim(),
+      rtRw: rtRwVal,
+      kelurahan: kelurahanVal,
+      kecamatan: kecamatanVal,
+      kodePos: kodePosVal
+    };
+  };
+
+  const initialAddr = parseAddressString(getInitialAddress());
+
   const [name, setName] = createSignal(users().currUser?.name || "");
   const [phone, setPhone] = createSignal(users().currUser?.phone_number || "");
-  const [alamat, setAlamat] = createSignal(users().currUser?.address || "");
+  const [jalan, setJalan] = createSignal(initialAddr.jalan);
+  const [rtRw, setRtRw] = createSignal(initialAddr.rtRw);
+  const [kelurahan, setKelurahan] = createSignal(initialAddr.kelurahan);
+  const [kecamatan, setKecamatan] = createSignal(initialAddr.kecamatan);
+  const [kodePos, setKodePos] = createSignal(initialAddr.kodePos);
   const [password, setPassword] = createSignal("");
   const [newPass, setNewPass] = createSignal("");
   const [confirmPass, setConfirmPass] = createSignal("");
   const [mapQuery, setMapQuery] = createSignal("");
   const [myRequests, setMyRequests] = createSignal([]);
+  const [myOrders, setMyOrders] = createSignal([]);
 
   const socket = io(API_URL);
 
+  const getFullAddress = () => {
+    const parts = [];
+    if (jalan().trim()) parts.push(jalan().trim());
+    if (rtRw().trim()) {
+      const cleanRt = rtRw().trim();
+      parts.push(cleanRt.toLowerCase().startsWith("rt") ? cleanRt : `RT/RW ${cleanRt}`);
+    }
+    if (kelurahan().trim()) {
+      const cleanKel = kelurahan().trim();
+      parts.push(cleanKel.toLowerCase().startsWith("kel") ? cleanKel : `Kel. ${cleanKel}`);
+    }
+    if (kecamatan().trim()) {
+      const cleanKec = kecamatan().trim();
+      parts.push(cleanKec.toLowerCase().startsWith("kec") ? cleanKec : `Kec. ${cleanKec}`);
+    }
+    if (kodePos().trim()) {
+      const cleanKode = kodePos().trim();
+      parts.push(cleanKode.toLowerCase().includes("kode pos") ? cleanKode : `Kode Pos ${cleanKode}`);
+    }
+    return parts.join(", ");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const fullAddress = getFullAddress();
+
     try {
       const response = await fetch(`${API_URL}/api/update-profile`, {
         method: "PUT",
@@ -32,7 +108,8 @@ export const Profile = () => {
           email: users().currUser?.email,
           name: name(),
           phone_number: phone(),
-          address: alamat(),
+          addresses: fullAddress,
+          address: fullAddress,
         }),
       });
       const data = await response.json();
@@ -72,6 +149,20 @@ export const Profile = () => {
       console.error("Error fetching user requests:", err);
     }
 
+    // Fetch orders/payment status milik user ini
+    try {
+      const userId = users().currUser?.id;
+      if (userId) {
+        const ordRes = await fetch(`${API_URL}/api/orders/user/${userId}`);
+        const ordData = await ordRes.json();
+        if (ordRes.ok) {
+          setMyOrders(ordData.orders || []);
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching user orders:", err);
+    }
+
     // Listen for real-time new requests
     socket.on("new_request", (newReq) => {
       // Hanya tambahkan jika request ini milik user yang sedang login
@@ -97,11 +188,18 @@ export const Profile = () => {
         ),
       );
     });
+
+    socket.on("order_status_changed", (updatedOrd) => {
+      setMyOrders((prev) =>
+        prev.map((o) => (o.id === updatedOrd.id ? { ...o, status: updatedOrd.status } : o))
+      );
+    });
   });
 
   onCleanup(() => {
     socket.off("new_request");
     socket.off("request_status_changed");
+    socket.off("order_status_changed");
     socket.disconnect();
   });
 
@@ -200,22 +298,73 @@ export const Profile = () => {
               />
             </div>
 
+              {/* Detail Alamat Pengiriman (Dipecah) */}
             <div class="form-group">
-              <label>Alamat Pengiriman Lengkap</label>
-              <textarea
-                placeholder="Tuliskan nama jalan, RT/RW, kelurahan, kecamatan, dan kode pos dengan jelas..."
-                class="profile-textarea"
-                rows="4"
-                value={alamat()}
-                onInput={(e) => setAlamat(e.target.value)}
-              ></textarea>
+              <label>Nama Jalan / No. Rumah / Gedung</label>
+              <input
+                type="text"
+                placeholder="Contoh: Jl. Sudirman No. 12, Blok A"
+                class="profile-input"
+                value={jalan()}
+                onInput={(e) => setJalan(e.target.value)}
+              />
+            </div>
 
-              {/* Tombol pemicu map agar tidak berkedip saat ngetik */}
+            <div class="form-row-grid">
+              <div class="form-group">
+                <label>RT / RW</label>
+                <input
+                  type="text"
+                  placeholder="Contoh: 001/002"
+                  class="profile-input"
+                  value={rtRw()}
+                  onInput={(e) => setRtRw(e.target.value)}
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Kelurahan / Desa</label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Sukasari"
+                  class="profile-input"
+                  value={kelurahan()}
+                  onInput={(e) => setKelurahan(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div class="form-row-grid">
+              <div class="form-group">
+                <label>Kecamatan</label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Bogor Timur"
+                  class="profile-input"
+                  value={kecamatan()}
+                  onInput={(e) => setKecamatan(e.target.value)}
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Kode Pos</label>
+                <input
+                  type="text"
+                  placeholder="Contoh: 16142"
+                  class="profile-input"
+                  value={kodePos()}
+                  onInput={(e) => setKodePos(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              {/* Tombol pemicu map mencari alamat utuh lengkap */}
               <button
                 type="button"
                 class="profile-btn-secondary"
                 style="margin-top: 8px; width: fit-content;"
-                onClick={() => setMapQuery(alamat())}
+                onClick={() => setMapQuery(getFullAddress())}
               >
                 Cari Titik di Peta
               </button>
@@ -341,6 +490,7 @@ export const Profile = () => {
                     <th>Detail Barang</th>
                     <th>Persetujuan</th>
                     <th>Status Barang</th>
+                    <th>Status Pembayaran</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -357,6 +507,11 @@ export const Profile = () => {
                         product_image_url={item.product_image_url}
                         approval_status={item.approval_status}
                         status={item.status}
+                        payment_status={
+                          myOrders().length > 0
+                            ? (myOrders()[0]?.status || "unpaid")
+                            : "unpaid"
+                        }
                       />
                     )}
                   </For>

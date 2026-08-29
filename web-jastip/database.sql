@@ -29,6 +29,7 @@ CREATE TABLE products (
     description TEXT,
     price NUMERIC(12, 2) NOT NULL,
     image_url TEXT,
+    category VARCHAR(100) DEFAULT 'Kosmetik',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -48,16 +49,16 @@ CREATE TABLE requests (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. TABEL: orders (Transaksi Checkout Produk Katalog)
--- Relasi: Menghubungkan 'users' dan 'products'
+-- 4. TABEL: orders (Transaksi Checkout & Upload Bukti Pembayaran)
+-- Relasi: Menghubungkan 'users' dengan bukti pembayaran
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    product_id INT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
-    quantity INT DEFAULT 1,
+    user_id INT REFERENCES users(id) ON DELETE SET NULL,
+    bank_name VARCHAR(100),
+    sender_name VARCHAR(150),
     total_price NUMERIC(12, 2) NOT NULL,
     payment_receipt_url TEXT, 
-    status VARCHAR(50) DEFAULT 'pending_payment', -- pending_payment, verified, rejected
+    status VARCHAR(50) DEFAULT 'pending', -- pending, verified, rejected
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );  
 

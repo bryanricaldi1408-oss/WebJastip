@@ -1,9 +1,12 @@
-import { Show, For, createSignal, onMount } from "solid-js";
+import { Show, For, createSignal, onMount, onCleanup } from "solid-js";
+import { io } from "socket.io-client";
 import { useNavigate } from "@solidjs/router";
-import { users, setCartCount } from "../store/WebStore";
+import { users, setCartCount, showNotification } from "../store/WebStore";
 import cartIcon from "../assets/Cart.png";
 import "../style/Cart.css";
 import { API_URL } from "../config";
+
+const socket = io(API_URL);
 
 // =====================================================
 // DATA DUMMY - Ganti dengan data asli dari API nanti
@@ -46,6 +49,36 @@ export const Cart = () => {
 
   onMount(() => {
     fetchCartItems();
+
+    // Listen to real-time request status changes
+    socket.on("request_status_changed", (updatedReq) => {
+      setCartItems((prev) =>
+        prev.map((item) => {
+          if (item.type === "request" && item.request_id === updatedReq.id) {
+            return { ...item, request_status: updatedReq.status };
+          }
+          return item;
+        })
+      );
+    });
+
+    // Listen to real-time request price updates
+    socket.on("request_price_set", (updatedReq) => {
+      setCartItems((prev) =>
+        prev.map((item) => {
+          if (item.type === "request" && item.request_id === updatedReq.id) {
+            return { ...item, price: updatedReq.price };
+          }
+          return item;
+        })
+      );
+    });
+  });
+
+  onCleanup(() => {
+    socket.off("request_status_changed");
+    socket.off("request_price_set");
+    socket.disconnect();
   });
 
   // Total harga semua item
@@ -134,7 +167,17 @@ export const Cart = () => {
 
   const navigate = useNavigate();
 
+  const hasIncompleteItems = () =>
+    cartItems().some((item) => item.type === "request" && item.request_status !== "complete");
+
   const handleCheckout = () => {
+    if (hasIncompleteItems()) {
+      showNotification(
+        "Terdapat barang titipan custom yang belum didapatkan oleh Admin. Harap tunggu hingga didapatkan sebelum checkout.",
+        "error"
+      );
+      return;
+    }
     navigate("/payment", { state: { amount: subtotal() } });
   };
 
@@ -200,17 +243,24 @@ export const Cart = () => {
                   <div class="cart-item-info">
                     <div class="cart-item-top">
                       <div>
-                        <span
-                          class={`cart-badge ${
-                            item.type === "request"
-                              ? "cart-badge-pink"
-                              : "cart-badge-blue"
-                          }`}
-                        >
-                          {item.type === "request"
-                            ? "Titipan Custom"
-                            : "Katalog"}
-                        </span>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                          <span
+                            class={`cart-badge ${
+                              item.type === "request"
+                                ? "cart-badge-pink"
+                                : "cart-badge-blue"
+                            }`}
+                          >
+                            {item.type === "request"
+                              ? "Titipan Custom"
+                              : "Katalog"}
+                          </span>
+                          <Show when={item.type === "request" && item.request_status !== "complete"}>
+                            <span class="cart-badge-warning-item">
+                              Masa Pencarian
+                            </span>
+                          </Show>
+                        </div>
                         <h3 class="cart-item-name">{item.name}</h3>
                         <p class="cart-item-category">
                           Kategori: {item.category}
@@ -302,9 +352,20 @@ export const Cart = () => {
                 </span>
               </div>
 
+              <Show when={hasIncompleteItems()}>
+                <div 
+                  class="cart-incomplete-warning" 
+                  style="margin-bottom: 16px; padding: 12px; background: #fff1f2; border: 1px solid #fecaca; border-radius: 12px; color: #b91c1c; font-size: 13px; font-weight: 500; line-height: 1.4; text-align: left;"
+                >
+                  ⚠️ Beberapa barang titipan custom di keranjang Anda masih dalam status pencarian. Harap tunggu hingga didapatkan oleh Admin sebelum checkout.
+                </div>
+              </Show>
+
               <button
                 class="cart-checkout-btn"
                 onClick={handleCheckout}
+                disabled={hasIncompleteItems()}
+                style={hasIncompleteItems() ? { opacity: 0.6, cursor: "not-allowed", background: "#cbd5e1", "box-shadow": "none" } : {}}
               >
                 <span>Lanjut ke Pembayaran</span>
                 <span class="cart-checkout-arrow">→</span>

@@ -2,6 +2,7 @@ import { createSignal, createMemo, For, onCleanup, onMount, Show } from "solid-j
 import "../style/HomeAdmin.css";
 import { A, useNavigate } from "@solidjs/router";
 import { RequestTable } from "../components/RequestTable";
+import { CatalogRow } from "../components/CatalogRow";
 import { io } from "socket.io-client";
 import { setUsers, showNotification } from "../../src/store/WebStore";
 import { uploadImage } from "../../src/utils/uploadImage";
@@ -149,6 +150,9 @@ export const HomeAdmin = () => {
   // Add Product Modal State
   const [isAddModalOpen, setIsAddModalOpen] = createSignal(false);
   const [newProductName, setNewProductName] = createSignal("");
+  const [newProductCategory, setNewProductCategory] = createSignal("Kosmetik");
+  const [isCustomCategory, setIsCustomCategory] = createSignal(false);
+  const [customCategoryInput, setCustomCategoryInput] = createSignal("");
   const [newProductPrice, setNewProductPrice] = createSignal("");
   const [newProductDesc, setNewProductDesc] = createSignal("");
   const [newProductImage, setNewProductImage] = createSignal(null);
@@ -172,6 +176,9 @@ export const HomeAdmin = () => {
           imageUrl = await uploadImage(newProductImage(), "products");
 
           const cleanPrice = newProductPrice().replace(/\./g, "");
+          const finalCategory = isCustomCategory()
+            ? (customCategoryInput().trim() || "Lainnya")
+            : newProductCategory();
 
           const response = await fetch(`${API_URL}/api/product`, {
             method: "POST",
@@ -183,6 +190,7 @@ export const HomeAdmin = () => {
               description: newProductDesc(),
               price: cleanPrice,
               image_url: imageUrl,
+              category: finalCategory,
             }),
           });
 
@@ -194,6 +202,9 @@ export const HomeAdmin = () => {
             }
 
             setNewProductName("");
+            setNewProductCategory("Kosmetik");
+            setIsCustomCategory(false);
+            setCustomCategoryInput("");
             setNewProductPrice("");
             setNewProductDesc("");
             setNewProductImage(null);
@@ -247,12 +258,19 @@ export const HomeAdmin = () => {
     socket.on("delete_product", ({ id }) => {
       setProductsList((prev) => prev.filter((p) => p.id !== id));
     });
+
+    socket.on("product_price_set", (updatedItem) => {
+      setProductsList((prev) =>
+        prev.map((p) => (p.id === updatedItem.id ? { ...p, price: updatedItem.price } : p))
+      );
+    });
   });
 
   onCleanup(() => {
     socket.off("new_request");
     socket.off("new_product");
     socket.off("delete_product");
+    socket.off("product_price_set");
   });
   return (
     <>
@@ -543,55 +561,10 @@ export const HomeAdmin = () => {
                       }
                     >
                       {(item) => (
-                        <tr class="catalog-row">
-                          <td class="catalog-cell catalog-cell--image">
-                            <div class="request-img-thumb">
-                              {item.image_url ? (
-                                <img
-                                  src={item.image_url}
-                                  alt={item.name}
-                                  style="width: 100%; height: 100%; object-fit: cover;"
-                                />
-                              ) : (
-                                <svg
-                                  width="28"
-                                  height="28"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="1.8"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  style="color: #94A3B8;"
-                                >
-                                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                  <polyline points="21 15 16 10 5 21"></polyline>
-                                </svg>
-                              )}
-                            </div>
-                          </td>
-                          <td class="catalog-cell catalog-cell--info" data-label="Produk">
-                            <div class="product-info">
-                              <strong style="font-size: 15px; color: var(--text-dark);">{item.name}</strong>
-                              <span class="desc">{item.description || "Tidak ada deskripsi"}</span>
-                            </div>
-                          </td>
-                          <td class="catalog-cell catalog-cell--price" data-label="Harga">
-                            <span class="product-price-badge">
-                              {formatCurrency(item.price)}
-                            </span>
-                          </td>
-                          <td class="catalog-cell catalog-cell--action" data-label="Aksi">
-                            <button
-                              class="btn btn-danger"
-                              style="font-size: 13px; padding: 8px 12px;"
-                              onClick={() => handleDeleteProduct(item.id)}
-                            >
-                              Hapus Produk
-                            </button>
-                          </td>
-                        </tr>
+                        <CatalogRow
+                          item={item}
+                          onDeleteProduct={handleDeleteProduct}
+                        />
                       )}
                     </For>
                   </tbody>
@@ -739,6 +712,38 @@ export const HomeAdmin = () => {
                     onInput={(e) => setNewProductName(e.target.value)}
                     required
                   />
+                </div>
+                <div class="form-group">
+                  <label>Kategori Produk</label>
+                  <select
+                    class="form-input"
+                    value={isCustomCategory() ? "Lainnya" : newProductCategory()}
+                    onChange={(e) => {
+                      if (e.target.value === "Lainnya") {
+                        setIsCustomCategory(true);
+                      } else {
+                        setIsCustomCategory(false);
+                        setNewProductCategory(e.target.value);
+                      }
+                    }}
+                  >
+                    <option value="Kosmetik">Kosmetik</option>
+                    <option value="Makanan">Makanan</option>
+                    <option value="Suplementasi">Suplementasi</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Lainnya">Kategori Lainnya...</option>
+                  </select>
+                  <Show when={isCustomCategory()}>
+                    <input
+                      type="text"
+                      class="form-input"
+                      style="margin-top: 8px;"
+                      placeholder="Ketik nama kategori baru..."
+                      value={customCategoryInput()}
+                      onInput={(e) => setCustomCategoryInput(e.target.value)}
+                      required
+                    />
+                  </Show>
                 </div>
                 <div class="form-group">
                   <label>Harga Produk (Rp)</label>

@@ -480,6 +480,7 @@ export const Home = () => {
                     description = {item.description}
                     price = {item.price}
                     image_url = {item.image_url}
+                    category = {item.category}
                   />
                 </A>
               )}
@@ -508,6 +509,7 @@ export const Home = () => {
                     desc={item.details}
                     user={item.user_name}
                     link={item.item_link}
+                    price={item.price}
                   />
                 </A>
               )}

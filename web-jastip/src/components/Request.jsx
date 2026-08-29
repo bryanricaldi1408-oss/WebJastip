@@ -1,4 +1,5 @@
 import "../style/Request.css";
+import { Show } from "solid-js";
 
 const truncateText = (text, maxLength = 70) => {
   if (!text) return "Tidak ada detail barang";
@@ -26,6 +27,16 @@ export const Request = (props) => {
       <div class="request-info">
         <h3 class="request-title">{props.name || "Request Barang"}</h3>
         <p class="request-desc">{truncateText(props.desc, 70)}</p>
+
+        {/* Display Price if set by Admin */}
+        <Show when={props.price && Number(props.price) > 0}>
+          <div class="request-price-box">
+            <span class="request-price-label">Estimasi Harga:</span>
+            <span class="request-price-value">
+              Rp {Number(props.price).toLocaleString("id-ID")}
+            </span>
+          </div>
+        </Show>
 
         {/* Informasi Request dari Siapa */}
         <div class="request-user-box">

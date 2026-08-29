@@ -5,7 +5,8 @@ const bcrypt = require("bcrypt");
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "20mb" }));
+app.use(express.urlencoded({ limit: "20mb", extended: true }));
 
 const dbPool = new Pool(
   process.env.DATABASE_URL
@@ -45,8 +46,11 @@ dbPool.connect((err, client, release) => {
         description TEXT,
         price NUMERIC(12, 2) NOT NULL,
         image_url TEXT,
+        category VARCHAR(100) DEFAULT 'Kosmetik',
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
+
+      ALTER TABLE products ADD COLUMN IF NOT EXISTS category VARCHAR(100) DEFAULT 'Kosmetik';
 
       CREATE TABLE IF NOT EXISTS requests (
         id SERIAL PRIMARY KEY,
@@ -77,6 +81,34 @@ dbPool.connect((err, client, release) => {
         quantity INT DEFAULT 1,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
+
+      CREATE TABLE IF NOT EXISTS orders (
+        id SERIAL PRIMARY KEY,
+        user_id INT REFERENCES users(id) ON DELETE SET NULL,
+        bank_name VARCHAR(100),
+        sender_name VARCHAR(150),
+        total_price NUMERIC(12, 2) NOT NULL,
+        payment_receipt_url TEXT,
+        status VARCHAR(50) DEFAULT 'pending',
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+
+      ALTER TABLE orders ADD COLUMN IF NOT EXISTS bank_name VARCHAR(100);
+      ALTER TABLE orders ADD COLUMN IF NOT EXISTS sender_name VARCHAR(150);
+      ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_receipt_url TEXT;
+      ALTER TABLE orders ADD COLUMN IF NOT EXISTS total_price NUMERIC(12, 2) DEFAULT 0;
+
+      DO $$ 
+      BEGIN
+        ALTER TABLE orders ALTER COLUMN user_id DROP NOT NULL;
+      EXCEPTION WHEN OTHERS THEN NULL;
+      END $$;
+
+      DO $$ 
+      BEGIN
+        ALTER TABLE orders ALTER COLUMN product_id DROP NOT NULL;
+      EXCEPTION WHEN OTHERS THEN NULL;
+      END $$;
     `).catch(e => console.error("Error auto-creating tables:", e.message));
     release();
   }
@@ -199,7 +231,7 @@ app.put("/api/update-password", async (req, res) => {
 // Send Product
 app.post("/api/product", async (req, res) => {
   try {
-    const { name, description, price, image_url } = req.body;
+    const { name, description, price, image_url, category } = req.body;
 
     if (!name) {
       return res.status(400).json({ message: "Nama produk wajib diisi" });
@@ -209,8 +241,8 @@ app.post("/api/product", async (req, res) => {
     const numericPrice = parseFloat(rawPrice) || 0;
 
     const query = `
-      INSERT INTO products (name, description, price, image_url)
-      VALUES ($1, $2, $3, $4) RETURNING *
+      INSERT INTO products (name, description, price, image_url, category)
+      VALUES ($1, $2, $3, $4, $5) RETURNING *
     `;
 
     const result = await dbPool.query(query, [
@@ -218,6 +250,7 @@ app.post("/api/product", async (req, res) => {
       description || "",
       numericPrice,
       image_url || "",
+      category || "Kosmetik",
     ]);
 
     const newProduct = result.rows[0];
@@ -237,7 +270,7 @@ app.post("/api/product", async (req, res) => {
 app.get("/api/products", async (_, res) => {
   try {
     const query = `
-            SELECT id, name, description, price, image_url 
+            SELECT id, name, description, price, image_url, category 
             FROM products 
             ORDER BY id DESC;
         `;
@@ -251,6 +284,37 @@ app.get("/api/products", async (_, res) => {
   } catch (error) {
     console.error("Error fetching products:", error);
     res.status(500).json({ message: "Gagal mengambil data produk" });
+  }
+});
+
+// SET PRODUCT PRICE BY ADMIN
+app.put("/api/product-price", async (req, res) => {
+  const { price, productId } = req.body;
+  try {
+    const rawPrice = String(price || "0").replace(/\./g, "").replace(/\D/g, "");
+    const numericPrice = parseFloat(rawPrice) || parseFloat(price) || 0;
+
+    const query = `
+      UPDATE products
+      SET price = $1
+      WHERE id = $2 RETURNING *
+    `;
+    const result = await dbPool.query(query, [numericPrice, productId]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Produk tidak ditemukan" });
+    }
+
+    const updatedItem = result.rows[0];
+
+    io.emit("product_price_set", updatedItem);
+
+    res.status(200).json({
+      message: "Harga produk berhasil diperbarui",
+      product: updatedItem,
+    });
+  } catch (error) {
+    console.error("Error updating product price:", error);
+    res.status(500).json({ message: "Gagal memperbarui harga produk" });
   }
 });
 // GET ALL REQUESTS yang udh di approved
@@ -594,7 +658,8 @@ app.get("/api/cart", async (req, res) => {
         COALESCE(p.name, r.name) AS name,
         COALESCE(p.image_url, r.product_image_url) AS image_url,
         COALESCE(r.category, 'Katalog') AS category,
-        COALESCE(p.price, r.price, 0) AS price
+        COALESCE(p.price, r.price, 0) AS price,
+        r.status AS request_status
       FROM cart c
       LEFT JOIN products p ON c.product_id = p.id
       LEFT JOIN requests r ON c.request_id = r.id
@@ -726,6 +791,143 @@ app.delete("/api/banners/:id", async (req, res) => {
   } catch (error) {
     console.error("Error deleting banner:", error);
     res.status(500).json({ message: "Gagal menghapus banner" });
+  }
+});
+
+// ORDERS / PAYMENT API
+// SUBMIT ORDER PAYMENT
+app.post("/api/orders", async (req, res) => {
+  try {
+    const { user_id, bank_name, sender_name, total_price, payment_receipt_url } = req.body;
+
+    const rawPrice = String(total_price || "0").replace(/\./g, "").replace(/\D/g, "");
+    const numericPrice = parseFloat(rawPrice) || parseFloat(total_price) || 0;
+
+    const query = `
+      INSERT INTO orders (user_id, bank_name, sender_name, total_price, payment_receipt_url, status)
+      VALUES ($1, $2, $3, $4, $5, 'pending')
+      RETURNING *
+    `;
+
+    const parsedUserId = user_id && !isNaN(parseInt(user_id, 10)) ? parseInt(user_id, 10) : null;
+
+    const values = [
+      parsedUserId,
+      bank_name || "",
+      sender_name || "",
+      numericPrice,
+      payment_receipt_url || ""
+    ];
+
+    const result = await dbPool.query(query, values);
+    const newOrder = result.rows[0];
+
+    // If parsedUserId is provided, clear the user's cart
+    if (parsedUserId) {
+      await dbPool.query("DELETE FROM cart WHERE user_id = $1", [parsedUserId]).catch(() => {});
+    }
+
+    // Fetch order with user info for broadcasting
+    const fullQuery = `
+      SELECT o.*, COALESCE(u.name, o.sender_name) AS user_name, u.phone_number
+      FROM orders o
+      LEFT JOIN users u ON o.user_id = u.id
+      WHERE o.id = $1
+    `;
+    const fullOrderResult = await dbPool.query(fullQuery, [newOrder.id]);
+    const broadcastOrder = fullOrderResult.rows[0] || newOrder;
+
+    io.emit("new_order", broadcastOrder);
+
+    res.status(201).json({
+      message: "Bukti pembayaran berhasil dikirim!",
+      order: broadcastOrder,
+    });
+  } catch (error) {
+    console.error("Error submitting order payment:", error);
+    res.status(500).json({ message: error.message || "Gagal mengirim bukti pembayaran" });
+  }
+});
+
+// GET ALL ORDERS FOR ADMIN
+app.get("/api/orders", async (_, res) => {
+  try {
+    const query = `
+      SELECT 
+        o.id,
+        o.user_id,
+        o.bank_name,
+        o.sender_name,
+        o.total_price,
+        o.payment_receipt_url,
+        o.status,
+        o.created_at,
+        COALESCE(u.name, o.sender_name) AS user_name,
+        u.phone_number
+      FROM orders o
+      LEFT JOIN users u ON o.user_id = u.id
+      ORDER BY o.id DESC;
+    `;
+
+    const result = await dbPool.query(query);
+
+    res.status(200).json({
+      orders: result.rows,
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ message: "Gagal mengambil data order" });
+  }
+});
+
+// GET ORDERS BY USER (for profile page)
+app.get("/api/orders/user/:userId", async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const query = `
+      SELECT id, bank_name, sender_name, total_price, status, created_at
+      FROM orders
+      WHERE user_id = $1
+      ORDER BY id DESC;
+    `;
+    const result = await dbPool.query(query, [userId]);
+    res.status(200).json({ orders: result.rows });
+  } catch (error) {
+    console.error("Error fetching user orders:", error);
+    res.status(500).json({ message: "Gagal mengambil data order" });
+  }
+});
+
+// UPDATE ORDER PAYMENT STATUS
+app.put("/api/orders/:id/status", async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const query = `
+      UPDATE orders
+      SET status = $1
+      WHERE id = $2
+      RETURNING *
+    `;
+
+    const result = await dbPool.query(query, [status, id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Order tidak ditemukan" });
+    }
+
+    const updatedOrder = result.rows[0];
+
+    io.emit("order_status_changed", updatedOrder);
+
+    res.status(200).json({
+      message: "Status pembayaran berhasil diperbarui",
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ message: "Gagal memperbarui status pembayaran" });
   }
 });
 

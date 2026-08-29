@@ -132,10 +132,15 @@ export const RequestTable = (props) => {
   }
 
   return (
-    <tr class="req-row" onClick={handleRowClick} style="cursor: pointer;">
+    <tr class="req-row">
       {/* Gambar */}
       <td class="req-cell req-cell--image">
-        <div class="request-img-thumb">
+        <div
+          class="request-img-thumb"
+          style="cursor: pointer;"
+          onClick={() => navigate(`/request/${props.id}`)}
+          title="Lihat detail request"
+        >
           {props.product_image_url ? (
             <img
               src={props.product_image_url}
