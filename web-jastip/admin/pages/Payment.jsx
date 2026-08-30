@@ -122,6 +122,9 @@ export const Payment = () => {
             <A href="/admin" class="menu-item">
               Dashboard
             </A>
+            <A href="/admin/orders" class="menu-item">
+              Orders
+            </A>
             <A href="/admin/payment" class="menu-item active">
               Payment
             </A>

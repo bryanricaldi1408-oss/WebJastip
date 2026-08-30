@@ -1348,4 +1348,45 @@ body {
   }
 }
 
+/* ==========================================
+   Aesthetic WhatsApp Button
+   ========================================== */
+.aesthetic-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff !important;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.28);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.2px;
+}
+
+.aesthetic-wa-btn:hover {
+  transform: translateY(-1.5px) scale(1.03);
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.42);
+  background: linear-gradient(135deg, #28e16e 0%, #109888 100%);
+  color: #ffffff !important;
+}
+
+.aesthetic-wa-btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);
+}
+
+.aesthetic-wa-btn svg {
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+
+
+
+
 

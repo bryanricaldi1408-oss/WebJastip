@@ -597,7 +597,7 @@ export const Profile = () => {
             </div>
           </div>
           <a
-            href={`https://wa.me/6281234567890?text=${encodeURIComponent("Halo Admin, saya ingin menanyakan pembayaran saya yang ditolak (Rejected). Mohon bantuannya. Terima kasih.")}`}
+            href={`https://wa.me/628122040228?text=${encodeURIComponent("Halo Admin, saya ingin menanyakan pembayaran saya yang ditolak (Rejected). Mohon bantuannya. Terima kasih.")}`}
             target="_blank"
             rel="noopener noreferrer"
             class="o-rejected-wa-btn"
@@ -709,7 +709,7 @@ export const Profile = () => {
                               </Show>
                               <Show when={item.status === "rejected"}>
                                 <a
-                                  href={`https://wa.me/6281234567890?text=${encodeURIComponent(`Halo Admin, saya ingin menanyakan pembayaran saya yang ditolak (Rejected) untuk barang "${item.name}". Mohon bantuannya. Terima kasih.`)}`}
+                                  href={`https://wa.me/628122040228?text=${encodeURIComponent(`Halo Admin, saya ingin menanyakan pembayaran saya yang ditolak (Rejected) untuk barang "${item.name}". Mohon bantuannya. Terima kasih.`)}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   class="ur-contact-admin-btn"

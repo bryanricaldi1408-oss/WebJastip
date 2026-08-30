@@ -50,7 +50,7 @@ export const Header = () => {
           {/* 3. Contacts Us */}
           <div class="right-container">
             <a
-              href="https://wa.me/8122040228"
+              href="https://wa.me/628122040228"
               target="_blank"
               rel="noopener noreferrer"
               class="contact-container"

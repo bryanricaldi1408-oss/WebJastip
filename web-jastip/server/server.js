@@ -883,7 +883,9 @@ app.get("/api/orders", async (_, res) => {
         o.items,
         o.created_at,
         COALESCE(u.name, o.sender_name) AS user_name,
-        u.phone_number
+        u.phone_number,
+        u.email,
+        u.addresses
       FROM orders o
       LEFT JOIN users u ON o.user_id = u.id
       ORDER BY o.id DESC;
