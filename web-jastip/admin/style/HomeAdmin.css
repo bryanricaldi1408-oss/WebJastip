@@ -403,7 +403,7 @@
 }
 
 /* Responsive */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .price-baseline-section {
     padding: 0;
     margin-bottom: 24px;
@@ -431,6 +431,12 @@
     gap: 16px;
   }
 
+  .pb-currency-select {
+    max-width: 130px;
+    padding: 0 8px;
+    text-overflow: ellipsis;
+  }
+
   .pb-arrow {
     transform: rotate(90deg);
     align-self: center;
@@ -439,5 +445,40 @@
 
   .pb-breakdown {
     margin: 0 18px 18px;
+  }
+
+  /* Formula Editor Mobile adjustments */
+  .pb-formula-editor {
+    padding: 16px 18px;
+  }
+
+  .pb-formula-editor-fields {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .pb-formula-sep {
+    display: none;
+  }
+
+  .pb-formula-field {
+    width: 100%;
+  }
+
+  .pb-formula-actions {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .pb-save-btn,
+  .pb-cancel-btn {
+    flex: 1;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

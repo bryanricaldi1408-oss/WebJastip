@@ -69,8 +69,72 @@ export const Profile = () => {
   const [mapQuery, setMapQuery] = createSignal("");
   const [myRequests, setMyRequests] = createSignal([]);
   const [myOrders, setMyOrders] = createSignal([]);
+  const [myCartItems, setMyCartItems] = createSignal([]);
 
   const socket = io(API_URL);
+
+  const allPaymentItems = () => {
+    const list = [];
+
+    // 1. Items currently in cart (Belum Dibayar)
+    for (const c of myCartItems()) {
+      list.push({
+        id: `cart-${c.id}`,
+        name: c.name,
+        image_url: c.image_url,
+        category: c.category || "Katalog",
+        quantity: c.quantity,
+        price: c.price * c.quantity,
+        status: "unpaid",
+        type: c.type,
+        is_cart: true,
+      });
+    }
+
+    // 2. Items from orders (Submitted & Paid/Pending/Verified/Rejected)
+    for (const o of myOrders()) {
+      let parsedItems = [];
+      try {
+        if (o.items) {
+          parsedItems = typeof o.items === "string" ? JSON.parse(o.items) : o.items;
+        }
+      } catch (e) {
+        console.error("Error parsing order items:", e);
+      }
+
+      if (Array.isArray(parsedItems) && parsedItems.length > 0) {
+        for (const it of parsedItems) {
+          list.push({
+            id: `order-${o.id}-${it.id || it.product_id || it.request_id}`,
+            order_id: o.id,
+            name: it.name,
+            image_url: it.image_url,
+            category: it.category || "Katalog",
+            quantity: it.quantity,
+            price: it.price * it.quantity,
+            status: o.status,
+            type: it.type,
+            is_cart: false,
+          });
+        }
+      } else {
+        list.push({
+          id: `order-${o.id}`,
+          order_id: o.id,
+          name: `Pesanan #${String(o.id).padStart(5, "0")}`,
+          image_url: null,
+          category: "Checkout",
+          quantity: 1,
+          price: o.total_price || 0,
+          status: o.status,
+          type: "order",
+          is_cart: false,
+        });
+      }
+    }
+
+    return list;
+  };
 
   const getFullAddress = () => {
     const parts = [];
@@ -158,9 +222,15 @@ export const Profile = () => {
         if (ordRes.ok) {
           setMyOrders(ordData.orders || []);
         }
+
+        const cartRes = await fetch(`${API_URL}/api/cart?user_id=${userId}`);
+        const cartData = await cartRes.json();
+        if (cartRes.ok) {
+          setMyCartItems(cartData.cart || []);
+        }
       }
     } catch (err) {
-      console.error("Error fetching user orders:", err);
+      console.error("Error fetching user orders or cart:", err);
     }
 
     // Listen for real-time new requests
@@ -180,10 +250,10 @@ export const Profile = () => {
         prev.map((req) =>
           req.id === updatedReq.id
             ? {
-                ...req,
-                approval_status: updatedReq.approval_status,
-                status: updatedReq.status,
-              }
+              ...req,
+              approval_status: updatedReq.approval_status,
+              status: updatedReq.status,
+            }
             : req,
         ),
       );
@@ -298,7 +368,7 @@ export const Profile = () => {
               />
             </div>
 
-              {/* Detail Alamat Pengiriman (Dipecah) */}
+            {/* Detail Alamat Pengiriman (Dipecah) */}
             <div class="form-group">
               <label>Nama Jalan / No. Rumah / Gedung</label>
               <input
@@ -490,7 +560,6 @@ export const Profile = () => {
                     <th>Detail Barang</th>
                     <th>Persetujuan</th>
                     <th>Status Barang</th>
-                    <th>Status Pembayaran</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -507,13 +576,158 @@ export const Profile = () => {
                         product_image_url={item.product_image_url}
                         approval_status={item.approval_status}
                         status={item.status}
-                        payment_status={
-                          myOrders().length > 0
-                            ? (myOrders()[0]?.status || "unpaid")
-                            : "unpaid"
-                        }
                       />
                     )}
+                  </For>
+                </tbody>
+              </table>
+            </div>
+          </Show>
+        </div>
+      </div>
+
+      {/* ===== STICKY REJECTED PAYMENT BANNER ===== */}
+      <Show when={allPaymentItems().some((item) => item.status === "rejected")}>
+        <div class="o-rejected-banner">
+          <div class="o-rejected-banner-left">
+            <span class="o-rejected-banner-icon">⚠️</span>
+            <div>
+              <strong>Pembayaran Ditolak</strong>
+              <p>Terdapat pembayaran barang yang ditolak oleh Admin. Silakan hubungi kami via WhatsApp.</p>
+            </div>
+          </div>
+          <a
+            href={`https://wa.me/6281234567890?text=${encodeURIComponent("Halo Admin, saya ingin menanyakan pembayaran saya yang ditolak (Rejected). Mohon bantuannya. Terima kasih.")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="o-rejected-wa-btn"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+            Hubungi Admin via WhatsApp
+          </a>
+        </div>
+      </Show>
+
+      {/* ===== DAFTAR BELANJA & STATUS PEMBAYARAN ===== */}
+      <div class="o-section">
+        <div class="ur-section-header">
+          <h2>Daftar Belanja &amp; Status Pembayaran</h2>
+          <Show when={allPaymentItems().length > 0}>
+            <span class="ur-count">{allPaymentItems().length}</span>
+          </Show>
+        </div>
+        <div class="ur-card">
+          <Show
+            when={allPaymentItems().length > 0}
+            fallback={
+              <div class="ur-empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #ccc;">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <p>Belum ada barang di keranjang atau pesanan.</p>
+              </div>
+            }
+          >
+            <div class="ur-table-responsive">
+              <table class="ur-table">
+                <thead>
+                  <tr>
+                    <th>Gambar</th>
+                    <th>Nama Barang</th>
+                    <th>Jumlah</th>
+                    <th>Total Harga</th>
+                    <th>Status Pembayaran</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <For each={allPaymentItems()}>
+                    {(item) => {
+                      const payLabel = () => {
+                        switch (item.status) {
+                          case "verified": return "Terverifikasi";
+                          case "rejected": return "Ditolak";
+                          case "pending":
+                          case "pending_payment": return "Menunggu Verifikasi";
+                          default: return "Belum Dibayar";
+                        }
+                      };
+                      const payClass = () => {
+                        switch (item.status) {
+                          case "verified": return "ur-badge ur-badge--pay-verified";
+                          case "rejected": return "ur-badge ur-badge--pay-rejected";
+                          case "pending":
+                          case "pending_payment": return "ur-badge ur-badge--pay-pending";
+                          default: return "ur-badge ur-badge--pay-unpaid";
+                        }
+                      };
+                      return (
+                        <tr class="ur-row">
+                          <td>
+                            <div class="ur-img-thumb">
+                              <Show
+                                when={item.image_url}
+                                fallback={
+                                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color: #94A3B8;">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                  </svg>
+                                }
+                              >
+                                <img src={item.image_url} alt={item.name} />
+                              </Show>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="ur-item-info">
+                              <strong style="font-size: 14px; color: #1e293b;">{item.name}</strong>
+                              <span class="ur-desc">Kategori: {item.category}</span>
+                            </div>
+                          </td>
+                          <td>
+                            <span style="font-weight: 600; color: #475569;">{item.quantity} item</span>
+                          </td>
+                          <td>
+                            <span class="o-order-price">
+                              Rp {Number(item.price || 0).toLocaleString("id-ID")}
+                            </span>
+                          </td>
+                          <td>
+                            <span class={payClass()}>{payLabel()}</span>
+                          </td>
+                          <td>
+                            <div class="o-pay-status-cell">
+                              <Show when={item.is_cart}>
+                                <a href="/cart" class="o-receipt-link">
+                                  Ke Keranjang 🛒
+                                </a>
+                              </Show>
+                              <Show when={item.status === "rejected"}>
+                                <a
+                                  href={`https://wa.me/6281234567890?text=${encodeURIComponent(`Halo Admin, saya ingin menanyakan pembayaran saya yang ditolak (Rejected) untuk barang "${item.name}". Mohon bantuannya. Terima kasih.`)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  class="ur-contact-admin-btn"
+                                >
+                                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                                  </svg>
+                                  Hubungi Admin
+                                </a>
+                              </Show>
+                              <Show when={!item.is_cart && item.status !== "rejected"}>
+                                <span class="ur-desc">-</span>
+                              </Show>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    }}
                   </For>
                 </tbody>
               </table>

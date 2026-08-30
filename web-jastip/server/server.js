@@ -97,6 +97,7 @@ dbPool.connect((err, client, release) => {
       ALTER TABLE orders ADD COLUMN IF NOT EXISTS sender_name VARCHAR(150);
       ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_receipt_url TEXT;
       ALTER TABLE orders ADD COLUMN IF NOT EXISTS total_price NUMERIC(12, 2) DEFAULT 0;
+      ALTER TABLE orders ADD COLUMN IF NOT EXISTS items TEXT;
 
       DO $$ 
       BEGIN
@@ -802,21 +803,39 @@ app.post("/api/orders", async (req, res) => {
 
     const rawPrice = String(total_price || "0").replace(/\./g, "").replace(/\D/g, "");
     const numericPrice = parseFloat(rawPrice) || parseFloat(total_price) || 0;
+    const parsedUserId = user_id && !isNaN(parseInt(user_id, 10)) ? parseInt(user_id, 10) : null;
+
+    let itemsJson = "[]";
+    if (parsedUserId) {
+      const cartRes = await dbPool.query(`
+        SELECT 
+          c.id, c.quantity, c.product_id, c.request_id,
+          CASE WHEN c.product_id IS NOT NULL THEN 'product' ELSE 'request' END AS type,
+          COALESCE(p.name, r.name) AS name,
+          COALESCE(p.image_url, r.product_image_url) AS image_url,
+          COALESCE(r.category, 'Katalog') AS category,
+          COALESCE(p.price, r.price, 0) AS price
+        FROM cart c
+        LEFT JOIN products p ON c.product_id = p.id
+        LEFT JOIN requests r ON c.request_id = r.id
+        WHERE c.user_id = $1
+      `, [parsedUserId]);
+      itemsJson = JSON.stringify(cartRes.rows || []);
+    }
 
     const query = `
-      INSERT INTO orders (user_id, bank_name, sender_name, total_price, payment_receipt_url, status)
-      VALUES ($1, $2, $3, $4, $5, 'pending')
+      INSERT INTO orders (user_id, bank_name, sender_name, total_price, payment_receipt_url, items, status)
+      VALUES ($1, $2, $3, $4, $5, $6, 'pending')
       RETURNING *
     `;
-
-    const parsedUserId = user_id && !isNaN(parseInt(user_id, 10)) ? parseInt(user_id, 10) : null;
 
     const values = [
       parsedUserId,
       bank_name || "",
       sender_name || "",
       numericPrice,
-      payment_receipt_url || ""
+      payment_receipt_url || "",
+      itemsJson
     ];
 
     const result = await dbPool.query(query, values);
@@ -861,6 +880,7 @@ app.get("/api/orders", async (_, res) => {
         o.total_price,
         o.payment_receipt_url,
         o.status,
+        o.items,
         o.created_at,
         COALESCE(u.name, o.sender_name) AS user_name,
         u.phone_number
@@ -885,7 +905,7 @@ app.get("/api/orders/user/:userId", async (req, res) => {
   const { userId } = req.params;
   try {
     const query = `
-      SELECT id, bank_name, sender_name, total_price, status, created_at
+      SELECT id, bank_name, sender_name, total_price, status, items, created_at
       FROM orders
       WHERE user_id = $1
       ORDER BY id DESC;

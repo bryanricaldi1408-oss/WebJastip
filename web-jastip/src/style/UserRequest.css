@@ -315,15 +315,148 @@
     margin-top: 32px;
   }
 
-  .ur-table th,
-  .ur-table td {
-    padding: 12px 16px;
+  .ur-card {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .ur-table-responsive {
+    overflow-x: visible;
+  }
+
+  .ur-table thead {
+    display: none;
+  }
+
+  .ur-table,
+  .ur-table tbody,
+  .ur-row {
+    display: block;
+    width: 100%;
+  }
+
+  .ur-row {
+    background-color: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .ur-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .ur-row td {
+    display: block;
+    padding: 0 !important;
+    border-bottom: none !important;
+    width: 100%;
+  }
+
+  /* Reorder column elements */
+  .ur-row td:nth-child(2) {
+    grid-column: 1;
+    order: 1;
+  }
+
+  .ur-row td:nth-child(3) {
+    grid-column: 2;
+    order: 2;
+  }
+
+  /* Badge and status rows */
+  .ur-row td:nth-child(4) {
+    grid-column: span 2;
+    order: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 10px !important;
+  }
+  .ur-row td:nth-child(4)::before {
+    content: "Persetujuan";
+    font-weight: 600;
+    color: #4b5563;
     font-size: 13px;
   }
 
+  .ur-row td:nth-child(5) {
+    grid-column: span 2;
+    order: 4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px !important;
+  }
+  .ur-row td:nth-child(5)::before {
+    content: "Status Barang";
+    font-weight: 600;
+    color: #4b5563;
+    font-size: 13px;
+  }
+
+  .ur-row td:nth-child(6) {
+    grid-column: span 2;
+    order: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px !important;
+    padding-bottom: 10px !important;
+  }
+  .ur-row td:nth-child(6)::before {
+    content: "Pembayaran";
+    font-weight: 600;
+    color: #4b5563;
+    font-size: 13px;
+  }
+
+  /* User Info at the bottom */
+  .ur-row td:nth-child(1) {
+    grid-column: span 2;
+    order: 6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 10px !important;
+  }
+  .ur-row td:nth-child(1)::before {
+    content: "Info Pemesan";
+    font-weight: 600;
+    color: #94a3b8;
+    font-size: 12px;
+  }
+
+  .ur-user-info {
+    align-items: flex-end;
+  }
+
+  .ur-user-info strong {
+    font-size: 13px;
+  }
+
+  .ur-user-info .ur-desc {
+    font-size: 12px;
+  }
+
+  .ur-payment-cell {
+    align-items: flex-end;
+    gap: 6px;
+  }
+
   .ur-img-thumb {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
   }
 
   .ur-badge {
@@ -333,15 +466,175 @@
 }
 
 @media (max-width: 480px) {
-  .ur-table th,
-  .ur-table td {
-    padding: 10px 12px;
+  .ur-row {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .ur-row td:nth-child(4)::before,
+  .ur-row td:nth-child(5)::before,
+  .ur-row td:nth-child(6)::before {
     font-size: 12px;
   }
 
+  .ur-row td:nth-child(1)::before {
+    font-size: 11px;
+  }
+
   .ur-img-thumb {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     border-radius: 8px;
   }
 }
+
+/* ===========================
+   Orders Section (o-section)
+   =========================== */
+.o-section {
+  margin-top: 48px;
+  grid-column: 1 / -1;
+}
+
+/* Order table cell styles */
+.o-order-id {
+  font-size: 13px;
+  font-weight: 700;
+  color: #4b5563;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+.o-order-bank,
+.o-order-sender {
+  font-size: 14px;
+  color: #374151;
+}
+
+.o-order-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+/* Receipt link */
+.o-receipt-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--my-blue, #88a8d7);
+  text-decoration: none;
+  padding: 4px 10px;
+  border: 1px solid var(--my-blue, #88a8d7);
+  border-radius: 20px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.o-receipt-link:hover {
+  background: var(--my-blue, #88a8d7);
+  color: #fff;
+}
+
+/* Payment status cell */
+.o-pay-status-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* ===========================
+   Rejected Payment Banner
+   =========================== */
+.o-rejected-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+  border: 1.5px solid #fca5a5;
+  border-radius: 16px;
+  margin-top: 40px;
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.08);
+  animation: banner-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes banner-pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(220, 38, 38, 0.08); }
+  50% { box-shadow: 0 4px 28px rgba(220, 38, 38, 0.18); }
+}
+
+.o-rejected-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.o-rejected-banner-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.o-rejected-banner-left strong {
+  display: block;
+  font-size: 15px;
+  color: #b91c1c;
+  margin-bottom: 2px;
+}
+
+.o-rejected-banner-left p {
+  margin: 0;
+  font-size: 13px;
+  color: #dc2626;
+  opacity: 0.85;
+}
+
+.o-rejected-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 24px;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+}
+
+.o-rejected-wa-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .o-section {
+    margin-top: 32px;
+  }
+
+  .o-rejected-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .o-rejected-wa-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .o-pay-status-cell {
+    align-items: flex-end;
+  }
+}
+
